@@ -280,34 +280,39 @@ enableGitInfo = false
   align_right = true
 
 [[menu.main]]
-  name = "Home"
+  name = "About"
   url = "#about"
-  weight = 3
+  weight = 1
 
-[[menu.main]]
-  name = "Publications"
-  url = "#publications_selected"
-  weight = 2
+#[[menu.main]]
+#  name = "Publications"
+#  url = "#publications_selected"
+#  weight = 2
 
 [[menu.main]]
   name = "Posts"
   url = "#posts"
-  weight = 1
+  weight = 2
 
 [[menu.main]]
   name = "Projects"
   url = "#projects"
-  weight = 2
+  weight = 3
 
 [[menu.main]]
-  name = "Tutorials"
-  url = "/tutorial/"
-  weight = 5
+  name = "CV"
+  url = "#experience"
+  weight = 4
 
-[[menu.main]]
-  name = "Contact"
-  url = "#contact"
-  weight = 6
+#[[menu.main]]
+#  name = "Tutorials"
+#  url = "/tutorial/"
+#  weight = 5
+
+#[[menu.main]]
+#  name = "Contact"
+#  url = "#contact"
+#  weight = 6
 
 # Link to a PDF of your resume/CV from the menu.
 # To enable, copy your resume/CV to `static/files/cv.pdf` and uncomment the lines below.
@@ -347,13 +352,13 @@ enableGitInfo = false
   languageCode = "en-us"
 
 # Uncomment the lines below to configure your website in a second language.
-#[languages.zh]
-#  languageCode = "zh-Hans"
-#  title = "Chinese website title..."
-#  [languages.zh.params]
-#    name = "Your name in Chinese..."
-#    role = "Your role in Chinese..."
-#  [[languages.zh.menu.main]]
-#    name = "Wo"
-#    url = "#about"
-#    weight = 1
+[languages.es]
+  languageCode = "es"
+  title = "Sergio Olmos"
+  [languages.es.params]
+    name = "Sergio Olmos Pardo"
+    role = "Estadístico y jugador de baloncesto"
+  [[languages.es.menu.main]]
+    name = "Bio"
+    url = "#about"
+    weight = 1

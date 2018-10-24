@@ -1,5 +1,8 @@
 ---
 title: "Hello R Markdown"
+subtitle: "This is a subtitle."
+summary: "This is a summary."
+featuredImage: 
 author: "Frida Gomam"
 date: 2015-07-23T21:13:14-05:00
 categories: ["R"]
@@ -35,3 +38,10 @@ pie(
   init.angle = -50, border = NA
 )
 ```
+
+
+# Math
+
+You can write math with LaTex:
+
+$$f(x) = \sum_{i = 1}^n X_i / n$$

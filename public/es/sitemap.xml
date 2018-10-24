@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/es/post/post-1/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/post/post-1/" hreflang="en"/>
+    
+      <loc>/es/post/post-1/</loc>
+      <lastmod>2018-10-24T00:00:00+00:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/es/categories/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/categories/" hreflang="en"/>
+    
+      <loc>/es/categories/</loc>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/es/post/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/post/" hreflang="en"/>
+    
+      <loc>/es/post/</loc>
+      <lastmod>2018-10-24T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/es/publication_types/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/publication_types/" hreflang="en"/>
+    
+      <loc>/es/publication_types/</loc>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/es/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/" hreflang="en"/>
+    
+      <loc>/es/</loc>
+      <lastmod>2016-04-20T00:00:00+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/es/tags/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/tags/" hreflang="en"/>
+    
+      <loc>/es/tags/</loc>
+      <priority>0</priority>
+    </url>
+    
+  
+</urlset>
