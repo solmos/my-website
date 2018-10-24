@@ -12,6 +12,7 @@ weight = 1
   interests = [
     "Statistics",
     "Basketball analytics",
+    "RStats",
     "Bioinformatics",
     "Mathematics"
   ]
