@@ -11,7 +11,8 @@ weight = 1
 [interests]
   interests = [
     "Estadística",
-    "Basketball analytics",
+    "Aprendizaje automático",
+    "Estadística avanzada en baloncesto",
     "Rstats",
     "Bioinformática",
     "Matemáticas"
@@ -38,4 +39,6 @@ weight = 1
 
 # Bio
 
-Soy jugador de baloncesto profesional.
+Después de graduarme en Matemáticas en 2009 comencé a jugar a baloncesto profesionalmente y ese ha sido [mi trabajo](https://www.youtube.com/watch?v=1fS4MCVzFu4) desde entonces. También soy investigador colaborador en [Biostatech](http://biostatech.com/), empresa de asesoramiento en estadística aplicada basada en Santiago de Compostela.
+
+Como consultor he utilizado métodos estadísticos y de aprendizaje automático (*machine learning*) en varios campos científicos como la ecología, la genómica y la farmacología. Recientemente también me he puesto a jugar con datos de baloncesto.
