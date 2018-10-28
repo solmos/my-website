@@ -1,0 +1,91 @@
+---
+title: Cómo creé mi página web con blogdown
+author: Sergio Olmos
+summary: "Tutorial paso a paso de cómo creé mi página web personal con blogdown y el tema de Hugo Academic."
+date: '2018-10-28'
+slug: web_con_blogdown
+categories: ["R"]
+tags: ["R"]
+image:
+  caption: ''
+  focal_point: ''
+---
+
+Después de muchas pruebas e intentos he decidido por fin publicar mi página web personal. Llevaba queriendo hacerlo desde hace meses, pero siempre lo dejaba para más adelante por una cosa o la otra. Que si no tenía tiempo, que si el tema (*theme*) no es perfecto, que si lo hago en inglés o en español... En realidad eran [excusas de un introvertido](https://www.johnmackintosh.com/2017-12-30-time-to-shine/) para no poner su trabajo a la vista de todos. 
+
+Si utilizas R y RStudio como yo, parece que lo más cómodo y práctico es utilizar el fántastico paquete `blogdown` que utiliza Hugo para construir la página web. `blogdown` te permite crear y modificar la página desde RStudio. El e-book [*blogdown: Creating Websites with R Markdown*](https://bookdown.org/yihui/blogdown/) me ha sido de mucha ayuda a la hora de crear mi página.
+
+Finalmente, de entre la multitud de [temas](https://themes.gohugo.io/) que hay disponibles, me decidí por el tema `academic` ya que contiene una muy completa [documentación](https://sourcethemes.com/academic/docs/) e incorpora básicamente todos los requerimientos necesarios para escribir sobre estadística:
+
+* Posibilidad de escribir entradas en RMarkdown
+
+* Soporte de $\LaTeX$ para notación matemática
+
+* Muy flexible a la hora de personalizar la página
+
+* Posibilidad de traducir toda la página a diferentes idiomas
+
+***
+
+## Paso a paso
+
+A continuación detallo los pasos que he seguido para crear y publicar mi web.
+
+### 1. Crear un repositorio en GitHub
+
+Para publicar la página web utilizaremos Netlify, que nos permite sincronizar el repositorio remoto de nuestra web y actualizarla automáticamente^1. Por lo tanto vamos a necesitar crear un repositorio en nuestra cuenta de GitHub (GitBucket/GitLab). Si eres nuevo en esto del control de versiones, [Jenny Bryan](http://happygitwithr.com/) tiene un fantástico tutorial especialmente escrito para usuarios de RStudio.
+
+Así pues, creamos el repositorio en nuestra cuenta de GitHub y copiamos la URL del repositorio a través del botón *Clone or download*:
+
+
+A continuación, creamos un proyecto nuevo en RStudio y seleccionamos la opción de *Version Control*. Introducimos la dirección URL de nuestro repositorio que copiamos al portapapeles anteriormente y creamos nuestro nuestro proyecto:
+
+
+Ahora nuestro repositorio remoto y nuestro repositorio local están conectados y podremos mandar los cambios que hagamos en RStudio a nuestro repositorio remoto en GitHub (y viceversa).
+
+### 2. Construir la estructura de la web con `blogdown`
+
+En RStudio, instalamos el paquete `blogdown` y posteriormente Hugo:
+```{r, eval = FALSE}
+install.packages("blogdown")
+blogdown::install_hugo()
+```
+
+A continuación creamos la estructura de la web escribiendo en la consola:
+```{r, eval = FALSE}
+blogdown::new_site(theme = "gcushen/hugo-academic")
+```
+
+Si quisieramos utilizar otro tema de Hugo simplemente cambiamos `gcushen/hugo-academic` por el `usuario/repo` correspondiente a la página del repositorio en GitHub.
+
+### 3. Personalizar la página
+
+Una vez creada la estructura de la página web, podemos utilizar el *Addin* de RStudio *Serve site* para visualizar nuestra web dentro de RStudio o en nuestro navegador. Esto básicamente llama la función `blogdown::serve_site()`. Ahora cada vez que guardemos algún cambio podremos ver interactivamente cómo queda en nuestra web.
+
+Al utilizar `blogdown::new_site(theme = "gcushen/hugo-academic")` se crean una serie de archivos que se corresponden con una página web ejemplo que podemos modificar a nuestro gusto.
+
+Lo primero que querremos modificar será el archivo `config.toml`. Examina el archivo y modifica todo lo que quieras. Por ejemplo, busca los siguientes campos en el archivo y modifícalos con tus datos:
+```{toml}
+title = "Sergio Olmos"
+
+#==============================================================
+
+[params]
+  # AUTHOR SETUP
+
+  # Your details.
+  name = "Sergio Olmos Pardo"
+  role = "Statistician and Basketball Player"
+
+  # Organizations/Affiliations.
+  #   Separate multiple entries with a comma, using the form: `[ {name="Org1", url=""}, {name="Org2", url=""} ]`.
+  organizations = [ { name = "Biostatech", url = "http://biostatech.com" } ]
+  
+#==============================================================
+   
+[[params.social]]
+    icon = "twitter"
+    icon_pack = "fab"
+    link = "//twitter.com/solmos41"
+```
+

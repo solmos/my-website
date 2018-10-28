@@ -1,0 +1,72 @@
+---
+title: Cómo creé mi página web con blogdown
+author: Sergio Olmos
+summary: "Tutorial paso a paso de cómo creé mi página web personal con blogdown y el tema de Hugo Academic."
+date: '2018-10-28'
+slug: web_con_blogdown
+categories: ["R"]
+tags: ["R"]
+image:
+  caption: ''
+  focal_point: ''
+---
+
+
+
+<p>Después de muchas pruebas e intentos he decidido por fin publicar mi página web personal. Llevaba queriendo hacerlo desde hace meses, pero siempre lo dejaba para más adelante por una cosa o la otra. Que si no tenía tiempo, que si el tema (<em>theme</em>) no es perfecto, que si lo hago en inglés o en español… En realidad eran <a href="https://www.johnmackintosh.com/2017-12-30-time-to-shine/">excusas de un introvertido</a> para no poner su trabajo a la vista de todos.</p>
+<p>Si utilizas R y RStudio como yo, parece que lo más cómodo y práctico es utilizar el fántastico paquete <code>blogdown</code> que utiliza Hugo para construir la página web. <code>blogdown</code> te permite crear y modificar la página desde RStudio. El e-book <a href="https://bookdown.org/yihui/blogdown/"><em>blogdown: Creating Websites with R Markdown</em></a> me ha sido de mucha ayuda a la hora de crear mi página.</p>
+<p>Finalmente, de entre la multitud de <a href="https://themes.gohugo.io/">temas</a> que hay disponibles, me decidí por el tema <code>academic</code> ya que contiene una muy completa <a href="https://sourcethemes.com/academic/docs/">documentación</a> e incorpora básicamente todos los requerimientos necesarios para escribir sobre estadística:</p>
+<ul>
+<li><p>Posibilidad de escribir entradas en RMarkdown</p></li>
+<li><p>Soporte de <span class="math inline">\(\LaTeX\)</span> para notación matemática</p></li>
+<li><p>Muy flexible a la hora de personalizar la página</p></li>
+<li><p>Posibilidad de traducir toda la página a diferentes idiomas</p></li>
+</ul>
+<hr />
+<div id="paso-a-paso" class="section level2">
+<h2>Paso a paso</h2>
+<p>A continuación detallo los pasos que he seguido para crear y publicar mi web.</p>
+<div id="crear-un-repositorio-en-github" class="section level3">
+<h3>1. Crear un repositorio en GitHub</h3>
+<p>Para publicar la página web utilizaremos Netlify, que nos permite sincronizar el repositorio remoto de nuestra web y actualizarla automáticamente^1. Por lo tanto vamos a necesitar crear un repositorio en nuestra cuenta de GitHub (GitBucket/GitLab). Si eres nuevo en esto del control de versiones, <a href="http://happygitwithr.com/">Jenny Bryan</a> tiene un fantástico tutorial especialmente escrito para usuarios de RStudio.</p>
+<p>Así pues, creamos el repositorio en nuestra cuenta de GitHub y copiamos la URL del repositorio a través del botón <em>Clone or download</em>:</p>
+<p>A continuación, creamos un proyecto nuevo en RStudio y seleccionamos la opción de <em>Version Control</em>. Introducimos la dirección URL de nuestro repositorio que copiamos al portapapeles anteriormente y creamos nuestro nuestro proyecto:</p>
+<p>Ahora nuestro repositorio remoto y nuestro repositorio local están conectados y podremos mandar los cambios que hagamos en RStudio a nuestro repositorio remoto en GitHub (y viceversa).</p>
+</div>
+<div id="construir-la-estructura-de-la-web-con-blogdown" class="section level3">
+<h3>2. Construir la estructura de la web con <code>blogdown</code></h3>
+<p>En RStudio, instalamos el paquete <code>blogdown</code> y posteriormente Hugo:</p>
+<pre class="r"><code>install.packages(&quot;blogdown&quot;)
+blogdown::install_hugo()</code></pre>
+<p>A continuación creamos la estructura de la web escribiendo en la consola:</p>
+<pre class="r"><code>blogdown::new_site(theme = &quot;gcushen/hugo-academic&quot;)</code></pre>
+<p>Si quisieramos utilizar otro tema de Hugo simplemente cambiamos <code>gcushen/hugo-academic</code> por el <code>usuario/repo</code> correspondiente a la página del repositorio en GitHub.</p>
+</div>
+<div id="personalizar-la-pagina" class="section level3">
+<h3>3. Personalizar la página</h3>
+<p>Una vez creada la estructura de la página web, podemos utilizar el <em>Addin</em> de RStudio <em>Serve site</em> para visualizar nuestra web dentro de RStudio o en nuestro navegador. Esto básicamente llama la función <code>blogdown::serve_site()</code>. Ahora cada vez que guardemos algún cambio podremos ver interactivamente cómo queda en nuestra web.</p>
+<p>Al utilizar <code>blogdown::new_site(theme = &quot;gcushen/hugo-academic&quot;)</code> se crean una serie de archivos que se corresponden con una página web ejemplo que podemos modificar a nuestro gusto.</p>
+<p>Lo primero que querremos modificar será el archivo <code>config.toml</code>. Examina el archivo y modifica todo lo que quieras. Por ejemplo, busca los siguientes campos en el archivo y modifícalos con tus datos:</p>
+<pre class="toml"><code>title = &quot;Sergio Olmos&quot;
+
+#==============================================================
+
+[params]
+  # AUTHOR SETUP
+
+  # Your details.
+  name = &quot;Sergio Olmos Pardo&quot;
+  role = &quot;Statistician and Basketball Player&quot;
+
+  # Organizations/Affiliations.
+  #   Separate multiple entries with a comma, using the form: `[ {name=&quot;Org1&quot;, url=&quot;&quot;}, {name=&quot;Org2&quot;, url=&quot;&quot;} ]`.
+  organizations = [ { name = &quot;Biostatech&quot;, url = &quot;http://biostatech.com&quot; } ]
+  
+#==============================================================
+   
+[[params.social]]
+    icon = &quot;twitter&quot;
+    icon_pack = &quot;fab&quot;
+    link = &quot;//twitter.com/solmos41&quot;</code></pre>
+</div>
+</div>
