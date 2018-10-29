@@ -4,7 +4,7 @@ author: Sergio Olmos
 summary: "Tutorial paso a paso de cómo creé mi página web personal con blogdown y el tema de Hugo Academic."
 date: '2018-10-28'
 slug: web_con_blogdown
-categories: ["R"]
+categories: ["R", "Español"]
 tags: ["R"]
 image:
   caption: ''
@@ -28,9 +28,9 @@ image:
 <p>A continuación detallo los pasos que he seguido para crear y publicar mi web.</p>
 <div id="crear-un-repositorio-en-github" class="section level3">
 <h3>1. Crear un repositorio en GitHub</h3>
-<p>Para publicar la página web utilizaremos Netlify, que nos permite sincronizar el repositorio remoto de nuestra web y actualizarla automáticamente^1. Por lo tanto vamos a necesitar crear un repositorio en nuestra cuenta de GitHub (GitBucket/GitLab). Si eres nuevo en esto del control de versiones, <a href="http://happygitwithr.com/">Jenny Bryan</a> tiene un fantástico tutorial especialmente escrito para usuarios de RStudio.</p>
-<p>Así pues, creamos el repositorio en nuestra cuenta de GitHub y copiamos la URL del repositorio a través del botón <em>Clone or download</em>:</p>
-<p>A continuación, creamos un proyecto nuevo en RStudio y seleccionamos la opción de <em>Version Control</em>. Introducimos la dirección URL de nuestro repositorio que copiamos al portapapeles anteriormente y creamos nuestro nuestro proyecto:</p>
+<p>Para publicar la página web utilizaremos Netlify, que nos permite sincronizar el repositorio remoto de nuestra web y actualizarla automáticamente <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. Por lo tanto vamos a necesitar crear un repositorio en nuestra cuenta de GitHub (GitBucket/GitLab). Si eres nuevo en esto del control de versiones, <a href="http://happygitwithr.com/">Jenny Bryan</a> tiene un fantástico tutorial especialmente escrito para usuarios de RStudio.</p>
+<p>Así pues, creamos el repositorio en nuestra cuenta de GitHub y copiamos la URL del repositorio a través del botón <em>Clone or download</em>.</p>
+<p>A continuación, creamos un proyecto nuevo en RStudio y seleccionamos la opción de <em>Version Control</em>. Introducimos la dirección URL de nuestro repositorio que copiamos al portapapeles anteriormente y creamos nuestro proyecto.</p>
 <p>Ahora nuestro repositorio remoto y nuestro repositorio local están conectados y podremos mandar los cambios que hagamos en RStudio a nuestro repositorio remoto en GitHub (y viceversa).</p>
 </div>
 <div id="construir-la-estructura-de-la-web-con-blogdown" class="section level3">
@@ -46,27 +46,73 @@ blogdown::install_hugo()</code></pre>
 <h3>3. Personalizar la página</h3>
 <p>Una vez creada la estructura de la página web, podemos utilizar el <em>Addin</em> de RStudio <em>Serve site</em> para visualizar nuestra web dentro de RStudio o en nuestro navegador. Esto básicamente llama la función <code>blogdown::serve_site()</code>. Ahora cada vez que guardemos algún cambio podremos ver interactivamente cómo queda en nuestra web.</p>
 <p>Al utilizar <code>blogdown::new_site(theme = &quot;gcushen/hugo-academic&quot;)</code> se crean una serie de archivos que se corresponden con una página web ejemplo que podemos modificar a nuestro gusto.</p>
-<p>Lo primero que querremos modificar será el archivo <code>config.toml</code>. Examina el archivo y modifica todo lo que quieras. Por ejemplo, busca los siguientes campos en el archivo y modifícalos con tus datos:</p>
-<pre class="toml"><code>title = &quot;Sergio Olmos&quot;
+<p>Lo primero que querremos modificar será el archivo <code>config.toml</code>. Examina el archivo y modifica todo lo que quieras. Lee los comentarios para entender qué indica cada campo y cómo modificarlo.</p>
+<p>Para modificar qué elementos aparecen en el menú de navegación de la página, puedes borrar o comentar (#) las entradas bajo <code>[[menu.main]]</code> que no quieres mostrar:</p>
+<pre class="r"><code>[[menu.main]]
+  name = &quot;About&quot;
+  url = &quot;#about&quot;
+  weight = 1
 
-#==============================================================
-
-[params]
-  # AUTHOR SETUP
-
-  # Your details.
-  name = &quot;Sergio Olmos Pardo&quot;
-  role = &quot;Statistician and Basketball Player&quot;
-
-  # Organizations/Affiliations.
-  #   Separate multiple entries with a comma, using the form: `[ {name=&quot;Org1&quot;, url=&quot;&quot;}, {name=&quot;Org2&quot;, url=&quot;&quot;} ]`.
-  organizations = [ { name = &quot;Biostatech&quot;, url = &quot;http://biostatech.com&quot; } ]
-  
-#==============================================================
-   
-[[params.social]]
-    icon = &quot;twitter&quot;
-    icon_pack = &quot;fab&quot;
-    link = &quot;//twitter.com/solmos41&quot;</code></pre>
+#[[menu.main]]
+#  name = &quot;Publications&quot;
+#  url = &quot;#publications_selected&quot;
+#  weight = 2</code></pre>
+<p>También querrás cambiar las secciones (o <em>widgets</em>) que quieres que se muestren en tu página principal. La página de ejemplo viene con todas las secciones activas. Para que no se muestre una sección basta con indicar <code>active = false</code> en el <em>front-matter</em> del correspondiente archivo <code>.md</code> en el directorio <code>content/home</code>. En mi caso, tan solo tengo activas <code>about.md</code>, <code>posts.md</code>, <code>projects.md</code>, <code>experience.md</code>, <code>tags.md</code> y <code>search.md</code>.</p>
 </div>
+<div id="traducir-pagina-al-castellano" class="section level3">
+<h3>4. Traducir página al castellano</h3>
+<p>Como mencionamos al principio de esta entrada, Academic dispone de la opción de traducir toda la página web a otro idioma de forma relativamente sencilla. Por un lado está la traducción de la interfaz y por otro el contenido de la página.</p>
+<div id="interfaz" class="section level4">
+<h4>Interfaz</h4>
+<p>El texto de la interfaz para este tema está en archivos <code>yaml</code> en el fichero <code>themes/academic/i18n/</code>. Para traducir el texto de la interfaz debemos crear primero un fichero en la raiz de nuestro proyecto llamado <code>i18n</code>. A continuación copiamos el archivo <code>themes/academic/i18n/es.yaml</code> a nuestro nuevo fichero <code>i18n/es.yaml</code>.</p>
+<p>Si vamos al final del archivo <code>config.yaml</code> podemos encontrar instrucciones de cómo traducir los diferentes campos de la interfaz de nuestra web. En mi caso:</p>
+<pre class="r"><code>[languages.es]
+  languageCode = &quot;es&quot;
+  title = &quot;Sergio Olmos&quot;
+  [languages.es.params]
+    name = &quot;Sergio Olmos Pardo&quot;
+    role = &quot;Estadístico y jugador de baloncesto&quot;</code></pre>
+<p>A continuación traducimos los elementos del menú de navegación. Si sólo quieres tener la página en castellano basta con editar los elementos <code>[[menu.main]]</code> en <code>config.toml</code>. Sin embargo, si queremos habilitar la posibilidad de elegir el idioma de nuestra página tenemos que duplicar los elementos <code>[[menu.main]]</code> y cambiarles el nombre a <code>[[languages.es.menu.main]]</code>.</p>
+<p>En mi caso, el menú de navegación en castellano viene dado por:</p>
+<pre class="r"><code>  [[languages.es.menu.main]]
+    name = &quot;Sobre mí&quot;
+    url = &quot;#about&quot;
+    weight = 1
+  [[languages.es.menu.main]]
+    name = &quot;Blog&quot;
+    url = &quot;#posts&quot;
+    weight = 2
+  [[languages.es.menu.main]]
+    name = &quot;Proyectos&quot;
+    url = &quot;#projects&quot;
+    weight = 3
+  [[languages.es.menu.main]]
+    name = &quot;Experiencia&quot;
+    url = &quot;#experience&quot;
+    weight = 4</code></pre>
+</div>
+<div id="contenido" class="section level4">
+<h4>Contenido</h4>
+<p>Para traducir un archivo de nuestro fichero <code>content/</code> debemos realizar una copia del archivo y llamarlo <code>filename.es.md</code>, donde <code>filename</code> es el nombre del archivo original en inglés. Finalmente traducimos el texto del nuevo archivo.</p>
+<p>Por ejemplo, si queremos traducir el widget <code>content/home/about.md</code> deberemos copiar este archivo y renombrarlo como `content/home/about.es.md y redactar el texto dentro de este archivo en castellano.</p>
+<p>De igual modo, si queremos traducir una entrada de nuestro blog deberemos copiar el archivo <code>content/post/filename.md</code> y renombrarlo como <code>content/post/filename.es.md</code>.</p>
+<p>Tenemos que tener en cuenta que los archivos que no tengan la extensión <code>filename.es</code> no aparecerán en la versión de la página en castellano. Por lo que si algunas de tus entradas están en inglés pero quieres mostrarlas igualmente en la versión en castellano de tu página deberás tener dos archivos iguales pero con nombres <code>filename</code> y <code>filename.es</code>.</p>
+</div>
+</div>
+<div id="publicar-pagina-con-netlify" class="section level3">
+<h3>5. Publicar página con Netlify</h3>
+<p>El paso final es publicar la página web que hemos creado para que todo el mundo pueda acceder a ella. El autor de <code>blogdown</code> recomienda usar Netlify y yo he seguido su consejo. Me ha resultado bastante sencillo y parece muy práctico ya que tan solo necesitaremos empujar nuestros cambios al repositorio remoto en Github y Netlify actualizará la página web automáticamente.</p>
+<p>Nos registramos en <a href="https://www.netlify.com/">Netlify</a> y una vez en nuestra página principal pinchamos en el botón <em>New site from Git</em>. Nos conectamos a nuestra cuenta de GitHub y elegimos el repositorio de nuestra web.</p>
+<p>En mi caso he tenido problemas con la versión de Hugo por defecto. Para saber qué versión hemos utilizado para construir la página, introduce lo siguiente en la consola de RStudio:</p>
+<pre class="r"><code>blogdown::hugo_version()</code></pre>
+<pre><code>## [1] &#39;0.49.2&#39;</code></pre>
+<p>Queremos que Netlify utilice esta versión y para ello creamos una nueva <em>environment variable</em> con la llave (<em>key</em>) HUGO_VERSION y el valor (<em>value</em>) 0.49.2.</p>
+<p>Si todo va bien, nuestra web deberá estar publicada con una dirección generada automáticamente por Netlify. Podemos cambiar el nombre de la página de modo que la dirección quede por ejemplo como <a href="http://solmos.netlify.com" class="uri">http://solmos.netlify.com</a>. O incluso podemos comprar o conectar nuestro propio dominio.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>En la documentación de Academic existe la posibilidad de crear la página web directamente con Netlify de modo que la publicación de la página resulta más sencilla. Sin embargo, con este método he tenido problemas para visualizar la página en RStudio.<a href="#fnref1">↩</a></p></li>
+</ol>
 </div>

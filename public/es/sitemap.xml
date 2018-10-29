@@ -4,11 +4,33 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/es/post/web_con_blogdown/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/post/web_con_blogdown/" hreflang="en"/>
+    
+      <loc>/es/post/web_con_blogdown/</loc>
+      <lastmod>2018-10-28T00:00:00+00:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <xhtml:link rel="alternate" href="/es/post/post-1/" hreflang="es"/>
       <xhtml:link rel="alternate" href="/post/post-1/" hreflang="en"/>
     
       <loc>/es/post/post-1/</loc>
       <lastmod>2018-10-24T00:00:00+00:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/es/project/internal-project/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/project/internal-project/" hreflang="en"/>
+    
+      <loc>/es/project/internal-project/</loc>
+      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
     </url>
     
   
@@ -26,11 +48,47 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/es/tags/deep-learning/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/tags/deep-learning/" hreflang="en"/>
+    
+      <loc>/es/tags/deep-learning/</loc>
+      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/es/categories/espa%C3%B1ol/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/categories/espa%C3%B1ol/" hreflang="en"/>
+    
+      <loc>/es/categories/espa%C3%B1ol/</loc>
+      <lastmod>2018-10-28T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
       <xhtml:link rel="alternate" href="/es/post/" hreflang="es"/>
       <xhtml:link rel="alternate" href="/post/" hreflang="en"/>
     
       <loc>/es/post/</loc>
-      <lastmod>2018-10-24T00:00:00+00:00</lastmod>
+      <lastmod>2018-10-28T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/es/project/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/project/" hreflang="en"/>
+    
+      <loc>/es/project/</loc>
+      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -42,6 +100,30 @@
       <xhtml:link rel="alternate" href="/publication_types/" hreflang="en"/>
     
       <loc>/es/publication_types/</loc>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/es/tags/r/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/tags/r/" hreflang="en"/>
+    
+      <loc>/es/tags/r/</loc>
+      <lastmod>2018-10-28T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/es/categories/r/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/categories/r/" hreflang="en"/>
+    
+      <loc>/es/categories/r/</loc>
+      <lastmod>2018-10-28T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -65,6 +147,7 @@
       <xhtml:link rel="alternate" href="/tags/" hreflang="en"/>
     
       <loc>/es/tags/</loc>
+      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
       <priority>0</priority>
     </url>
     

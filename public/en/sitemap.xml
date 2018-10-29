@@ -4,6 +4,9 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/post/web_con_blogdown/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/post/web_con_blogdown/" hreflang="es"/>
+    
       <loc>/post/web_con_blogdown/</loc>
       <lastmod>2018-10-28T00:00:00+00:00</lastmod>
     </url>
@@ -90,6 +93,9 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/project/internal-project/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/project/internal-project/" hreflang="es"/>
+    
       <loc>/project/internal-project/</loc>
       <lastmod>2016-04-27T00:00:00+02:00</lastmod>
     </url>
@@ -168,6 +174,9 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/tags/deep-learning/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/tags/deep-learning/" hreflang="es"/>
+    
       <loc>/tags/deep-learning/</loc>
       <lastmod>2016-04-27T00:00:00+02:00</lastmod>
       <priority>0</priority>
@@ -185,6 +194,21 @@
   
     
     <url>
+    
+      <xhtml:link rel="alternate" href="/categories/espa%C3%B1ol/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/categories/espa%C3%B1ol/" hreflang="es"/>
+    
+      <loc>/categories/espa%C3%B1ol/</loc>
+      <lastmod>2018-10-28T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/project/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/project/" hreflang="es"/>
     
       <loc>/project/</loc>
       <lastmod>2016-04-27T00:00:00+02:00</lastmod>
@@ -207,6 +231,9 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/tags/r/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/tags/r/" hreflang="es"/>
+    
       <loc>/tags/r/</loc>
       <lastmod>2018-10-28T00:00:00+00:00</lastmod>
       <priority>0</priority>
@@ -215,6 +242,9 @@
   
     
     <url>
+    
+      <xhtml:link rel="alternate" href="/categories/r/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/categories/r/" hreflang="es"/>
     
       <loc>/categories/r/</loc>
       <lastmod>2018-10-28T00:00:00+00:00</lastmod>

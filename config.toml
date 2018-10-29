@@ -163,7 +163,7 @@ enableGitInfo = false
   #   For more info on the highlighting options, see:
   #   https://sourcethemes.com/academic/docs/writing-markdown-latex/#highlighting-options
   highlight = true
-  highlight_languages = []
+  highlight_languages = ["r"]
   # highlight_style = "github"
 
   # Enable native social sharing buttons?
@@ -300,7 +300,7 @@ enableGitInfo = false
   weight = 3
 
 [[menu.main]]
-  name = "CV"
+  name = "Experience"
   url = "#experience"
   weight = 4
 
@@ -359,6 +359,18 @@ enableGitInfo = false
     name = "Sergio Olmos Pardo"
     role = "Estadístico y jugador de baloncesto"
   [[languages.es.menu.main]]
-    name = "Bio"
+    name = "Sobre mí"
     url = "#about"
     weight = 1
+  [[languages.es.menu.main]]
+    name = "Blog"
+    url = "#posts"
+    weight = 2
+  [[languages.es.menu.main]]
+    name = "Proyectos"
+    url = "#projects"
+    weight = 3
+  [[languages.es.menu.main]]
+    name = "Experiencia"
+    url = "#experience"
+    weight = 4
