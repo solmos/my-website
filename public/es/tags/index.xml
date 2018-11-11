@@ -7,19 +7,10 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>es</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Wed, 27 Apr 2016 00:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 28 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/es/tags/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Deep Learning</title>
-      <link>/es/tags/deep-learning/</link>
-      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
-      
-      <guid>/es/tags/deep-learning/</guid>
-      <description></description>
-    </item>
     
     <item>
       <title>R</title>
@@ -27,6 +18,42 @@
       <pubDate>Sun, 28 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>/es/tags/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>hierarchical models</title>
+      <link>/es/tags/hierarchical-models/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>/es/tags/hierarchical-models/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>linear mixed models</title>
+      <link>/es/tags/linear-mixed-models/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>/es/tags/linear-mixed-models/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>multilevel models</title>
+      <link>/es/tags/multilevel-models/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>/es/tags/multilevel-models/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>statistics</title>
+      <link>/es/tags/statistics/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>/es/tags/statistics/</guid>
       <description></description>
     </item>
     

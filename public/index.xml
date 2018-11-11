@@ -11,6 +11,123 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Exploring the multiplication table with R</title>
+      <link>/post/multiplication-table-with-r/</link>
+      <pubDate>Tue, 06 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/multiplication-table-with-r/</guid>
+      <description>&lt;p&gt;I was reading about the Hidden beauty of multiplication tables and I thought it could be fun to make some of the cool plots in that article with R. While we are at it, we can tweak some of them and play around with the tables to see what we get.&lt;/p&gt;
+&lt;div id=&#34;the-multiplication-table&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The multiplication table&lt;/h2&gt;
+&lt;p&gt;Consider the standard &lt;span class=&#34;math inline&#34;&gt;\(10 \times 10\)&lt;/span&gt; multiplication table, with the first row and the first column taking the values &lt;span class=&#34;math inline&#34;&gt;\(1\)&lt;/span&gt; through &lt;span class=&#34;math inline&#34;&gt;\(10\)&lt;/span&gt;, forming a grid with the corresponding products.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+
+# Data frame with all the values of the 10x10 multiplication table
+multiplication_table &amp;lt;- tibble(
+    x = 1:10,
+    y = 1:10
+) %&amp;gt;% # Get all combination of x and y
+    complete(x, y) %&amp;gt;% # Get the product of all combinations
+    mutate(product = x * y)
+
+ggplot(multiplication_table, aes(x, y)) +
+    geom_tile(color = &amp;quot;white&amp;quot;) +
+    geom_text(aes(label = product), color = &amp;quot;white&amp;quot;) +
+    # We want the table to start with 1 in the upper-left corner
+    scale_y_continuous(trans = &amp;quot;reverse&amp;quot;) +
+    theme_void()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-1-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;For purposes that we will see next, I am going to add a row and a column of zeros above and to the left of our table, respectively:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# We need 11 zeros in the new row and column
+multiplication_table &amp;lt;- tibble(
+    x = c(1:10, rep(0, 11)),
+    y = c(1:10, rep(0,11))
+) %&amp;gt;% 
+    complete(x, y) %&amp;gt;% 
+    mutate(product = x * y) %&amp;gt;% 
+    distinct()
+
+ggplot(multiplication_table, aes(x, y)) +
+    geom_tile(color = &amp;quot;white&amp;quot;) +
+    geom_text(aes(label = product), color = &amp;quot;white&amp;quot;) +
+    scale_y_continuous(trans = &amp;quot;reverse&amp;quot;) +
+    theme_void()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-2-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Next, we will discover some beautiful symmetries by coloring the rectangles of the multiplication table that correspond to multiples of a number &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; for various values of &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;single-multiples&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Single multiples&lt;/h2&gt;
+&lt;p&gt;We say that &lt;span class=&#34;math inline&#34;&gt;\(c\)&lt;/span&gt; is a multiple of &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; if &lt;span class=&#34;math inline&#34;&gt;\(c = n k\)&lt;/span&gt; for some integer &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt;, which is called the multiplier. So we can tell if a given number &lt;span class=&#34;math inline&#34;&gt;\(c\)&lt;/span&gt; is a multiple of &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; if the division &lt;span class=&#34;math inline&#34;&gt;\(c\)&lt;/span&gt; over &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; has remainder 0.&lt;/p&gt;
+&lt;p&gt;Let’s begin with &lt;span class=&#34;math inline&#34;&gt;\(k = 2\)&lt;/span&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;m2 &amp;lt;- multiplication_table %&amp;gt;% 
+    mutate(multiple_of_2 = product %% 2 == 0)
+ggplot(m2, aes(x, y)) +
+    geom_tile(aes(fill = multiple_of_2), color = &amp;quot;white&amp;quot;) +
+    geom_text(aes(label = product), color = &amp;quot;white&amp;quot;) +
+    scale_y_continuous(trans = &amp;quot;reverse&amp;quot;) +
+    scale_fill_manual(values = c(&amp;quot;black&amp;quot;, &amp;quot;#E69F00&amp;quot;),
+                      name = &amp;quot;Multiple of 2?&amp;quot;,
+                      labels = c(&amp;quot;No&amp;quot;, &amp;quot;Yes&amp;quot;)) +
+    theme_void()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(m2, aes(x, y)) +
+    geom_tile(aes(fill = multiple_of_2), color = &amp;quot;white&amp;quot;) +
+    geom_text(aes(label = product), color = &amp;quot;white&amp;quot;) +
+    scale_y_continuous(trans = &amp;quot;reverse&amp;quot;) + # Change default colors and edit legend
+    scale_fill_brewer(palette = &amp;quot;Pastel1&amp;quot;,
+                      name = &amp;quot;Multiple of 2?&amp;quot;,
+                      labels = c(&amp;quot;No&amp;quot;, &amp;quot;Yes&amp;quot;)) +
+    theme_void()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;We can see that the whole pattern above can be pieced together using the following fundamental block:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;multiple-multiples&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Multiple multiples&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;multiple_multiples &amp;lt;- m2 %&amp;gt;%
+    mutate(multiple_of_3 = product %% 3 == 0,
+           inter = interaction(multiple_of_2, multiple_of_3))
+multiple_multiples&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 121 x 6
+##        x     y product multiple_of_2 multiple_of_3 inter    
+##    &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;   &amp;lt;dbl&amp;gt; &amp;lt;lgl&amp;gt;         &amp;lt;lgl&amp;gt;         &amp;lt;fct&amp;gt;    
+##  1     0     0       0 TRUE          TRUE          TRUE.TRUE
+##  2     0     1       0 TRUE          TRUE          TRUE.TRUE
+##  3     0     2       0 TRUE          TRUE          TRUE.TRUE
+##  4     0     3       0 TRUE          TRUE          TRUE.TRUE
+##  5     0     4       0 TRUE          TRUE          TRUE.TRUE
+##  6     0     5       0 TRUE          TRUE          TRUE.TRUE
+##  7     0     6       0 TRUE          TRUE          TRUE.TRUE
+##  8     0     7       0 TRUE          TRUE          TRUE.TRUE
+##  9     0     8       0 TRUE          TRUE          TRUE.TRUE
+## 10     0     9       0 TRUE          TRUE          TRUE.TRUE
+## # ... with 111 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;summary(multiple_multiples)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##        x            y         product    multiple_of_2   multiple_of_3  
+##  Min.   : 0   Min.   : 0   Min.   :  0   Mode :logical   Mode :logical  
+##  1st Qu.: 2   1st Qu.: 2   1st Qu.:  5   FALSE:25        FALSE:49       
+##  Median : 5   Median : 5   Median : 18   TRUE :96        TRUE :72       
+##  Mean   : 5   Mean   : 5   Mean   : 25                                  
+##  3rd Qu.: 8   3rd Qu.: 8   3rd Qu.: 40                                  
+##  Max.   :10   Max.   :10   Max.   :100                                  
+##          inter   
+##  FALSE.FALSE: 9  
+##  TRUE.FALSE :40  
+##  FALSE.TRUE :16  
+##  TRUE.TRUE  :56  
+##                  
+## &lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(multiple_multiples, aes(x, y)) +
+    geom_tile(aes(fill = multiple_of_2)) +
+    geom_tile(aes(fill = inter)) +
+    scale_fill_brewer(palette = &amp;quot;Pastel2&amp;quot;) +
+    scale_y_continuous(trans = &amp;quot;reverse&amp;quot;) +
+    theme_void()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Cómo creé mi página web con blogdown</title>
       <link>/post/web_con_blogdown/</link>
       <pubDate>Sun, 28 Oct 2018 00:00:00 +0000</pubDate>
@@ -97,7 +214,7 @@ blogdown::install_hugo()&lt;/code&gt;&lt;/pre&gt;
 &lt;div id=&#34;contenido&#34; class=&#34;section level4&#34;&gt;
 &lt;h4&gt;Contenido&lt;/h4&gt;
 &lt;p&gt;Para traducir un archivo de nuestro fichero &lt;code&gt;content/&lt;/code&gt; debemos realizar una copia del archivo y llamarlo &lt;code&gt;filename.es.md&lt;/code&gt;, donde &lt;code&gt;filename&lt;/code&gt; es el nombre del archivo original en inglés. Finalmente traducimos el texto del nuevo archivo.&lt;/p&gt;
-&lt;p&gt;Por ejemplo, si queremos traducir el widget &lt;code&gt;content/home/about.md&lt;/code&gt; deberemos copiar este archivo y renombrarlo como `content/home/about.es.md y redactar el texto dentro de este archivo en castellano.&lt;/p&gt;
+&lt;p&gt;Por ejemplo, si queremos traducir el widget &lt;code&gt;content/home/about.md&lt;/code&gt; deberemos copiar este archivo y renombrarlo como &lt;code&gt;content/home/about.es.md&lt;/code&gt; y redactar el texto dentro de este archivo en castellano.&lt;/p&gt;
 &lt;p&gt;De igual modo, si queremos traducir una entrada de nuestro blog deberemos copiar el archivo &lt;code&gt;content/post/filename.md&lt;/code&gt; y renombrarlo como &lt;code&gt;content/post/filename.es.md&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Tenemos que tener en cuenta que los archivos que no tengan la extensión &lt;code&gt;filename.es&lt;/code&gt; no aparecerán en la versión de la página en castellano. Por lo que si algunas de tus entradas están en inglés pero quieres mostrarlas igualmente en la versión en castellano de tu página deberás tener dos archivos iguales pero con nombres &lt;code&gt;filename&lt;/code&gt; y &lt;code&gt;filename.es&lt;/code&gt;.&lt;/p&gt;
 &lt;/div&gt;
@@ -197,30 +314,12 @@ blogdown::install_hugo()&lt;/code&gt;&lt;/pre&gt;
     </item>
     
     <item>
-      <title>External Project</title>
-      <link>/project/external-project/</link>
+      <title>Analysis of clustered data using linear mixed models</title>
+      <link>/project/tfm/</link>
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
       
-      <guid>/project/external-project/</guid>
+      <guid>/project/tfm/</guid>
       <description></description>
-    </item>
-    
-    <item>
-      <title>Internal Project</title>
-      <link>/project/internal-project/</link>
-      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
-      
-      <guid>/project/internal-project/</guid>
-      <description>&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis posuere tellus ac convallis placerat. Proin tincidunt magna sed ex sollicitudin condimentum. Sed ac faucibus dolor, scelerisque sollicitudin nisi. Cras purus urna, suscipit quis sapien eu, pulvinar tempor diam. Quisque risus orci, mollis id ante sit amet, gravida egestas nisl. Sed ac tempus magna. Proin in dui enim. Donec condimentum, sem id dapibus fringilla, tellus enim condimentum arcu, nec volutpat est felis vel metus. Vestibulum sit amet erat at nulla eleifend gravida.&lt;/p&gt;
-
-&lt;p&gt;Nullam vel molestie justo. Curabitur vitae efficitur leo. In hac habitasse platea dictumst. Sed pulvinar mauris dui, eget varius purus congue ac. Nulla euismod, lorem vel elementum dapibus, nunc justo porta mi, sed tempus est est vel tellus. Nam et enim eleifend, laoreet sem sit amet, elementum sem. Morbi ut leo congue, maximus velit ut, finibus arcu. In et libero cursus, rutrum risus non, molestie leo. Nullam congue quam et volutpat malesuada. Sed risus tortor, pulvinar et dictum nec, sodales non mi. Phasellus lacinia commodo laoreet. Nam mollis, erat in feugiat consectetur, purus eros egestas tellus, in auctor urna odio at nibh. Mauris imperdiet nisi ac magna convallis, at rhoncus ligula cursus.&lt;/p&gt;
-
-&lt;p&gt;Cras aliquam rhoncus ipsum, in hendrerit nunc mattis vitae. Duis vitae efficitur metus, ac tempus leo. Cras nec fringilla lacus. Quisque sit amet risus at ipsum pharetra commodo. Sed aliquam mauris at consequat eleifend. Praesent porta, augue sed viverra bibendum, neque ante euismod ante, in vehicula justo lorem ac eros. Suspendisse augue libero, venenatis eget tincidunt ut, malesuada at lorem. Donec vitae bibendum arcu. Aenean maximus nulla non pretium iaculis. Quisque imperdiet, nulla in pulvinar aliquet, velit quam ultrices quam, sit amet fringilla leo sem vel nunc. Mauris in lacinia lacus.&lt;/p&gt;
-
-&lt;p&gt;Suspendisse a tincidunt lacus. Curabitur at urna sagittis, dictum ante sit amet, euismod magna. Sed rutrum massa id tortor commodo, vitae elementum turpis tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean purus turpis, venenatis a ullamcorper nec, tincidunt et massa. Integer posuere quam rutrum arcu vehicula imperdiet. Mauris ullamcorper quam vitae purus congue, quis euismod magna eleifend. Vestibulum semper vel augue eget tincidunt. Fusce eget justo sodales, dapibus odio eu, ultrices lorem. Duis condimentum lorem id eros commodo, in facilisis mauris scelerisque. Morbi sed auctor leo. Nullam volutpat a lacus quis pharetra. Nulla congue rutrum magna a ornare.&lt;/p&gt;
-
-&lt;p&gt;Aliquam in turpis accumsan, malesuada nibh ut, hendrerit justo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Quisque sed erat nec justo posuere suscipit. Donec ut efficitur arcu, in malesuada neque. Nunc dignissim nisl massa, id vulputate nunc pretium nec. Quisque eget urna in risus suscipit ultricies. Pellentesque odio odio, tincidunt in eleifend sed, posuere a diam. Nam gravida nisl convallis semper elementum. Morbi vitae felis faucibus, vulputate orci placerat, aliquet nisi. Aliquam erat volutpat. Maecenas sagittis pulvinar purus, sed porta quam laoreet at.&lt;/p&gt;
-</description>
     </item>
     
     <item>

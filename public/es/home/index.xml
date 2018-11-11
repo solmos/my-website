@@ -19,7 +19,7 @@
       
       <guid>/es/home/about/</guid>
       <description>¡Hola! Me llamo Sergio y actualmente vivo en Granada. Después de graduarme en Matemáticas en 2009 comencé a jugar a baloncesto profesionalmente y ese ha sido mi trabajo desde entonces. También soy investigador colaborador en Biostatech, empresa de asesoramiento en estadística aplicada basada en Santiago de Compostela.
-Como consultor he utilizado métodos estadísticos y de aprendizaje automático (machine learning) en varios campos científicos como la ecología, la genómica y la farmacología.</description>
+Como consultor he utilizado métodos estadísticos y de aprendizaje automático en varios campos científicos como la ecología, la genómica y la farmacología. Recientemente también me he puesto a jugar con datos de baloncesto.</description>
     </item>
     
     <item>
@@ -32,11 +32,29 @@ Como consultor he utilizado métodos estadísticos y de aprendizaje automático 
     </item>
     
     <item>
-      <title>Projects</title>
+      <title>Proyectos</title>
       <link>/es/home/projects/</link>
       <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
       
       <guid>/es/home/projects/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tags</title>
+      <link>/es/home/tags/</link>
+      <pubDate>Wed, 20 Sep 2017 00:00:00 +0200</pubDate>
+      
+      <guid>/es/home/tags/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Búsqueda</title>
+      <link>/es/home/search/</link>
+      <pubDate>Mon, 23 Jul 2018 00:00:00 +0200</pubDate>
+      
+      <guid>/es/home/search/</guid>
       <description></description>
     </item>
     

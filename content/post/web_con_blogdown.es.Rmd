@@ -127,7 +127,7 @@ En mi caso, el menú de navegación en castellano viene dado por:
 
 Para traducir un archivo de nuestro fichero `content/` debemos realizar una copia del archivo y llamarlo `filename.es.md`, donde `filename` es el nombre del archivo original en inglés. Finalmente traducimos el texto del nuevo archivo.
 
-Por ejemplo, si queremos traducir el widget `content/home/about.md` deberemos copiar este archivo y renombrarlo como `content/home/about.es.md y redactar el texto dentro de este archivo en castellano.
+Por ejemplo, si queremos traducir el widget `content/home/about.md` deberemos copiar este archivo y renombrarlo como `content/home/about.es.md` y redactar el texto dentro de este archivo en castellano.
 
 De igual modo, si queremos traducir una entrada de nuestro blog deberemos copiar el archivo `content/post/filename.md` y renombrarlo como `content/post/filename.es.md`.
 

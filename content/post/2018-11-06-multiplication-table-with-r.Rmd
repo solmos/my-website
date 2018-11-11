@@ -1,0 +1,138 @@
+---
+title: Exploring the multiplication table with R
+author: Sergio Olmos Pardo
+date: '2018-11-06'
+slug: multiplication-table-with-r
+categories:
+  - Mathematics
+  - R
+tags:
+  - R
+  - Mathematics
+image:
+  caption: ''
+  focal_point: ''
+---
+
+I was reading about the Hidden beauty of multiplication tables and I thought it could be fun to make some of the cool plots in that article with R. While we are at it, we can tweak some of them and play around with the tables to see what we get.
+
+## The multiplication table
+
+Consider the standard $10 \times 10$ multiplication table, with the first row and the first column taking the values $1$ through $10$, forming a grid with the corresponding products.
+```{r, message = FALSE}
+library(tidyverse)
+
+# Data frame with all the values of the 10x10 multiplication table
+multiplication_table <- tibble(
+    x = 1:10,
+    y = 1:10
+) %>% # Get all combination of x and y
+    complete(x, y) %>% # Get the product of all combinations
+    mutate(product = x * y)
+
+ggplot(multiplication_table, aes(x, y)) +
+    geom_tile(color = "white") +
+    geom_text(aes(label = product), color = "white") +
+    # We want the table to start with 1 in the upper-left corner
+    scale_y_continuous(trans = "reverse") +
+    theme_void()
+```
+
+For purposes that we will see next, I am going to add a row and a column of zeros above and to the left of our table, respectively:
+```{r}
+# We need 11 zeros in the new row and column
+multiplication_table <- tibble(
+    x = c(1:10, rep(0, 11)),
+    y = c(1:10, rep(0,11))
+) %>% 
+    complete(x, y) %>% 
+    mutate(product = x * y) %>% 
+    distinct()
+
+ggplot(multiplication_table, aes(x, y)) +
+    geom_tile(color = "white") +
+    geom_text(aes(label = product), color = "white") +
+    scale_y_continuous(trans = "reverse") +
+    theme_void()
+```
+
+Next, we will discover some beautiful symmetries by coloring the rectangles of the multiplication table that correspond to multiples of a number $k$ for various values of $k$.
+
+## Single multiples
+
+We say that $c$ is a multiple of $k$ if $c = n k$ for some integer $n$, which is called the multiplier. So we can tell if a given number $c$ is a multiple of $k$ if the division $c$ over $k$ has remainder 0.
+
+Let's begin with $k = 2$:
+```{r}
+m2 <- multiplication_table %>% 
+    mutate(multiple_of_2 = product %% 2 == 0)
+ggplot(m2, aes(x, y)) +
+    geom_tile(aes(fill = multiple_of_2), color = "white") +
+    geom_text(aes(label = product), color = "white") +
+    scale_y_continuous(trans = "reverse") +
+    scale_fill_manual(values = c("black", "#E69F00"),
+                      name = "Multiple of 2?",
+                      labels = c("No", "Yes")) +
+    theme_void()
+```
+
+```{r}
+ggplot(m2, aes(x, y)) +
+    geom_tile(aes(fill = multiple_of_2), color = "white") +
+    geom_text(aes(label = product), color = "white") +
+    scale_y_continuous(trans = "reverse") + # Change default colors and edit legend
+    scale_fill_brewer(palette = "Pastel1",
+                      name = "Multiple of 2?",
+                      labels = c("No", "Yes")) +
+    theme_void()
+```
+
+We can see that the whole pattern above can be pieced together using the following fundamental block:
+```{r}
+
+```
+
+
+We want to explore the patterns for different values of $k$ so let's create a function:
+```{r}
+library(wesanderson)
+draw_pattern <- function(k, xmax = k * 4, ymax = k * 4) {
+    tab <- data.frame(
+        x = c(1:xmax, rep(0, xmax + 1)),
+        y = c(1:ymax, rep(0, ymax + 1))
+    ) %>% 
+        complete(x, y) %>% 
+        mutate(prod = x * y,
+               multiple = prod %% k == 0)
+    ggplot(tab, aes(x, y)) +
+        geom_tile(aes(fill = multiple)) +
+        scale_y_continuous(trans = "reverse") +
+        scale_fill_manual(values = wes_palette(name = "Zissou1",
+                                               n = 2)) +
+        #geom_text(aes(label = prod)) +
+        theme_void() +
+        guides(fill = FALSE)
+}
+draw_pattern(15)
+```
+
+
+
+## Multiple multiples
+
+
+```{r}
+multiple_multiples <- m2 %>%
+    mutate(multiple_of_3 = product %% 3 == 0,
+           inter = interaction(multiple_of_2, multiple_of_3))
+multiple_multiples
+summary(multiple_multiples)
+ggplot(multiple_multiples, aes(x, y)) +
+    geom_tile(aes(fill = inter)) +
+    scale_fill_brewer(palette = "Pastel1") +
+    scale_y_continuous(trans = "reverse") +
+    theme_void()
+```
+
+
+

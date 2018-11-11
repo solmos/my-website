@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Sun, 28 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 06 Nov 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Exploring the multiplication table with R</title>
+      <link>/post/multiplication-table-with-r/</link>
+      <pubDate>Tue, 06 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/multiplication-table-with-r/</guid>
+      <description>I was reading about the Hidden beauty of multiplication tables and I thought it could be fun to make some of the cool plots in that article with R. While we are at it, we can tweak some of them and play around with the tables to see what we get.
+The multiplication table Consider the standard \(10 \times 10\) multiplication table, with the first row and the first column taking the values \(1\) through \(10\), forming a grid with the corresponding products.</description>
+    </item>
     
     <item>
       <title>Cómo creé mi página web con blogdown</title>

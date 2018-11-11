@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 3.0.0">
+  <meta name="generator" content="Hugo 0.49.2" />
+  <meta name="author" content="Sergio Olmos Pardo">
+
+  
+  
+  
+  
+    
+  
+  <meta name="description" content="Introduction Context and Motivation General description Motivation  Objectives General Objectives Specific Objectives  Approach and Methods    Introduction Context and Motivation General description Standard classical linear regression is usually not valid when data have a clustered/grouped structure since measurements on units within a cluster are in general more similar than measurements on units in different clusters, and thus not all observations can be considered independent. Statistical models for this type of data must account for the intra-cluster correlation (ICC) at each level, otherwise inferences may be misleading.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="/project/tfm/tfm/">
+
+  
+
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" crossorigin="anonymous">
+        
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700|Roboto:400,400italic,700|Roboto+Mono">
+  
+
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+  
+  
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Sergio Olmos">
+  <link rel="feed" href="/index.xml" type="application/rss+xml" title="Sergio Olmos">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="/project/tfm/tfm/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Sergio Olmos">
+  <meta property="og:url" content="/project/tfm/tfm/">
+  <meta property="og:title" content="Analyzing clustered data with linear mixed models | Sergio Olmos">
+  <meta property="og:description" content="Introduction Context and Motivation General description Motivation  Objectives General Objectives Specific Objectives  Approach and Methods    Introduction Context and Motivation General description Standard classical linear regression is usually not valid when data have a clustered/grouped structure since measurements on units within a cluster are in general more similar than measurements on units in different clusters, and thus not all observations can be considered independent. Statistical models for this type of data must account for the intra-cluster correlation (ICC) at each level, otherwise inferences may be misleading.">
+  
+  
+    
+  <meta property="og:image" content="/img/icon-192.png">
+  <meta property="og:locale" content="en-us">
+  
+  <meta property="article:published_time" content="2018-11-05T00:00:00&#43;00:00">
+  
+  <meta property="article:modified_time" content="2018-11-05T00:00:00&#43;00:00">
+  
+
+  
+
+  
+
+  <title>Analyzing clustered data with linear mixed models | Sergio Olmos</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#TableOfContents" data-offset="71" >
+
+<nav class="navbar navbar-light fixed-top navbar-expand-lg py-0" id="navbar-main">
+  <div class="container">
+
+    
+      <a class="navbar-brand" href="/">Sergio Olmos</a>
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+    
+    <div class="collapse navbar-collapse" id="navbar">
+
+      
+      
+      <ul class="navbar-nav ml-auto">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#about">
+            
+            <span>About</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#posts">
+            
+            <span>Posts</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#projects">
+            
+            <span>Projects</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#experience">
+            
+            <span>Experience</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+      
+
+        
+
+        
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article article-project" itemscope itemtype="http://schema.org/Article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1 itemprop="name">Analyzing clustered data with linear mixed models</h1>
+
+  
+
+  
+    
+
+<div class="article-metadata">
+
+  
+  
+  <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+  
+
+  <span class="article-date">
+    
+    <meta content="2018-11-05 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+    <time datetime="2018-11-05 00:00:00 &#43;0000 UTC" itemprop="dateModified">
+      Nov 5, 2018
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+
+  
+
+  
+  
+
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Analyzing%20clustered%20data%20with%20linear%20mixed%20models&amp;url=%2fproject%2ftfm%2ftfm%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fproject%2ftfm%2ftfm%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fproject%2ftfm%2ftfm%2f&amp;title=Analyzing%20clustered%20data%20with%20linear%20mixed%20models"
+         target="_blank" rel="noopener">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fproject%2ftfm%2ftfm%2f&amp;title=Analyzing%20clustered%20data%20with%20linear%20mixed%20models"
+         target="_blank" rel="noopener">
+        <i class="fab fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Analyzing%20clustered%20data%20with%20linear%20mixed%20models&amp;body=%2fproject%2ftfm%2ftfm%2f">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+  
+</div>
+
+
+
+  <div class="article-container">
+    
+
+    <div class="article-style" itemprop="articleBody">
+      <div id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a><ul>
+<li><a href="#context-and-motivation">Context and Motivation</a><ul>
+<li><a href="#general-description">General description</a></li>
+<li><a href="#motivation">Motivation</a></li>
+</ul></li>
+<li><a href="#objectives">Objectives</a><ul>
+<li><a href="#general-objectives">General Objectives</a></li>
+<li><a href="#specific-objectives">Specific Objectives</a></li>
+</ul></li>
+<li><a href="#approach-and-methods">Approach and Methods</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<div id="context-and-motivation" class="section level2">
+<h2>Context and Motivation</h2>
+<div id="general-description" class="section level3">
+<h3>General description</h3>
+<p>Standard classical linear regression is usually not valid when data have a clustered/grouped structure since measurements on units within a cluster are in general more similar than measurements on units in different clusters, and thus not all observations can be considered independent. Statistical models for this type of data must account for the intra-cluster correlation (ICC) at each level, otherwise inferences may be misleading.</p>
+<p>Several methods for analyzing multilevel data have been developed, which require different sets of assumptions and their adequacy differs depending on the structure of the data. After a review of the different available methods, only linear mixed models (LMMs) and the generalized estimating equations (GEEs) approach will be considered in our analysis. These two methods seem to be the two most widely used when analyzing clustered data. We will argue, however, that LMMs provide a more flexible approach than GEEs for cluster-correlated data, and therefore focus our analysis in the linear mixed model approach.</p>
+<p>This will be illustrated through two case-studies analyzing real data sets from different scientific fields. The first data set comes from a 48-week, multi-center clinical trial evaluating the efficacy and tolerability of two different treatments for HIV-infected patients <span class="citation">[@nuria]</span>. The second data set comes from a microarray experiment studying the .</p>
+<p>Furthermore, the data and code used in the analysis will be hosted in a Github repository for easier sharing reproducibility.</p>
+</div>
+<div id="motivation" class="section level3">
+<h3>Motivation</h3>
+<p>The fields where clustered data arise are numerous, from the social sciences to the natural sciences. Examples of clustered data are multi-center clinical trials where measurements on patients are nested within clinics, toxicity studies where repeated measurements are obtained from a single individual at different times or agricultural experiments with complex experimental designs. Knowing what method works best with a given data set is not straightforward.</p>
+<p>A review of the literature suggests that the two most common methods for analyzing multilevel data are LMMs and GEEs. Each method has advantages and drawbacks. Linear mixed models require additional assumptions beyond those of classical regression, which can be difficult to verify <span class="citation">[@geeHubbard]</span>. On the other hand, GEE can be problematic in small sample settings, in unbalanced designs and when there are missing data <span class="citation">[@geeRogers15]</span>. Moreover, since GEE is a quasi-likelihood method, likelihood-based methods are not available for usual statistical inference.</p>
+<p>The present project aims to provide some examples and suggestions for researchers trying to analyze multilevel data.</p>
+</div>
+</div>
+<div id="objectives" class="section level2">
+<h2>Objectives</h2>
+<div id="general-objectives" class="section level3">
+<h3>General Objectives</h3>
+<ol style="list-style-type: decimal">
+<li><p>Review of methods for cluster-correlated data analysis.</p></li>
+<li><p>Analysis of two real data sets with a multilevel structure from different fields in science using LMMs.</p></li>
+</ol>
+</div>
+<div id="specific-objectives" class="section level3">
+<h3>Specific Objectives</h3>
+<div id="review-of-methods" class="section level4">
+<h4>Review of methods</h4>
+<ol style="list-style-type: decimal">
+<li><p>Define clustered data and review statistical methods for this type of data.</p></li>
+<li><p>Specify the generalized estimating equations method and the linear mixed model.</p></li>
+<li><p>Strengths and weaknesses of these two methods.</p></li>
+</ol>
+</div>
+<div id="analysis-of-real-cluster-correlated-data" class="section level4">
+<h4>Analysis of real cluster-correlated data</h4>
+<ol style="list-style-type: decimal">
+<li><p>Exploratory analysis of two examples of clustered data.</p></li>
+<li><p>Analyze these data using LMMs.</p></li>
+<li><p>Sharing the data and code through Github.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div id="approach-and-methods" class="section level2">
+<h2>Approach and Methods</h2>
+<p>The project tries to provide some guidelines in the analysis of cluster-correlated data. This will be done by analyzing data from a 48-week, multi-center clinical study <span class="citation">[@nuria]</span> and a microarray experiment <span class="citation">[@radiation2007]</span>. The data sets were chosen because they both have a multilevel structure and the original studies where these data come from do not use LMMs for their analysis.</p>
+<p>It is important to understand the multilevel structure of the data at hand before any modeling is done, thus great emphasis is placed on graphical exploration of the data. This exploration provides insights about the nature of the data and hence about the potential model that will later be used.</p>
+<p>After a review of the relevant methods for clustered data analysis and a detailed specification of the LMMs and GEEs frameworks, we argue that LMMs provide a more flexible approach and use it to analyze the two data sets.</p>
+<p>A more theoretical or empirical approach in the assessment of LMMs and GEEs was considered, but seemed to be out of reach given the time constraint and the expected scope of the project. Instead, a more hands-on approach has been taken, illustrating a sample workflow and potential problems encountered when analyzing clustered data. A simulation-based assessment of these and other methods can be found in <span class="citation">@galbraith10</span>.</p>
+<p>The project will extensively use the R programming environment to accomplish the proposed objectives. R is a free and open source programming language specifically designed for statistical analysis, with hundreds of packages that perform specific tasks. In the context of cluster-correlated data, the packages <code>nlme</code> and <code>lme4</code> provide two frameworks to fit linear mixed models, while the <code>geepack</code> package implements the generalized estimating equations approach.</p>
+<p>Moreover, the R programming environment provides a workflow for reproducible research. As opposed to point-and-click statistical software, in R it is easy for independent researchers to reproduce the analysis since it weaves the principle of reproducibility throughout the entire project. In particular, with self-contained R packages it is straightforward to share and reproduce the analysis performed, by attaching the data and source code into a single file that can be loaded within the R environment.</p>
+<p>Since a large amount of code will be written, version control will be used. Git and Github helped keep track of changes in the project and correct potential bugs in the code.</p>
+<p>The data and the RMarkdown files used in the generation of this manuscript is hosted in Github (<a href="https://github.com/solmos/tfm" class="uri">https://github.com/solmos/tfm</a>).</p>
+</div>
+</div>
+
+    </div>
+
+    
+
+    
+
+
+
+
+
+
+<div class="media author-card" itemscope itemtype="http://schema.org/Person">
+  
+  <img class="portrait mr-3" src="/img/foto_perfil.jpg" itemprop="image" alt="Avatar">
+  
+  <div class="media-body">
+    <h5 class="card-title" itemprop="name"><a href="/">Sergio Olmos Pardo</a></h5>
+    <h6 class="card-subtitle">Statistician and Basketball Player</h6>
+    
+    <ul class="network-icon" aria-hidden="true">
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="solmos41@gmail.com" target="_blank" rel="noopener">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//twitter.com/solmos41" target="_blank" rel="noopener">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//github.com/solmos" target="_blank" rel="noopener">
+          <i class="fab fa-github"></i>
+        </a>
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
+
+    
+      
+      
+      
+      
+
+      
+      
+      
+      
+    
+
+  </div>
+</article>
+
+
+
+<div class="container">
+  <footer class="site-footer">
+  
+  <p class="powered-by">
+    <a href="/privacy/">Privacy Policy</a>
+  </p>
+  
+
+  <p class="powered-by">
+    &copy; 2018 &middot; 
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" id="back_to_top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+</div>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    
+    
+    <script src="/js/mathjax-config.500a6cbb2c0f345fcecc21b3116d6637aa78f1f11db8081ea581abe05390c2e8f3bbffe61be3cf0217baf785c40efceabe51050a4f007e69af94efd3643260e8.js" integrity="sha512-UApsuywPNF/OzCGzEW1mN6p48fEduAgepYGr4FOQwujzu//mG&#43;PPAhe694XEDvzqvlEFCk8AfmmvlO/TZDJg6A=="></script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha512-+NqPlbbtM1QqiK8ZAo4Yrj2c4lNQoGv8P79DPtKzj++l5jnN39rHA/xsqn8zE9l0uSoxaCdrOgFs6yjyfbBxSg==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+
+    
+    
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/index.json";
+      const i18n = {
+        'placeholder': "Search...",
+        'results': "Search Results",
+        'no_results': "No results found"
+      };
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    <script src="/js/search.js"></script>
+    
+
+    
+    
+
+  </body>
+</html>
+

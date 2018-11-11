@@ -1,0 +1,126 @@
+---
+title: Exploring the multiplication table with R
+author: Sergio Olmos Pardo
+date: '2018-11-06'
+slug: multiplication-table-with-r
+categories:
+  - Mathematics
+  - R
+tags:
+  - R
+  - Mathematics
+image:
+  caption: ''
+  focal_point: ''
+---
+
+
+
+<p>I was reading about the Hidden beauty of multiplication tables and I thought it could be fun to make some of the cool plots in that article with R. While we are at it, we can tweak some of them and play around with the tables to see what we get.</p>
+<div id="the-multiplication-table" class="section level2">
+<h2>The multiplication table</h2>
+<p>Consider the standard <span class="math inline">\(10 \times 10\)</span> multiplication table, with the first row and the first column taking the values <span class="math inline">\(1\)</span> through <span class="math inline">\(10\)</span>, forming a grid with the corresponding products.</p>
+<pre class="r"><code>library(tidyverse)
+
+# Data frame with all the values of the 10x10 multiplication table
+multiplication_table &lt;- tibble(
+    x = 1:10,
+    y = 1:10
+) %&gt;% # Get all combination of x and y
+    complete(x, y) %&gt;% # Get the product of all combinations
+    mutate(product = x * y)
+
+ggplot(multiplication_table, aes(x, y)) +
+    geom_tile(color = &quot;white&quot;) +
+    geom_text(aes(label = product), color = &quot;white&quot;) +
+    # We want the table to start with 1 in the upper-left corner
+    scale_y_continuous(trans = &quot;reverse&quot;) +
+    theme_void()</code></pre>
+<p><img src="/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>For purposes that we will see next, I am going to add a row and a column of zeros above and to the left of our table, respectively:</p>
+<pre class="r"><code># We need 11 zeros in the new row and column
+multiplication_table &lt;- tibble(
+    x = c(1:10, rep(0, 11)),
+    y = c(1:10, rep(0,11))
+) %&gt;% 
+    complete(x, y) %&gt;% 
+    mutate(product = x * y) %&gt;% 
+    distinct()
+
+ggplot(multiplication_table, aes(x, y)) +
+    geom_tile(color = &quot;white&quot;) +
+    geom_text(aes(label = product), color = &quot;white&quot;) +
+    scale_y_continuous(trans = &quot;reverse&quot;) +
+    theme_void()</code></pre>
+<p><img src="/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Next, we will discover some beautiful symmetries by coloring the rectangles of the multiplication table that correspond to multiples of a number <span class="math inline">\(k\)</span> for various values of <span class="math inline">\(k\)</span>.</p>
+</div>
+<div id="single-multiples" class="section level2">
+<h2>Single multiples</h2>
+<p>We say that <span class="math inline">\(c\)</span> is a multiple of <span class="math inline">\(k\)</span> if <span class="math inline">\(c = n k\)</span> for some integer <span class="math inline">\(n\)</span>, which is called the multiplier. So we can tell if a given number <span class="math inline">\(c\)</span> is a multiple of <span class="math inline">\(k\)</span> if the division <span class="math inline">\(c\)</span> over <span class="math inline">\(k\)</span> has remainder 0.</p>
+<p>Let’s begin with <span class="math inline">\(k = 2\)</span>:</p>
+<pre class="r"><code>m2 &lt;- multiplication_table %&gt;% 
+    mutate(multiple_of_2 = product %% 2 == 0)
+ggplot(m2, aes(x, y)) +
+    geom_tile(aes(fill = multiple_of_2), color = &quot;white&quot;) +
+    geom_text(aes(label = product), color = &quot;white&quot;) +
+    scale_y_continuous(trans = &quot;reverse&quot;) +
+    scale_fill_manual(values = c(&quot;black&quot;, &quot;#E69F00&quot;),
+                      name = &quot;Multiple of 2?&quot;,
+                      labels = c(&quot;No&quot;, &quot;Yes&quot;)) +
+    theme_void()</code></pre>
+<p><img src="/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(m2, aes(x, y)) +
+    geom_tile(aes(fill = multiple_of_2), color = &quot;white&quot;) +
+    geom_text(aes(label = product), color = &quot;white&quot;) +
+    scale_y_continuous(trans = &quot;reverse&quot;) + # Change default colors and edit legend
+    scale_fill_brewer(palette = &quot;Pastel1&quot;,
+                      name = &quot;Multiple of 2?&quot;,
+                      labels = c(&quot;No&quot;, &quot;Yes&quot;)) +
+    theme_void()</code></pre>
+<p><img src="/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>We can see that the whole pattern above can be pieced together using the following fundamental block:</p>
+</div>
+<div id="multiple-multiples" class="section level2">
+<h2>Multiple multiples</h2>
+<pre class="r"><code>multiple_multiples &lt;- m2 %&gt;%
+    mutate(multiple_of_3 = product %% 3 == 0,
+           inter = interaction(multiple_of_2, multiple_of_3))
+multiple_multiples</code></pre>
+<pre><code>## # A tibble: 121 x 6
+##        x     y product multiple_of_2 multiple_of_3 inter    
+##    &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;lgl&gt;         &lt;lgl&gt;         &lt;fct&gt;    
+##  1     0     0       0 TRUE          TRUE          TRUE.TRUE
+##  2     0     1       0 TRUE          TRUE          TRUE.TRUE
+##  3     0     2       0 TRUE          TRUE          TRUE.TRUE
+##  4     0     3       0 TRUE          TRUE          TRUE.TRUE
+##  5     0     4       0 TRUE          TRUE          TRUE.TRUE
+##  6     0     5       0 TRUE          TRUE          TRUE.TRUE
+##  7     0     6       0 TRUE          TRUE          TRUE.TRUE
+##  8     0     7       0 TRUE          TRUE          TRUE.TRUE
+##  9     0     8       0 TRUE          TRUE          TRUE.TRUE
+## 10     0     9       0 TRUE          TRUE          TRUE.TRUE
+## # ... with 111 more rows</code></pre>
+<pre class="r"><code>summary(multiple_multiples)</code></pre>
+<pre><code>##        x            y         product    multiple_of_2   multiple_of_3  
+##  Min.   : 0   Min.   : 0   Min.   :  0   Mode :logical   Mode :logical  
+##  1st Qu.: 2   1st Qu.: 2   1st Qu.:  5   FALSE:25        FALSE:49       
+##  Median : 5   Median : 5   Median : 18   TRUE :96        TRUE :72       
+##  Mean   : 5   Mean   : 5   Mean   : 25                                  
+##  3rd Qu.: 8   3rd Qu.: 8   3rd Qu.: 40                                  
+##  Max.   :10   Max.   :10   Max.   :100                                  
+##          inter   
+##  FALSE.FALSE: 9  
+##  TRUE.FALSE :40  
+##  FALSE.TRUE :16  
+##  TRUE.TRUE  :56  
+##                  
+## </code></pre>
+<pre class="r"><code>ggplot(multiple_multiples, aes(x, y)) +
+    geom_tile(aes(fill = multiple_of_2)) +
+    geom_tile(aes(fill = inter)) +
+    scale_fill_brewer(palette = &quot;Pastel2&quot;) +
+    scale_y_continuous(trans = &quot;reverse&quot;) +
+    theme_void()</code></pre>
+<p><img src="/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>

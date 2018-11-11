@@ -4,6 +4,14 @@
     
     <url>
     
+      <loc>/post/multiplication-table-with-r/</loc>
+      <lastmod>2018-11-06T00:00:00+00:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <xhtml:link rel="alternate" href="/post/web_con_blogdown/" hreflang="en"/>
       <xhtml:link rel="alternate" href="/es/post/web_con_blogdown/" hreflang="es"/>
     
@@ -85,18 +93,10 @@
     
     <url>
     
-      <loc>/project/external-project/</loc>
-      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
-    </url>
+      <xhtml:link rel="alternate" href="/project/tfm/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/project/tfm/" hreflang="es"/>
     
-  
-    
-    <url>
-    
-      <xhtml:link rel="alternate" href="/project/internal-project/" hreflang="en"/>
-      <xhtml:link rel="alternate" href="/es/project/internal-project/" hreflang="es"/>
-    
-      <loc>/project/internal-project/</loc>
+      <loc>/project/tfm/</loc>
       <lastmod>2016-04-27T00:00:00+02:00</lastmod>
     </url>
     
@@ -174,32 +174,29 @@
     
     <url>
     
-      <xhtml:link rel="alternate" href="/tags/deep-learning/" hreflang="en"/>
-      <xhtml:link rel="alternate" href="/es/tags/deep-learning/" hreflang="es"/>
-    
-      <loc>/tags/deep-learning/</loc>
-      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    <url>
-    
-      <loc>/tags/demo/</loc>
-      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    <url>
-    
       <xhtml:link rel="alternate" href="/categories/espa%C3%B1ol/" hreflang="en"/>
       <xhtml:link rel="alternate" href="/es/categories/espa%C3%B1ol/" hreflang="es"/>
     
       <loc>/categories/espa%C3%B1ol/</loc>
       <lastmod>2018-10-28T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>/categories/mathematics/</loc>
+      <lastmod>2018-11-06T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>/tags/mathematics/</loc>
+      <lastmod>2018-11-06T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -231,11 +228,11 @@
     
     <url>
     
-      <xhtml:link rel="alternate" href="/tags/r/" hreflang="en"/>
-      <xhtml:link rel="alternate" href="/es/tags/r/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/categories/r/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/categories/r/" hreflang="es"/>
     
-      <loc>/tags/r/</loc>
-      <lastmod>2018-10-28T00:00:00+00:00</lastmod>
+      <loc>/categories/r/</loc>
+      <lastmod>2018-11-06T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -243,11 +240,11 @@
     
     <url>
     
-      <xhtml:link rel="alternate" href="/categories/r/" hreflang="en"/>
-      <xhtml:link rel="alternate" href="/es/categories/r/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/tags/r/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/tags/r/" hreflang="es"/>
     
-      <loc>/categories/r/</loc>
-      <lastmod>2018-10-28T00:00:00+00:00</lastmod>
+      <loc>/tags/r/</loc>
+      <lastmod>2018-11-06T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -303,6 +300,42 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/tags/hierarchical-models/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/tags/hierarchical-models/" hreflang="es"/>
+    
+      <loc>/tags/hierarchical-models/</loc>
+      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/tags/linear-mixed-models/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/tags/linear-mixed-models/" hreflang="es"/>
+    
+      <loc>/tags/linear-mixed-models/</loc>
+      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/tags/multilevel-models/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/tags/multilevel-models/" hreflang="es"/>
+    
+      <loc>/tags/multilevel-models/</loc>
+      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>/tags/plot/</loc>
       <lastmod>2015-07-23T21:13:14-05:00</lastmod>
       <priority>0</priority>
@@ -314,6 +347,18 @@
     
       <loc>/tags/regression/</loc>
       <lastmod>2015-07-23T21:13:14-05:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/tags/statistics/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/tags/statistics/" hreflang="es"/>
+    
+      <loc>/tags/statistics/</loc>
+      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
       <priority>0</priority>
     </url>
     

@@ -26,10 +26,10 @@
     
     <url>
     
-      <xhtml:link rel="alternate" href="/es/project/internal-project/" hreflang="es"/>
-      <xhtml:link rel="alternate" href="/project/internal-project/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/project/tfm/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/project/tfm/" hreflang="en"/>
     
-      <loc>/es/project/internal-project/</loc>
+      <loc>/es/project/tfm/</loc>
       <lastmod>2016-04-27T00:00:00+02:00</lastmod>
     </url>
     
@@ -41,18 +41,6 @@
       <xhtml:link rel="alternate" href="/categories/" hreflang="en"/>
     
       <loc>/es/categories/</loc>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    <url>
-    
-      <xhtml:link rel="alternate" href="/es/tags/deep-learning/" hreflang="es"/>
-      <xhtml:link rel="alternate" href="/tags/deep-learning/" hreflang="en"/>
-    
-      <loc>/es/tags/deep-learning/</loc>
-      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -147,6 +135,54 @@
       <xhtml:link rel="alternate" href="/tags/" hreflang="en"/>
     
       <loc>/es/tags/</loc>
+      <lastmod>2018-10-28T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/es/tags/hierarchical-models/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/tags/hierarchical-models/" hreflang="en"/>
+    
+      <loc>/es/tags/hierarchical-models/</loc>
+      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/es/tags/linear-mixed-models/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/tags/linear-mixed-models/" hreflang="en"/>
+    
+      <loc>/es/tags/linear-mixed-models/</loc>
+      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/es/tags/multilevel-models/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/tags/multilevel-models/" hreflang="en"/>
+    
+      <loc>/es/tags/multilevel-models/</loc>
+      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/es/tags/statistics/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/tags/statistics/" hreflang="en"/>
+    
+      <loc>/es/tags/statistics/</loc>
       <lastmod>2016-04-27T00:00:00+02:00</lastmod>
       <priority>0</priority>
     </url>
