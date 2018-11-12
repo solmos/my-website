@@ -396,6 +396,27 @@ ggplot(m2, aes(x, y)) +
     theme_void()</code></pre>
 <p><img src="/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>We can see that the whole pattern above can be pieced together using the following fundamental block:</p>
+<p>We want to explore the patterns for different values of <span class="math inline">\(k\)</span> so let’s create a function:</p>
+<pre class="r"><code>library(wesanderson)
+draw_pattern &lt;- function(k, xmax = k * 4, ymax = k * 4) {
+    tab &lt;- data.frame(
+        x = c(1:xmax, rep(0, xmax + 1)),
+        y = c(1:ymax, rep(0, ymax + 1))
+    ) %&gt;% 
+        complete(x, y) %&gt;% 
+        mutate(prod = x * y,
+               multiple = prod %% k == 0)
+    ggplot(tab, aes(x, y)) +
+        geom_tile(aes(fill = multiple)) +
+        scale_y_continuous(trans = &quot;reverse&quot;) +
+        scale_fill_manual(values = wes_palette(name = &quot;Zissou1&quot;,
+                                               n = 2)) +
+        #geom_text(aes(label = prod)) +
+        theme_void() +
+        guides(fill = FALSE)
+}
+draw_pattern(15)</code></pre>
+<p><img src="/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 </div>
 <div id="multiple-multiples" class="section level2">
 <h2>Multiple multiples</h2>
@@ -433,12 +454,11 @@ multiple_multiples</code></pre>
 ##                  
 ## </code></pre>
 <pre class="r"><code>ggplot(multiple_multiples, aes(x, y)) +
-    geom_tile(aes(fill = multiple_of_2)) +
     geom_tile(aes(fill = inter)) +
-    scale_fill_brewer(palette = &quot;Pastel2&quot;) +
+    scale_fill_brewer(palette = &quot;Pastel1&quot;) +
     scale_y_continuous(trans = &quot;reverse&quot;) +
     theme_void()</code></pre>
-<p><img src="/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 </div>
 
     </div>
