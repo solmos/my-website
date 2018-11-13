@@ -38,17 +38,16 @@ ggplot(multiplication_table, aes(x, y)) +
     theme_void()
 ```
 
+
+
 For purposes that we will see next, I am going to add a row and a column of zeros above and to the left of our table, respectively:
 ```{r}
-# We need 11 zeros in the new row and column
 multiplication_table <- tibble(
-    x = c(1:10, rep(0, 11)),
-    y = c(1:10, rep(0,11))
+    x = 0:10,
+    y = 0:10
 ) %>% 
     complete(x, y) %>% 
-    mutate(product = x * y) %>% 
-    distinct()
-
+    mutate(product = x * y)
 ggplot(multiplication_table, aes(x, y)) +
     geom_tile(color = "white") +
     geom_text(aes(label = product), color = "white") +
@@ -56,77 +55,108 @@ ggplot(multiplication_table, aes(x, y)) +
     theme_void()
 ```
 
+
 Next, we will discover some beautiful symmetries by coloring the rectangles of the multiplication table that correspond to multiples of a number $k$ for various values of $k$.
 
 ## Single multiples
 
 We say that $c$ is a multiple of $k$ if $c = n k$ for some integer $n$, which is called the multiplier. So we can tell if a given number $c$ is a multiple of $k$ if the division $c$ over $k$ has remainder 0.
 
-Let's begin with $k = 2$:
+Let's begin with $k = 2$. I am going to color the cells corresponding to multiples of $2$ in one color and non-multiples of $2$ in another color. Check out the pattern it emerges:
 ```{r}
 m2 <- multiplication_table %>% 
     mutate(multiple_of_2 = product %% 2 == 0)
+colors <- wesanderson::wes_palette(name = "Zissou1")
 ggplot(m2, aes(x, y)) +
     geom_tile(aes(fill = multiple_of_2), color = "white") +
     geom_text(aes(label = product), color = "white") +
     scale_y_continuous(trans = "reverse") +
-    scale_fill_manual(values = c("black", "#E69F00"),
+    scale_fill_manual(values = colors,
                       name = "Multiple of 2?",
                       labels = c("No", "Yes")) +
     theme_void()
 ```
 
-```{r}
-ggplot(m2, aes(x, y)) +
-    geom_tile(aes(fill = multiple_of_2), color = "white") +
-    geom_text(aes(label = product), color = "white") +
-    scale_y_continuous(trans = "reverse") + # Change default colors and edit legend
-    scale_fill_brewer(palette = "Pastel1",
-                      name = "Multiple of 2?",
-                      labels = c("No", "Yes")) +
+
+If we look closely we can see that the whole pattern above can be pieced together using the following fundamental block:
+```{r, fig.height = 2, fig.width = 2}
+block_2 <- tibble(
+    x = c(0,1),
+    y = c(0,1)
+) %>% 
+    complete(x, y) %>% 
+    distinct() %>% 
+    mutate(product = x * y,
+           multiple = product %% 2 == 0)
+ggplot(block_2, aes(x, y)) +
+    geom_tile(aes(fill = multiple), color = "white") +
+    scale_y_continuous(trans = "reverse") +
+    scale_fill_manual(values = colors,
+                      guide = FALSE) +
     theme_void()
 ```
 
-We can see that the whole pattern above can be pieced together using the following fundamental block:
-```{r}
+As Zoheir Barka explains in his article mentioned in the begining, the fundamental building block contains $k \times k = 2 \times 2 = 4$ cells of the multiplication table. The number of squares corresponding to the non-multiples of $2$ in this block is given by
 
-```
+$$(k - 1)^2 = (2 - 1)^2 = 1$$
 
-
-We want to explore the patterns for different values of $k$ so let's create a function:
-```{r}
+We want to explore the patterns for different values of $k$ so I create a simple function to make my life easier. The fact that each side of the fundamental building block is $k$ can be useful for setting good defaults in our function.
+```{r, fig.height = 5, fig.width = 5}
 library(wesanderson)
 draw_pattern <- function(k, xmax = k * 4, ymax = k * 4) {
     tab <- data.frame(
-        x = c(1:xmax, rep(0, xmax + 1)),
-        y = c(1:ymax, rep(0, ymax + 1))
-    ) %>% 
+        x = 0:xmax,
+        y = 0:xmax) %>% 
         complete(x, y) %>% 
         mutate(prod = x * y,
-               multiple = prod %% k == 0)
-    ggplot(tab, aes(x, y)) +
-        geom_tile(aes(fill = multiple)) +
+               multiple = prod %% k == 0) %>% 
+        ggplot(aes(x, y)) +
+        geom_tile(aes(fill = multiple), color = "white") +
+        geom_text(aes(label = prod), color = "white") +
         scale_y_continuous(trans = "reverse") +
         scale_fill_manual(values = wes_palette(name = "Zissou1",
                                                n = 2)) +
-        #geom_text(aes(label = prod)) +
         theme_void() +
         guides(fill = FALSE)
+    tab
 }
-draw_pattern(15)
+draw_pattern(4, 4*2, 4*2)
+draw_pattern(6, 6*2, 6*2)
 ```
 
+```{r, fig.height=5, fig.width=5}
+draw_pattern(14, 13, 13)
+```
+
+```{r}
+wes_palette("Zissou1", 5, type = "continuous")
+```
 
 
 ## Multiple multiples
 
+```{r, fig.height=6, fig.width=6}
+multiple_multiples <- tibble(
+    x = 0:60,
+    y = 0:60
+) %>% 
+    complete(x, y) %>% 
+    mutate(product = x * y,
+           m2 = product %% 2 == 0,
+           m3 = product %% 3 == 0,
+           inter = interaction(m2, m3))
+ggplot(multiple_multiples, aes(x, y)) +
+    geom_tile(aes(fill = inter)) +
+    scale_fill_brewer(palette = "Pastel1") +
+    scale_y_continuous(trans = "reverse") +
+    theme_void() +
+    guides(fill = FALSE)
+```
 
 ```{r}
 multiple_multiples <- m2 %>%
     mutate(multiple_of_3 = product %% 3 == 0,
            inter = interaction(multiple_of_2, multiple_of_3))
-multiple_multiples
-summary(multiple_multiples)
 ggplot(multiple_multiples, aes(x, y)) +
     geom_tile(aes(fill = inter)) +
     scale_fill_brewer(palette = "Pastel1") +
