@@ -35,6 +35,8 @@ ggplot(multiplication_table, aes(x, y)) +
     geom_text(aes(label = product), color = "white") +
     # We want the table to start with 1 in the upper-left corner
     scale_y_continuous(trans = "reverse") +
+    # We want to always display the tables as squares
+    coord_fixed() +
     theme_void()
 ```
 
@@ -52,6 +54,7 @@ ggplot(multiplication_table, aes(x, y)) +
     geom_tile(color = "white") +
     geom_text(aes(label = product), color = "white") +
     scale_y_continuous(trans = "reverse") +
+    coord_fixed() +
     theme_void()
 ```
 
@@ -64,13 +67,16 @@ We say that $c$ is a multiple of $k$ if $c = n k$ for some integer $n$, which is
 
 Let's begin with $k = 2$. I am going to color the cells corresponding to multiples of $2$ in one color and non-multiples of $2$ in another color. Check out the pattern it emerges:
 ```{r}
+library(wesanderson)
 m2 <- multiplication_table %>% 
     mutate(multiple_of_2 = product %% 2 == 0)
-colors <- wesanderson::wes_palette(name = "Zissou1")
+# Color palette chosen from the wesanderson package
+colors <- wesanderson::wes_palette(name = "Zissou1", n = 2)
 ggplot(m2, aes(x, y)) +
     geom_tile(aes(fill = multiple_of_2), color = "white") +
     geom_text(aes(label = product), color = "white") +
     scale_y_continuous(trans = "reverse") +
+    coord_fixed() +
     scale_fill_manual(values = colors,
                       name = "Multiple of 2?",
                       labels = c("No", "Yes")) +
@@ -96,73 +102,100 @@ ggplot(block_2, aes(x, y)) +
     theme_void()
 ```
 
-As Zoheir Barka explains in his article mentioned in the begining, the fundamental building block contains $k \times k = 2 \times 2 = 4$ cells of the multiplication table. The number of squares corresponding to the non-multiples of $2$ in this block is given by
+As Zoheir Barka explains in his article mentioned in the beginning, the fundamental building block contains $k \times k = 2 \times 2 = 4$ cells of the multiplication table. The fact that, in the case of a single multiple, each side of the fundamental building block is $k$ can be useful when plotting our tables.
 
-$$(k - 1)^2 = (2 - 1)^2 = 1$$
+We want to explore the patterns for different values of $k$ so I created a simple function that plots a colored multiplication table for the supplied $k$ and the supplied dimensions. Multiples and non-multiples are coloured the same way as before so I chose to drop the legend for aesthetic reasons. I will add more arguments to this function later to easily customize the resulting table.
 
-We want to explore the patterns for different values of $k$ so I create a simple function to make my life easier. The fact that each side of the fundamental building block is $k$ can be useful for setting good defaults in our function.
-```{r, fig.height = 5, fig.width = 5}
-library(wesanderson)
-draw_pattern <- function(k, xmax = k * 4, ymax = k * 4) {
-    tab <- data.frame(
+```{r}
+# Auxiliary function to create a data frame 
+# with the values of the multiplication table
+create_mtable <- function(xmax, ymax) {
+    data.frame(
         x = 0:xmax,
-        y = 0:xmax) %>% 
+        y = 0:ymax
+    ) %>% 
         complete(x, y) %>% 
-        mutate(prod = x * y,
-               multiple = prod %% k == 0) %>% 
+        mutate(product = x * y)
+}
+
+# Plot the colored table
+draw_pattern <- function(k, xmax, ymax) {
+    # Colors chosen from the Zissou1 palette in the wesanderson package
+    colors <- wesanderson::wes_palette(name = "Zissou1", n = 2)
+    tab <- create_mtable(xmax, ymax) %>% 
+        mutate(multiple = product %% k == 0) %>% 
         ggplot(aes(x, y)) +
         geom_tile(aes(fill = multiple), color = "white") +
-        geom_text(aes(label = prod), color = "white") +
+        geom_text(aes(label = product), color = "white") +
         scale_y_continuous(trans = "reverse") +
-        scale_fill_manual(values = wes_palette(name = "Zissou1",
-                                               n = 2)) +
+        coord_fixed() +
+        scale_fill_manual(values = colors) +
         theme_void() +
         guides(fill = FALSE)
     tab
 }
-draw_pattern(4, 4*2, 4*2)
-draw_pattern(6, 6*2, 6*2)
 ```
 
+We can now easily plot the colored tables for different values of $k$ and see what patterns emerge:
 ```{r, fig.height=5, fig.width=5}
-draw_pattern(14, 13, 13)
+draw_pattern(k = 4, xmax = 4 * 3, ymax = 4 * 3) +
+    labs(title = "Multiples of 4")
+draw_pattern(6, 6 * 2, 6 * 2) +
+    labs(title = "Multiples of 6")
 ```
 
-```{r}
-wes_palette("Zissou1", 5, type = "continuous")
-```
 
+Notice that we set the "length" of each side of the tables to multiples of $k$ so that the pattern is symmetric.
 
 ## Multiple multiples
 
-```{r, fig.height=6, fig.width=6}
+We can plot more interesting (and beautiful) patterns if we use multiple multiples, and corresponding to them, multiple colors.
+
+Consider the multiples of $k_1 = 2$ and $k_2 = 3$. I will color each square of the multiplication table according to the following criteria:
+
+* Not multiple of neither 2 nor 3
+
+* Multiple only of 2
+
+* Multiple only of 3
+
+* Multiple of both 2 and 3
+
+```{r}
 multiple_multiples <- tibble(
-    x = 0:60,
-    y = 0:60
+    x = 0:12,
+    y = 0:12
 ) %>% 
     complete(x, y) %>% 
     mutate(product = x * y,
            m2 = product %% 2 == 0,
            m3 = product %% 3 == 0,
-           inter = interaction(m2, m3))
+           inter = interaction(m2, m3)) %>% 
+    mutate(interaction = recode_factor(inter,
+                                       FALSE.FALSE = "Multple of neither",
+                                       TRUE.FALSE = "Multiple of 2",
+                                       FALSE.TRUE = "Multiple of 3",
+                                       TRUE.TRUE = "Multiple of both"))
 ggplot(multiple_multiples, aes(x, y)) +
-    geom_tile(aes(fill = inter)) +
-    scale_fill_brewer(palette = "Pastel1") +
-    scale_y_continuous(trans = "reverse") +
-    theme_void() +
-    guides(fill = FALSE)
-```
-
-```{r}
-multiple_multiples <- m2 %>%
-    mutate(multiple_of_3 = product %% 3 == 0,
-           inter = interaction(multiple_of_2, multiple_of_3))
-ggplot(multiple_multiples, aes(x, y)) +
-    geom_tile(aes(fill = inter)) +
-    scale_fill_brewer(palette = "Pastel1") +
+    geom_tile(aes(fill = interaction), color = "white") +
+    geom_text(aes(label = product), color = "white") +
+    scale_fill_brewer(palette = "Pastel1",
+                      name = element_blank()) +
     scale_y_continuous(trans = "reverse") +
     theme_void()
 ```
+
+Notice that I used a $12 \times 12$ table so that I got a symmetric pattern. I did this because I knew that the fundamental building block is given by the least common multiple of $2$ and $3$. That is, in this case the fundamental block consists of $6 \times 6 = 36$ little cells.
+
+
+## Creating beautiful patterns
+
+Next I show some beautiful patterns obtained by playing around with this idea of coloring multiples of several numbers. You can find the full code used to create these visualizations here.
+
+
+
+
+
 
 
 

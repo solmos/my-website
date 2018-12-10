@@ -13,6 +13,26 @@
     
     
     <item>
+      <title>test</title>
+      <link>/post/test/</link>
+      <pubDate>Fri, 07 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/test/</guid>
+      <description>Hello I am 😕</description>
+    </item>
+    
+    <item>
+      <title>Gráficos de tiro con R</title>
+      <link>/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/</link>
+      <pubDate>Fri, 30 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/</guid>
+      <description>Kirk Goldsberry es una de las figuras más destacadas en el mundo de la estadística avanzada en la NBA. Se le conoce principalmente por el uso de gráficos de tiro en sus análisis. Este es un ejemplo en el que se muestran todos los tiros que ha realizado Lebron James a lo largo de su carrera:
+Gráfica de tiro de Lebron James
+ Los gráficos de tiro (shot charts en inglés) pueden ser útiles para, por ejemplo, identificar tendencias en ataque de un determinado jugador/equipo, mostrar en qué zonas del campo un jugador es más efectivo o analizar qué tipo de tiros un equipo permite al rival.</description>
+    </item>
+    
+    <item>
       <title>Exploring the multiplication table with R</title>
       <link>/post/multiplication-table-with-r/</link>
       <pubDate>Tue, 06 Nov 2018 00:00:00 +0000</pubDate>

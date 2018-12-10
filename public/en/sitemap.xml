@@ -4,6 +4,22 @@
     
     <url>
     
+      <loc>/post/test/</loc>
+      <lastmod>2018-12-07T00:00:00+00:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/</loc>
+      <lastmod>2018-11-30T00:00:00+00:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>/post/multiplication-table-with-r/</loc>
       <lastmod>2018-11-06T00:00:00+00:00</lastmod>
     </url>
@@ -163,10 +179,20 @@
     
     <url>
     
+      <loc>/categories/basketball/</loc>
+      <lastmod>2018-11-30T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
       <xhtml:link rel="alternate" href="/categories/" hreflang="en"/>
       <xhtml:link rel="alternate" href="/es/categories/" hreflang="es"/>
     
       <loc>/categories/</loc>
+      <lastmod>2018-11-30T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -244,7 +270,7 @@
       <xhtml:link rel="alternate" href="/es/categories/r/" hreflang="es"/>
     
       <loc>/categories/r/</loc>
-      <lastmod>2018-11-06T00:00:00+00:00</lastmod>
+      <lastmod>2018-11-30T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     

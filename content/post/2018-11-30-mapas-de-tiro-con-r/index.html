@@ -1,0 +1,204 @@
+---
+title: Gráficos de tiro con R
+subtitle: Tutorial de cómo crear un gráfico de tiro de un partido de baloncesto de Leb Oro con R
+author: Sergio Olmos Pardo
+summary: Tutorial de cómo crear un gráfico de tiro de un partido de baloncesto de Leb Oro con R
+date: '2018-11-30'
+slug: mapas-de-tiro-con-r
+categories:
+  - R
+  - Basketball
+tags: []
+image:
+  caption: ''
+  focal_point: ''
+---
+
+
+
+<p><a href="https://twitter.com/kirkgoldsberry">Kirk Goldsberry</a> es una de las figuras más destacadas en el mundo de la estadística avanzada en la NBA. Se le conoce principalmente por el uso de gráficos de tiro en sus análisis. Este es un ejemplo en el que se muestran todos los tiros que ha realizado Lebron James a lo largo de su carrera:</p>
+<div class="figure">
+<img src="http://a.espncdn.com/i/infographics/20181017_goldsberry/Figure2_Constellation.png" alt="Gráfica de tiro de Lebron James" />
+<p class="caption">Gráfica de tiro de Lebron James</p>
+</div>
+<p>Los gráficos de tiro (<em>shot charts</em> en inglés) pueden ser útiles para, por ejemplo, identificar tendencias en ataque de un determinado jugador/equipo, mostrar en qué zonas del campo un jugador es más efectivo o analizar qué tipo de tiros un equipo permite al rival.</p>
+<p>En esta entrada voy a crear un gráfico de tiro de un partido de la liga en la que yo juego, la <a href="http://www.leboro.es/inicio.aspx">Leb Oro</a>. Específicamente, voy a utilizar el partido que disputé con mi equipo, el Covirán Granada, contra mi ex-equipo, el Leyma Coruña.</p>
+<div id="obtener-los-datos" class="section level2">
+<h2>1. Obtener los datos</h2>
+<p>Cada jornada, en la plataforma de <a href="http://baloncestoenvivo.feb.es/">Baloncesto en Vivo</a> podemos seguir la evolución de las estadísticas de los partidos en directo. En esta plataforma no sólo se puede ver la tabla de estadísticas a la que estamos acostumbrados, también es posible ver las estadísticas jugada a jugada o los gráficos de tiro.</p>
+<p>Sin embargo, <strong>la página web de la FEB no lo pone muy fácil a la hora de acceder a estos datos</strong>. Baloncesto en vivo no proporciona menús de selección de ningún tipo que nos permitan elegir partidos de jornadas (o temporadas) anteriores. En la página principal tan solo aparecen los partidos de la jornada vigente en ese momento.</p>
+<p>A simple vista parece que cada jornada se eliminen los datos de la jornada anterior. No es así. Las páginas siguen siendo accesibles, aunque solo si has apuntado la dirección web cuando estaba visible en su momento ¯\_(ツ)_/¯.</p>
+<p>En este caso el enlace al partido que utilizaré en esta entrada es el siguiente:</p>
+<p><a href="http://baloncestoenvivo.feb.es/Game/2010150" class="uri">http://baloncestoenvivo.feb.es/Game/2010150</a></p>
+<p>Básicamente, debemos encontrar qué enlace o solicitud a la API nos da la información que queremos. Soy relativamente nuevo en esto de extraer datos de la web por lo que no entraré en mucho detalle de cómo lo he hecho. Esta entrada de <a href="http://www.gregreda.com/2015/02/15/web-scraping-finding-the-api/">Greg Reda</a> me ha sido de gran utilidad.</p>
+<p>Para encontrar esta solicitud a la API utilizaremos las herramientas para desarrolladores de nuestro navegador (en mi caso Chrome). Estando en la pestaña del <a href="http://baloncestoenvivo.feb.es/Game/2010150#shotchart">gráfico de tiro</a>, estos son los pasos que seguí para dar con el <em>request</em>:</p>
+<ol style="list-style-type: decimal">
+<li><p>Abrimos las herramientas para desarrolladores de nuestro navegador</p></li>
+<li><p>Vamos a la pestaña de <em>Network</em></p></li>
+<li><p>Seleccionamos el filtro <code>XHR</code></p></li>
+<li><p>Refrescamos la página</p></li>
+<li><p>Seleccionamos la entrada <code>20100150</code></p></li>
+<li><p>En la pestaña <em>Preview</em>, podemos observar que las coordenadas de los tiros se encuentran bajo la etiqueta <code>SHOTS</code> dentro de <code>SHOTCHART</code></p></li>
+</ol>
+<div class="figure">
+<img src="shotchart3.png" />
+
+</div>
+<ol start="7" style="list-style-type: decimal">
+<li>En la pestaña <em>Headers</em> copiamos el enlace de la petición bajo el título <code>Request URL</code>: <a href="http://baloncestoenvivo.feb.es/api/ShotChart/2010150" class="uri">http://baloncestoenvivo.feb.es/api/ShotChart/2010150</a></li>
+</ol>
+<p>Ya tenemos el enlace de la petición que nos dará la información que queremos. Para realizar la petición utilizaremos el paquete de R <code>httr</code>. También utilizaremos el paquete <code>jsonlite</code> para, una vez descargados los datos en formato JSON, obtener un objeto <code>list</code> con toda la información en un formato mucho más fácil de manipular en R. Ya que estamos, también cargamos el paquete <code>tidyverse</code>, que utilizaremos para manipular estos datos.</p>
+<pre class="r"><code>library(httr)
+library(jsonlite)
+library(tidyverse)
+
+api_request &lt;- GET(&quot;http://baloncestoenvivo.feb.es/api/ShotChart/2010150&quot;)
+content_list &lt;- content(api_request, as = &quot;text&quot;, encoding = &quot;UTF-8&quot;) %&gt;%
+    fromJSON</code></pre>
+<p>El objeto <code>content_list</code> es una lista con 10 elementos. La estructura de esta lista es precisamente la estructura que observamos cuando estábamos buscando el enlace de petición de la API.</p>
+<pre class="r"><code>shotchart_raw &lt;- content_list$SHOTCHART$SHOTS %&gt;%
+    as.tibble() %&gt;% 
+    print()</code></pre>
+<pre><code>## # A tibble: 128 x 7
+##    m     t     x     y     team  player quarter
+##  * &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
+##  1 0     00:14 138   41    0     12     1      
+##  2 1     00:54 38    102   0     11     1      
+##  3 1     01:14 138   35    1     22     1      
+##  4 1     01:32 211   146   0     11     1      
+##  5 0     01:40 177   163   0     11     1      
+##  6 1     01:49 170   164   1     22     1      
+##  7 1     02:11 147   26    0     15     1      
+##  8 0     02:35 134   159   1     4      1      
+##  9 0     02:48 72    140   1     4      1      
+## 10 1     03:28 115   163   1     7      1      
+## # ... with 118 more rows</code></pre>
+<p>Y aquí lo tenemos, un simple <em>data frame</em> con los datos que queríamos. Si miramos la ficha de estadísticas del partido, podemos comprobar que se hicieron 128 tiros entre los dos equipos, exactamente el número de filas en nuestra tabla de datos.</p>
+<p>Podemos deducir fácilmente qué representa cada variable:</p>
+<ul>
+<li><p><code>m</code> = Fallo (0) o acierto (1)</p></li>
+<li><p><code>t</code> = Tiempo</p></li>
+<li><p><code>x</code> = Coordenada en el eje horizontal</p></li>
+<li><p><code>y</code> = Coordenada en el eje vertical</p></li>
+<li><p><code>team</code> = Equipo al que pertenece el jugador realizando el tiro (0 equipo de casa, 1 equipo visitante)</p></li>
+<li><p><code>player</code> = Dorsal del jugador que realiza el tiro</p></li>
+<li><p><code>quarter</code> = Cuarto del partido en el que se realizó el tiro</p></li>
+</ul>
+<p>Observamos que todas la variables en nuestro data frame son de tipo <code>character</code>. Modificamos la clase de cada variable en base a lo que representa:</p>
+<pre class="r"><code>shotchart_df &lt;- shotchart_raw %&gt;%
+    transmute(made = as.factor(m),
+              time = parse_time(t, &quot;%M:%S&quot;),
+              x = as.numeric(x),
+              y = as.numeric(y),
+              team = factor(team, labels = c(&quot;Granada&quot;, &quot;Coruña&quot;)),
+              player = as.factor(player),
+              quarter = as.factor(quarter))
+shotchart_df</code></pre>
+<pre><code>## # A tibble: 128 x 7
+##    made  time       x     y team    player quarter
+##    &lt;fct&gt; &lt;time&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;   &lt;fct&gt;  &lt;fct&gt;  
+##  1 0     00&#39;14&quot;   138    41 Granada 12     1      
+##  2 1     00&#39;54&quot;    38   102 Granada 11     1      
+##  3 1     01&#39;14&quot;   138    35 Coruña  22     1      
+##  4 1     01&#39;32&quot;   211   146 Granada 11     1      
+##  5 0     01&#39;40&quot;   177   163 Granada 11     1      
+##  6 1     01&#39;49&quot;   170   164 Coruña  22     1      
+##  7 1     02&#39;11&quot;   147    26 Granada 15     1      
+##  8 0     02&#39;35&quot;   134   159 Coruña  4      1      
+##  9 0     02&#39;48&quot;    72   140 Coruña  4      1      
+## 10 1     03&#39;28&quot;   115   163 Coruña  7      1      
+## # ... with 118 more rows</code></pre>
+<p>Vamos a visualizar los tiros según sus coordenadas:</p>
+<pre class="r"><code>ggplot(shotchart_df, aes(x, y)) +
+    geom_point(aes(color = team, shape = made)) +
+    theme_minimal()</code></pre>
+<p><img src="/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="dibujar-la-cancha" class="section level2">
+<h2>2. Dibujar la cancha</h2>
+<p>En el gráfico de arriba nos falta dibujar las líneas que delimitan la cancha de juego. En concreto, vamos a dibujar media pista con el aro en la parte inferior. Al parecer, la plataforma Baloncesto en Vivo apunta la localización de los tiros en base a la antigua línea de triple a 6.25 metros, así como la antigua zona, : confused : .</p>
+<p>El siguiente bloque de código utiliza <code>ggplot2</code> y la extensión <code>ggforce</code> para dibujar la pista de baloncesto con <a href="http://www.csd.gob.es/csd/estaticos/inst-dep/nide/campos-peq/reglamentarias/baloncesto/blc1_el_campo_de_juego.pdf">estas medidas</a>:</p>
+<pre class="r"><code>library(ggforce)  ## For geom_circle() and geom_arc()
+
+outer_edges &lt;- tribble(
+    ~x,    ~y,
+     0,    0,
+     0,    1400,
+     1500, 1400,
+     1500, 0,
+     0,    0
+)
+mid_x &lt;- 15 / 2
+paint_rectangle &lt;- tribble(
+    ~x,           ~y,
+    750 - 175,     0,
+    750 - 175,     580,
+    750 + 175,     580,
+    750 + 175,     0
+)
+
+court &lt;- ggplot() +
+    
+    # Outer edges
+    geom_path(aes(x, y), data = outer_edges) +
+    
+    # Free throw circle
+    geom_circle(aes(x0 = 750, y0 = 580, r = 175)) +
+    
+    # Paint rectangle
+    geom_path(aes(x, y), data = paint_rectangle) +
+    
+    # Three point arc
+    ## Top arc
+    geom_arc(aes(x0 = 750, y0 = 157.5, r = 625,
+                 start = pi / 2, end = - pi / 2)) +
+    ## Corner lines
+    geom_path(aes(c(125, 125), c(157.5, 0))) +
+    geom_path(aes(c(1500 - 125, 1500 - 125), c(157.5, 0))) +
+    
+    # Basket
+    ## Rim
+    geom_circle(aes(x0 = 750, y0 = 120 + 45, r = 22.5)) +
+    ## Backboard
+    geom_path(aes(x = c(750 - 90, 750 + 90),
+                  y = c(120, 120))) +
+    coord_fixed()
+
+court</code></pre>
+<p><img src="/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="crear-el-grafico-de-tiro" class="section level2">
+<h2>Crear el gráfico de tiro</h2>
+<p>Ahora debemos sobreponer los puntos que representan los tiros en la pista que hemos dibujado. Sin embargo, vemos que <strong>las escalas son diferentes</strong>:</p>
+<pre class="r"><code>court + geom_point(data = shotchart_df, aes(x, y, color = made))</code></pre>
+<p><img src="/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Deberemos transformar los valores de las coordenadas de los tiros para que se ajusten a la pista que hemos dibujado. Esto es, debemos encontrar un valor <span class="math inline">\(c\)</span> tal que multiplicándolo por el valor de las coordenadas obtengamos valores en la escala de nuestra pista.</p>
+<p><strong>No he encontrado una solución fácil a este problema</strong>. Una opción es ir probando diferentes valores y ver qué valor nos da un resultado razonable. En una posible segunda entrada intentaré aportar una mejor solución.</p>
+<hr />
+<p>Otra opción más formal es elegir <span class="math inline">\(c\)</span> de modo que el producto entre éste y el mayor valor de la coordenada en el eje horizontal <span class="math inline">\(x_{max}\)</span>, quede dentro de la pista, esto es, elegir <span class="math inline">\(c\)</span> tal que <span class="math inline">\(c x_{max} &lt; 1500\)</span>. Podemos fijar un valor <span class="math inline">\(d\)</span> de modo que <span class="math inline">\(c x_{max}\)</span> no quede demasiado</p>
+<p><span class="math display">\[c x_{max} = 1500 - d,\]</span></p>
+<p>donde <span class="math inline">\(c\)</span> es el valor por el que multiplicaremos las coordenad</p>
+<p>podemos elegir el valor los valores de las coordenadas por la siguiente cantidad</p>
+<p><span class="math display">\[\frac{1500 - e} {max (x)}\]</span></p>
+<hr />
+<pre class="r"><code>shots &lt;- shotchart_df %&gt;% 
+    mutate(x = x * 5.45,
+           y = y * 5.45,
+           x_flipped = 2 * 750 - x)
+court +
+    geom_point(aes(x_flipped, y, color = made), data = shots)</code></pre>
+<p><img src="/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>max_x &lt;- max(shotchart_df$x)
+trns &lt;- (1500 - 25) / max_x
+shots &lt;- shotchart_df %&gt;% 
+    mutate(x = x * trns,
+           y = y * trns,
+           x_flipped = 2 * 750 - x)
+court +
+    geom_point(aes(x_flipped, y, color = made), data = shots) +
+    geom_text(aes(x_flipped, y, label = time), size = 4, data = shots)</code></pre>
+<p><img src="/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code>court +
+    geom_point(aes(x_flipped, y, color = made), data = shots)</code></pre>
+<p><img src="/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>

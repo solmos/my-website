@@ -11,6 +11,211 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>test</title>
+      <link>/post/test/</link>
+      <pubDate>Fri, 07 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/test/</guid>
+      <description>&lt;p&gt;Hello I am 😕&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Gráficos de tiro con R</title>
+      <link>/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/</link>
+      <pubDate>Fri, 30 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://twitter.com/kirkgoldsberry&#34;&gt;Kirk Goldsberry&lt;/a&gt; es una de las figuras más destacadas en el mundo de la estadística avanzada en la NBA. Se le conoce principalmente por el uso de gráficos de tiro en sus análisis. Este es un ejemplo en el que se muestran todos los tiros que ha realizado Lebron James a lo largo de su carrera:&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;http://a.espncdn.com/i/infographics/20181017_goldsberry/Figure2_Constellation.png&#34; alt=&#34;Gráfica de tiro de Lebron James&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Gráfica de tiro de Lebron James&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Los gráficos de tiro (&lt;em&gt;shot charts&lt;/em&gt; en inglés) pueden ser útiles para, por ejemplo, identificar tendencias en ataque de un determinado jugador/equipo, mostrar en qué zonas del campo un jugador es más efectivo o analizar qué tipo de tiros un equipo permite al rival.&lt;/p&gt;
+&lt;p&gt;En esta entrada voy a crear un gráfico de tiro de un partido de la liga en la que yo juego, la &lt;a href=&#34;http://www.leboro.es/inicio.aspx&#34;&gt;Leb Oro&lt;/a&gt;. Específicamente, voy a utilizar el partido que disputé con mi equipo, el Covirán Granada, contra mi ex-equipo, el Leyma Coruña.&lt;/p&gt;
+&lt;div id=&#34;obtener-los-datos&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;1. Obtener los datos&lt;/h2&gt;
+&lt;p&gt;Cada jornada, en la plataforma de &lt;a href=&#34;http://baloncestoenvivo.feb.es/&#34;&gt;Baloncesto en Vivo&lt;/a&gt; podemos seguir la evolución de las estadísticas de los partidos en directo. En esta plataforma no sólo se puede ver la tabla de estadísticas a la que estamos acostumbrados, también es posible ver las estadísticas jugada a jugada o los gráficos de tiro.&lt;/p&gt;
+&lt;p&gt;Sin embargo, &lt;strong&gt;la página web de la FEB no lo pone muy fácil a la hora de acceder a estos datos&lt;/strong&gt;. Baloncesto en vivo no proporciona menús de selección de ningún tipo que nos permitan elegir partidos de jornadas (o temporadas) anteriores. En la página principal tan solo aparecen los partidos de la jornada vigente en ese momento.&lt;/p&gt;
+&lt;p&gt;A simple vista parece que cada jornada se eliminen los datos de la jornada anterior. No es así. Las páginas siguen siendo accesibles, aunque solo si has apuntado la dirección web cuando estaba visible en su momento ¯\_(ツ)_/¯.&lt;/p&gt;
+&lt;p&gt;En este caso el enlace al partido que utilizaré en esta entrada es el siguiente:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://baloncestoenvivo.feb.es/Game/2010150&#34; class=&#34;uri&#34;&gt;http://baloncestoenvivo.feb.es/Game/2010150&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Básicamente, debemos encontrar qué enlace o solicitud a la API nos da la información que queremos. Soy relativamente nuevo en esto de extraer datos de la web por lo que no entraré en mucho detalle de cómo lo he hecho. Esta entrada de &lt;a href=&#34;http://www.gregreda.com/2015/02/15/web-scraping-finding-the-api/&#34;&gt;Greg Reda&lt;/a&gt; me ha sido de gran utilidad.&lt;/p&gt;
+&lt;p&gt;Para encontrar esta solicitud a la API utilizaremos las herramientas para desarrolladores de nuestro navegador (en mi caso Chrome). Estando en la pestaña del &lt;a href=&#34;http://baloncestoenvivo.feb.es/Game/2010150#shotchart&#34;&gt;gráfico de tiro&lt;/a&gt;, estos son los pasos que seguí para dar con el &lt;em&gt;request&lt;/em&gt;:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;&lt;p&gt;Abrimos las herramientas para desarrolladores de nuestro navegador&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Vamos a la pestaña de &lt;em&gt;Network&lt;/em&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Seleccionamos el filtro &lt;code&gt;XHR&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Refrescamos la página&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Seleccionamos la entrada &lt;code&gt;20100150&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;En la pestaña &lt;em&gt;Preview&lt;/em&gt;, podemos observar que las coordenadas de los tiros se encuentran bajo la etiqueta &lt;code&gt;SHOTS&lt;/code&gt; dentro de &lt;code&gt;SHOTCHART&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;shotchart3.png&#34; /&gt;
+
+&lt;/div&gt;
+&lt;ol start=&#34;7&#34; style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;En la pestaña &lt;em&gt;Headers&lt;/em&gt; copiamos el enlace de la petición bajo el título &lt;code&gt;Request URL&lt;/code&gt;: &lt;a href=&#34;http://baloncestoenvivo.feb.es/api/ShotChart/2010150&#34; class=&#34;uri&#34;&gt;http://baloncestoenvivo.feb.es/api/ShotChart/2010150&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Ya tenemos el enlace de la petición que nos dará la información que queremos. Para realizar la petición utilizaremos el paquete de R &lt;code&gt;httr&lt;/code&gt;. También utilizaremos el paquete &lt;code&gt;jsonlite&lt;/code&gt; para, una vez descargados los datos en formato JSON, obtener un objeto &lt;code&gt;list&lt;/code&gt; con toda la información en un formato mucho más fácil de manipular en R. Ya que estamos, también cargamos el paquete &lt;code&gt;tidyverse&lt;/code&gt;, que utilizaremos para manipular estos datos.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(httr)
+library(jsonlite)
+library(tidyverse)
+
+api_request &amp;lt;- GET(&amp;quot;http://baloncestoenvivo.feb.es/api/ShotChart/2010150&amp;quot;)
+content_list &amp;lt;- content(api_request, as = &amp;quot;text&amp;quot;, encoding = &amp;quot;UTF-8&amp;quot;) %&amp;gt;%
+    fromJSON&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;El objeto &lt;code&gt;content_list&lt;/code&gt; es una lista con 10 elementos. La estructura de esta lista es precisamente la estructura que observamos cuando estábamos buscando el enlace de petición de la API.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;shotchart_raw &amp;lt;- content_list$SHOTCHART$SHOTS %&amp;gt;%
+    as.tibble() %&amp;gt;% 
+    print()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 128 x 7
+##    m     t     x     y     team  player quarter
+##  * &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt;  &amp;lt;chr&amp;gt;  
+##  1 0     00:14 138   41    0     12     1      
+##  2 1     00:54 38    102   0     11     1      
+##  3 1     01:14 138   35    1     22     1      
+##  4 1     01:32 211   146   0     11     1      
+##  5 0     01:40 177   163   0     11     1      
+##  6 1     01:49 170   164   1     22     1      
+##  7 1     02:11 147   26    0     15     1      
+##  8 0     02:35 134   159   1     4      1      
+##  9 0     02:48 72    140   1     4      1      
+## 10 1     03:28 115   163   1     7      1      
+## # ... with 118 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Y aquí lo tenemos, un simple &lt;em&gt;data frame&lt;/em&gt; con los datos que queríamos. Si miramos la ficha de estadísticas del partido, podemos comprobar que se hicieron 128 tiros entre los dos equipos, exactamente el número de filas en nuestra tabla de datos.&lt;/p&gt;
+&lt;p&gt;Podemos deducir fácilmente qué representa cada variable:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;m&lt;/code&gt; = Fallo (0) o acierto (1)&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;t&lt;/code&gt; = Tiempo&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;x&lt;/code&gt; = Coordenada en el eje horizontal&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;y&lt;/code&gt; = Coordenada en el eje vertical&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;team&lt;/code&gt; = Equipo al que pertenece el jugador realizando el tiro (0 equipo de casa, 1 equipo visitante)&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;player&lt;/code&gt; = Dorsal del jugador que realiza el tiro&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;quarter&lt;/code&gt; = Cuarto del partido en el que se realizó el tiro&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Observamos que todas la variables en nuestro data frame son de tipo &lt;code&gt;character&lt;/code&gt;. Modificamos la clase de cada variable en base a lo que representa:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;shotchart_df &amp;lt;- shotchart_raw %&amp;gt;%
+    transmute(made = as.factor(m),
+              time = parse_time(t, &amp;quot;%M:%S&amp;quot;),
+              x = as.numeric(x),
+              y = as.numeric(y),
+              team = factor(team, labels = c(&amp;quot;Granada&amp;quot;, &amp;quot;Coruña&amp;quot;)),
+              player = as.factor(player),
+              quarter = as.factor(quarter))
+shotchart_df&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 128 x 7
+##    made  time       x     y team    player quarter
+##    &amp;lt;fct&amp;gt; &amp;lt;time&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;fct&amp;gt;   &amp;lt;fct&amp;gt;  &amp;lt;fct&amp;gt;  
+##  1 0     00&amp;#39;14&amp;quot;   138    41 Granada 12     1      
+##  2 1     00&amp;#39;54&amp;quot;    38   102 Granada 11     1      
+##  3 1     01&amp;#39;14&amp;quot;   138    35 Coruña  22     1      
+##  4 1     01&amp;#39;32&amp;quot;   211   146 Granada 11     1      
+##  5 0     01&amp;#39;40&amp;quot;   177   163 Granada 11     1      
+##  6 1     01&amp;#39;49&amp;quot;   170   164 Coruña  22     1      
+##  7 1     02&amp;#39;11&amp;quot;   147    26 Granada 15     1      
+##  8 0     02&amp;#39;35&amp;quot;   134   159 Coruña  4      1      
+##  9 0     02&amp;#39;48&amp;quot;    72   140 Coruña  4      1      
+## 10 1     03&amp;#39;28&amp;quot;   115   163 Coruña  7      1      
+## # ... with 118 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Vamos a visualizar los tiros según sus coordenadas:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(shotchart_df, aes(x, y)) +
+    geom_point(aes(color = team, shape = made)) +
+    theme_minimal()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;dibujar-la-cancha&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;2. Dibujar la cancha&lt;/h2&gt;
+&lt;p&gt;En el gráfico de arriba nos falta dibujar las líneas que delimitan la cancha de juego. En concreto, vamos a dibujar media pista con el aro en la parte inferior. Al parecer, la plataforma Baloncesto en Vivo apunta la localización de los tiros en base a la antigua línea de triple a 6.25 metros, así como la antigua zona, : confused : .&lt;/p&gt;
+&lt;p&gt;El siguiente bloque de código utiliza &lt;code&gt;ggplot2&lt;/code&gt; y la extensión &lt;code&gt;ggforce&lt;/code&gt; para dibujar la pista de baloncesto con &lt;a href=&#34;http://www.csd.gob.es/csd/estaticos/inst-dep/nide/campos-peq/reglamentarias/baloncesto/blc1_el_campo_de_juego.pdf&#34;&gt;estas medidas&lt;/a&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ggforce)  ## For geom_circle() and geom_arc()
+
+outer_edges &amp;lt;- tribble(
+    ~x,    ~y,
+     0,    0,
+     0,    1400,
+     1500, 1400,
+     1500, 0,
+     0,    0
+)
+mid_x &amp;lt;- 15 / 2
+paint_rectangle &amp;lt;- tribble(
+    ~x,           ~y,
+    750 - 175,     0,
+    750 - 175,     580,
+    750 + 175,     580,
+    750 + 175,     0
+)
+
+court &amp;lt;- ggplot() +
+    
+    # Outer edges
+    geom_path(aes(x, y), data = outer_edges) +
+    
+    # Free throw circle
+    geom_circle(aes(x0 = 750, y0 = 580, r = 175)) +
+    
+    # Paint rectangle
+    geom_path(aes(x, y), data = paint_rectangle) +
+    
+    # Three point arc
+    ## Top arc
+    geom_arc(aes(x0 = 750, y0 = 157.5, r = 625,
+                 start = pi / 2, end = - pi / 2)) +
+    ## Corner lines
+    geom_path(aes(c(125, 125), c(157.5, 0))) +
+    geom_path(aes(c(1500 - 125, 1500 - 125), c(157.5, 0))) +
+    
+    # Basket
+    ## Rim
+    geom_circle(aes(x0 = 750, y0 = 120 + 45, r = 22.5)) +
+    ## Backboard
+    geom_path(aes(x = c(750 - 90, 750 + 90),
+                  y = c(120, 120))) +
+    coord_fixed()
+
+court&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;crear-el-grafico-de-tiro&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Crear el gráfico de tiro&lt;/h2&gt;
+&lt;p&gt;Ahora debemos sobreponer los puntos que representan los tiros en la pista que hemos dibujado. Sin embargo, vemos que &lt;strong&gt;las escalas son diferentes&lt;/strong&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;court + geom_point(data = shotchart_df, aes(x, y, color = made))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Deberemos transformar los valores de las coordenadas de los tiros para que se ajusten a la pista que hemos dibujado. Esto es, debemos encontrar un valor &lt;span class=&#34;math inline&#34;&gt;\(c\)&lt;/span&gt; tal que multiplicándolo por el valor de las coordenadas obtengamos valores en la escala de nuestra pista.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;No he encontrado una solución fácil a este problema&lt;/strong&gt;. Una opción es ir probando diferentes valores y ver qué valor nos da un resultado razonable. En una posible segunda entrada intentaré aportar una mejor solución.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;Otra opción más formal es elegir &lt;span class=&#34;math inline&#34;&gt;\(c\)&lt;/span&gt; de modo que el producto entre éste y el mayor valor de la coordenada en el eje horizontal &lt;span class=&#34;math inline&#34;&gt;\(x_{max}\)&lt;/span&gt;, quede dentro de la pista, esto es, elegir &lt;span class=&#34;math inline&#34;&gt;\(c\)&lt;/span&gt; tal que &lt;span class=&#34;math inline&#34;&gt;\(c x_{max} &amp;lt; 1500\)&lt;/span&gt;. Podemos fijar un valor &lt;span class=&#34;math inline&#34;&gt;\(d\)&lt;/span&gt; de modo que &lt;span class=&#34;math inline&#34;&gt;\(c x_{max}\)&lt;/span&gt; no quede demasiado&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[c x_{max} = 1500 - d,\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;donde &lt;span class=&#34;math inline&#34;&gt;\(c\)&lt;/span&gt; es el valor por el que multiplicaremos las coordenad&lt;/p&gt;
+&lt;p&gt;podemos elegir el valor los valores de las coordenadas por la siguiente cantidad&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\frac{1500 - e} {max (x)}\]&lt;/span&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;shots &amp;lt;- shotchart_df %&amp;gt;% 
+    mutate(x = x * 5.45,
+           y = y * 5.45,
+           x_flipped = 2 * 750 - x)
+court +
+    geom_point(aes(x_flipped, y, color = made), data = shots)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;max_x &amp;lt;- max(shotchart_df$x)
+trns &amp;lt;- (1500 - 25) / max_x
+shots &amp;lt;- shotchart_df %&amp;gt;% 
+    mutate(x = x * trns,
+           y = y * trns,
+           x_flipped = 2 * 750 - x)
+court +
+    geom_point(aes(x_flipped, y, color = made), data = shots) +
+    geom_text(aes(x_flipped, y, label = time), size = 4, data = shots)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;court +
+    geom_point(aes(x_flipped, y, color = made), data = shots)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-9-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Exploring the multiplication table with R</title>
       <link>/post/multiplication-table-with-r/</link>
       <pubDate>Tue, 06 Nov 2018 00:00:00 +0000</pubDate>
@@ -35,6 +240,8 @@ ggplot(multiplication_table, aes(x, y)) +
     geom_text(aes(label = product), color = &amp;quot;white&amp;quot;) +
     # We want the table to start with 1 in the upper-left corner
     scale_y_continuous(trans = &amp;quot;reverse&amp;quot;) +
+    # We want to always display the tables as squares
+    coord_fixed() +
     theme_void()&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-1-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;For purposes that we will see next, I am going to add a row and a column of zeros above and to the left of our table, respectively:&lt;/p&gt;
@@ -48,6 +255,7 @@ ggplot(multiplication_table, aes(x, y)) +
     geom_tile(color = &amp;quot;white&amp;quot;) +
     geom_text(aes(label = product), color = &amp;quot;white&amp;quot;) +
     scale_y_continuous(trans = &amp;quot;reverse&amp;quot;) +
+    coord_fixed() +
     theme_void()&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-2-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Next, we will discover some beautiful symmetries by coloring the rectangles of the multiplication table that correspond to multiples of a number &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; for various values of &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt;.&lt;/p&gt;
@@ -56,13 +264,16 @@ ggplot(multiplication_table, aes(x, y)) +
 &lt;h2&gt;Single multiples&lt;/h2&gt;
 &lt;p&gt;We say that &lt;span class=&#34;math inline&#34;&gt;\(c\)&lt;/span&gt; is a multiple of &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; if &lt;span class=&#34;math inline&#34;&gt;\(c = n k\)&lt;/span&gt; for some integer &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt;, which is called the multiplier. So we can tell if a given number &lt;span class=&#34;math inline&#34;&gt;\(c\)&lt;/span&gt; is a multiple of &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; if the division &lt;span class=&#34;math inline&#34;&gt;\(c\)&lt;/span&gt; over &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; has remainder 0.&lt;/p&gt;
 &lt;p&gt;Let’s begin with &lt;span class=&#34;math inline&#34;&gt;\(k = 2\)&lt;/span&gt;. I am going to color the cells corresponding to multiples of &lt;span class=&#34;math inline&#34;&gt;\(2\)&lt;/span&gt; in one color and non-multiples of &lt;span class=&#34;math inline&#34;&gt;\(2\)&lt;/span&gt; in another color. Check out the pattern it emerges:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;m2 &amp;lt;- multiplication_table %&amp;gt;% 
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(wesanderson)
+m2 &amp;lt;- multiplication_table %&amp;gt;% 
     mutate(multiple_of_2 = product %% 2 == 0)
-colors &amp;lt;- wesanderson::wes_palette(name = &amp;quot;Zissou1&amp;quot;)
+# Color palette chosen from the wesanderson package
+colors &amp;lt;- wesanderson::wes_palette(name = &amp;quot;Zissou1&amp;quot;, n = 2)
 ggplot(m2, aes(x, y)) +
     geom_tile(aes(fill = multiple_of_2), color = &amp;quot;white&amp;quot;) +
     geom_text(aes(label = product), color = &amp;quot;white&amp;quot;) +
     scale_y_continuous(trans = &amp;quot;reverse&amp;quot;) +
+    coord_fixed() +
     scale_fill_manual(values = colors,
                       name = &amp;quot;Multiple of 2?&amp;quot;,
                       labels = c(&amp;quot;No&amp;quot;, &amp;quot;Yes&amp;quot;)) +
@@ -84,63 +295,81 @@ ggplot(block_2, aes(x, y)) +
                       guide = FALSE) +
     theme_void()&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;192&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;As Zoheir Barka explains in his article mentioned in the begining, the fundamental building block contains &lt;span class=&#34;math inline&#34;&gt;\(k \times k = 2 \times 2 = 4\)&lt;/span&gt; cells of the multiplication table. The number of squares corresponding to the non-multiples of &lt;span class=&#34;math inline&#34;&gt;\(2\)&lt;/span&gt; in this block is given by&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[(k - 1)^2 = (2 - 1)^2 = 1\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;We want to explore the patterns for different values of &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; so I create a simple function to make my life easier. The fact that each side of the fundamental building block is &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; can be useful for setting good defaults in our function.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(wesanderson)
-draw_pattern &amp;lt;- function(k, xmax = k * 4, ymax = k * 4) {
-    tab &amp;lt;- data.frame(
+&lt;p&gt;As Zoheir Barka explains in his article mentioned in the beginning, the fundamental building block contains &lt;span class=&#34;math inline&#34;&gt;\(k \times k = 2 \times 2 = 4\)&lt;/span&gt; cells of the multiplication table. The fact that, in the case of a single multiple, each side of the fundamental building block is &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; can be useful when plotting our tables.&lt;/p&gt;
+&lt;p&gt;We want to explore the patterns for different values of &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; so I created a simple function that plots a colored multiplication table for the supplied &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; and the supplied dimensions. Multiples and non-multiples are coloured the same way as before so I chose to drop the legend for aesthetic reasons. I will add more arguments to this function later to easily customize the resulting table.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Auxiliary function to create a data frame 
+# with the values of the multiplication table
+create_mtable &amp;lt;- function(xmax, ymax) {
+    data.frame(
         x = 0:xmax,
-        y = 0:xmax) %&amp;gt;% 
+        y = 0:ymax
+    ) %&amp;gt;% 
         complete(x, y) %&amp;gt;% 
-        mutate(prod = x * y,
-               multiple = prod %% k == 0) %&amp;gt;% 
+        mutate(product = x * y)
+}
+
+# Plot the colored table
+draw_pattern &amp;lt;- function(k, xmax, ymax) {
+    # Colors chosen from the Zissou1 palette in the wesanderson package
+    colors &amp;lt;- wesanderson::wes_palette(name = &amp;quot;Zissou1&amp;quot;, n = 2)
+    tab &amp;lt;- create_mtable(xmax, ymax) %&amp;gt;% 
+        mutate(multiple = product %% k == 0) %&amp;gt;% 
         ggplot(aes(x, y)) +
         geom_tile(aes(fill = multiple), color = &amp;quot;white&amp;quot;) +
-        geom_text(aes(label = prod), color = &amp;quot;white&amp;quot;) +
+        geom_text(aes(label = product), color = &amp;quot;white&amp;quot;) +
         scale_y_continuous(trans = &amp;quot;reverse&amp;quot;) +
-        scale_fill_manual(values = wes_palette(name = &amp;quot;Zissou1&amp;quot;,
-                                               n = 2)) +
+        coord_fixed() +
+        scale_fill_manual(values = colors) +
         theme_void() +
         guides(fill = FALSE)
     tab
-}
-draw_pattern(4, 4*2, 4*2)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;480&#34; /&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;draw_pattern(6, 6*2, 6*2)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-5-2.png&#34; width=&#34;480&#34; /&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;draw_pattern(14, 13, 13)&lt;/code&gt;&lt;/pre&gt;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can now easily plot the colored tables for different values of &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; and see what patterns emerge:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;draw_pattern(k = 4, xmax = 4 * 3, ymax = 4 * 3) +
+    labs(title = &amp;quot;Multiples of 4&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;480&#34; /&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;wes_palette(&amp;quot;Zissou1&amp;quot;, 5, type = &amp;quot;continuous&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;draw_pattern(6, 6 * 2, 6 * 2) +
+    labs(title = &amp;quot;Multiples of 6&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-6-2.png&#34; width=&#34;480&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Notice that we set the “length” of each side of the tables to multiples of &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; so that the pattern is symmetric.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;multiple-multiples&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Multiple multiples&lt;/h2&gt;
+&lt;p&gt;We can plot more interesting (and beautiful) patterns if we use multiple multiples, and corresponding to them, multiple colors.&lt;/p&gt;
+&lt;p&gt;Consider the multiples of &lt;span class=&#34;math inline&#34;&gt;\(k_1 = 2\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(k_2 = 3\)&lt;/span&gt;. I will color each square of the multiplication table according to the following criteria:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Not multiple of neither 2 nor 3&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Multiple only of 2&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Multiple only of 3&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Multiple of both 2 and 3&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;multiple_multiples &amp;lt;- tibble(
-    x = 0:60,
-    y = 0:60
+    x = 0:12,
+    y = 0:12
 ) %&amp;gt;% 
     complete(x, y) %&amp;gt;% 
     mutate(product = x * y,
            m2 = product %% 2 == 0,
            m3 = product %% 3 == 0,
-           inter = interaction(m2, m3))
+           inter = interaction(m2, m3)) %&amp;gt;% 
+    mutate(interaction = recode_factor(inter,
+                                       FALSE.FALSE = &amp;quot;Multple of neither&amp;quot;,
+                                       TRUE.FALSE = &amp;quot;Multiple of 2&amp;quot;,
+                                       FALSE.TRUE = &amp;quot;Multiple of 3&amp;quot;,
+                                       TRUE.TRUE = &amp;quot;Multiple of both&amp;quot;))
 ggplot(multiple_multiples, aes(x, y)) +
-    geom_tile(aes(fill = inter)) +
-    scale_fill_brewer(palette = &amp;quot;Pastel1&amp;quot;) +
-    scale_y_continuous(trans = &amp;quot;reverse&amp;quot;) +
-    theme_void() +
-    guides(fill = FALSE)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;576&#34; /&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;multiple_multiples &amp;lt;- m2 %&amp;gt;%
-    mutate(multiple_of_3 = product %% 3 == 0,
-           inter = interaction(multiple_of_2, multiple_of_3))
-ggplot(multiple_multiples, aes(x, y)) +
-    geom_tile(aes(fill = inter)) +
-    scale_fill_brewer(palette = &amp;quot;Pastel1&amp;quot;) +
+    geom_tile(aes(fill = interaction), color = &amp;quot;white&amp;quot;) +
+    geom_text(aes(label = product), color = &amp;quot;white&amp;quot;) +
+    scale_fill_brewer(palette = &amp;quot;Pastel1&amp;quot;,
+                      name = element_blank()) +
     scale_y_continuous(trans = &amp;quot;reverse&amp;quot;) +
     theme_void()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-9-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Notice that I used a &lt;span class=&#34;math inline&#34;&gt;\(12 \times 12\)&lt;/span&gt; table so that I got a symmetric pattern. I did this because I knew that the fundamental building block is given by the least common multiple of &lt;span class=&#34;math inline&#34;&gt;\(2\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(3\)&lt;/span&gt;. That is, in this case the fundamental block consists of &lt;span class=&#34;math inline&#34;&gt;\(6 \times 6 = 36\)&lt;/span&gt; little cells.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;creating-beautiful-patterns&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Creating beautiful patterns&lt;/h2&gt;
+&lt;p&gt;Next I show some beautiful patterns obtained by playing around with this idea of coloring multiples of several numbers. You can find the full code used to create these visualizations here.&lt;/p&gt;
 &lt;/div&gt;
 </description>
     </item>

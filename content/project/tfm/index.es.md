@@ -17,6 +17,7 @@ external_link = "https://drive.google.com/file/d/1JgHPNT9mJr3HLLww1EhIyRlCUJJZoD
 
 # Featured image
 # To use, add an image named `featured.jpg/png` to your project's folder. 
+
 [image]
   # Caption (optional)
   caption = "Photo by Toa Heftiba on Unsplash"

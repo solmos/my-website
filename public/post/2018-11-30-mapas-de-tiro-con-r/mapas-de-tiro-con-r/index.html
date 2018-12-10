@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 3.0.0">
+  <meta name="generator" content="Hugo 0.49.2" />
+  <meta name="author" content="Sergio Olmos Pardo">
+
+  
+  
+  
+  
+    
+  
+  <meta name="description" content="Tutorial de cómo crear un gráfico de tiro de un partido de baloncesto de Leb Oro con R">
+
+  
+  <link rel="alternate" hreflang="en-us" href="/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/">
+
+  
+
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" crossorigin="anonymous">
+        
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700|Roboto:400,400italic,700|Roboto+Mono">
+  
+
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+  
+  
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Sergio Olmos">
+  <link rel="feed" href="/index.xml" type="application/rss+xml" title="Sergio Olmos">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Sergio Olmos">
+  <meta property="og:url" content="/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/">
+  <meta property="og:title" content="Gráficos de tiro con R | Sergio Olmos">
+  <meta property="og:description" content="Tutorial de cómo crear un gráfico de tiro de un partido de baloncesto de Leb Oro con R">
+  
+  
+    
+  <meta property="og:image" content="/img/icon-192.png">
+  <meta property="og:locale" content="en-us">
+  
+  <meta property="article:published_time" content="2018-11-30T00:00:00&#43;00:00">
+  
+  <meta property="article:modified_time" content="2018-11-30T00:00:00&#43;00:00">
+  
+
+  
+
+  
+
+  <title>Gráficos de tiro con R | Sergio Olmos</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#TableOfContents" data-offset="71" >
+
+<nav class="navbar navbar-light fixed-top navbar-expand-lg py-0" id="navbar-main">
+  <div class="container">
+
+    
+      <a class="navbar-brand" href="/">Sergio Olmos</a>
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+    
+    <div class="collapse navbar-collapse" id="navbar">
+
+      
+      
+      <ul class="navbar-nav ml-auto">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#about">
+            
+            <span>About</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#posts">
+            
+            <span>Posts</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#projects">
+            
+            <span>Projects</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+      
+
+        
+
+        
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1 itemprop="name">Gráficos de tiro con R</h1>
+
+  
+  <p class="page-subtitle">Tutorial de cómo crear un gráfico de tiro de un partido de baloncesto de Leb Oro con R</p>
+  
+
+  
+    
+
+<div class="article-metadata">
+
+  
+  
+  <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+  
+
+  <span class="article-date">
+    
+    <meta content="2018-11-30 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+    <time datetime="2018-11-30 00:00:00 &#43;0000 UTC" itemprop="dateModified">
+      Nov 30, 2018
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    8 min read
+  </span>
+  
+
+  
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder"></i>
+    
+    <a href="/categories/r/">R</a>, 
+    
+    <a href="/categories/basketball/">Basketball</a>
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Gr%c3%a1ficos%20de%20tiro%20con%20R&amp;url=%2fpost%2f2018-11-30-mapas-de-tiro-con-r%2fmapas-de-tiro-con-r%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fpost%2f2018-11-30-mapas-de-tiro-con-r%2fmapas-de-tiro-con-r%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2f2018-11-30-mapas-de-tiro-con-r%2fmapas-de-tiro-con-r%2f&amp;title=Gr%c3%a1ficos%20de%20tiro%20con%20R"
+         target="_blank" rel="noopener">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fpost%2f2018-11-30-mapas-de-tiro-con-r%2fmapas-de-tiro-con-r%2f&amp;title=Gr%c3%a1ficos%20de%20tiro%20con%20R"
+         target="_blank" rel="noopener">
+        <i class="fab fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Gr%c3%a1ficos%20de%20tiro%20con%20R&amp;body=%2fpost%2f2018-11-30-mapas-de-tiro-con-r%2fmapas-de-tiro-con-r%2f">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style" itemprop="articleBody">
+      <p><a href="https://twitter.com/kirkgoldsberry">Kirk Goldsberry</a> es una de las figuras más destacadas en el mundo de la estadística avanzada en la NBA. Se le conoce principalmente por el uso de gráficos de tiro en sus análisis. Este es un ejemplo en el que se muestran todos los tiros que ha realizado Lebron James a lo largo de su carrera:</p>
+<div class="figure">
+<img src="http://a.espncdn.com/i/infographics/20181017_goldsberry/Figure2_Constellation.png" alt="Gráfica de tiro de Lebron James" />
+<p class="caption">Gráfica de tiro de Lebron James</p>
+</div>
+<p>Los gráficos de tiro (<em>shot charts</em> en inglés) pueden ser útiles para, por ejemplo, identificar tendencias en ataque de un determinado jugador/equipo, mostrar en qué zonas del campo un jugador es más efectivo o analizar qué tipo de tiros un equipo permite al rival.</p>
+<p>En esta entrada voy a crear un gráfico de tiro de un partido de la liga en la que yo juego, la <a href="http://www.leboro.es/inicio.aspx">Leb Oro</a>. Específicamente, voy a utilizar el partido que disputé con mi equipo, el Covirán Granada, contra mi ex-equipo, el Leyma Coruña.</p>
+<div id="obtener-los-datos" class="section level2">
+<h2>1. Obtener los datos</h2>
+<p>Cada jornada, en la plataforma de <a href="http://baloncestoenvivo.feb.es/">Baloncesto en Vivo</a> podemos seguir la evolución de las estadísticas de los partidos en directo. En esta plataforma no sólo se puede ver la tabla de estadísticas a la que estamos acostumbrados, también es posible ver las estadísticas jugada a jugada o los gráficos de tiro.</p>
+<p>Sin embargo, <strong>la página web de la FEB no lo pone muy fácil a la hora de acceder a estos datos</strong>. Baloncesto en vivo no proporciona menús de selección de ningún tipo que nos permitan elegir partidos de jornadas (o temporadas) anteriores. En la página principal tan solo aparecen los partidos de la jornada vigente en ese momento.</p>
+<p>A simple vista parece que cada jornada se eliminen los datos de la jornada anterior. No es así. Las páginas siguen siendo accesibles, aunque solo si has apuntado la dirección web cuando estaba visible en su momento ¯\_(ツ)_/¯.</p>
+<p>En este caso el enlace al partido que utilizaré en esta entrada es el siguiente:</p>
+<p><a href="http://baloncestoenvivo.feb.es/Game/2010150" class="uri">http://baloncestoenvivo.feb.es/Game/2010150</a></p>
+<p>Básicamente, debemos encontrar qué enlace o solicitud a la API nos da la información que queremos. Soy relativamente nuevo en esto de extraer datos de la web por lo que no entraré en mucho detalle de cómo lo he hecho. Esta entrada de <a href="http://www.gregreda.com/2015/02/15/web-scraping-finding-the-api/">Greg Reda</a> me ha sido de gran utilidad.</p>
+<p>Para encontrar esta solicitud a la API utilizaremos las herramientas para desarrolladores de nuestro navegador (en mi caso Chrome). Estando en la pestaña del <a href="http://baloncestoenvivo.feb.es/Game/2010150#shotchart">gráfico de tiro</a>, estos son los pasos que seguí para dar con el <em>request</em>:</p>
+<ol style="list-style-type: decimal">
+<li><p>Abrimos las herramientas para desarrolladores de nuestro navegador</p></li>
+<li><p>Vamos a la pestaña de <em>Network</em></p></li>
+<li><p>Seleccionamos el filtro <code>XHR</code></p></li>
+<li><p>Refrescamos la página</p></li>
+<li><p>Seleccionamos la entrada <code>20100150</code></p></li>
+<li><p>En la pestaña <em>Preview</em>, podemos observar que las coordenadas de los tiros se encuentran bajo la etiqueta <code>SHOTS</code> dentro de <code>SHOTCHART</code></p></li>
+</ol>
+<div class="figure">
+<img src="shotchart3.png" />
+
+</div>
+<ol start="7" style="list-style-type: decimal">
+<li>En la pestaña <em>Headers</em> copiamos el enlace de la petición bajo el título <code>Request URL</code>: <a href="http://baloncestoenvivo.feb.es/api/ShotChart/2010150" class="uri">http://baloncestoenvivo.feb.es/api/ShotChart/2010150</a></li>
+</ol>
+<p>Ya tenemos el enlace de la petición que nos dará la información que queremos. Para realizar la petición utilizaremos el paquete de R <code>httr</code>. También utilizaremos el paquete <code>jsonlite</code> para, una vez descargados los datos en formato JSON, obtener un objeto <code>list</code> con toda la información en un formato mucho más fácil de manipular en R. Ya que estamos, también cargamos el paquete <code>tidyverse</code>, que utilizaremos para manipular estos datos.</p>
+<pre class="r"><code>library(httr)
+library(jsonlite)
+library(tidyverse)
+
+api_request &lt;- GET(&quot;http://baloncestoenvivo.feb.es/api/ShotChart/2010150&quot;)
+content_list &lt;- content(api_request, as = &quot;text&quot;, encoding = &quot;UTF-8&quot;) %&gt;%
+    fromJSON</code></pre>
+<p>El objeto <code>content_list</code> es una lista con 10 elementos. La estructura de esta lista es precisamente la estructura que observamos cuando estábamos buscando el enlace de petición de la API.</p>
+<pre class="r"><code>shotchart_raw &lt;- content_list$SHOTCHART$SHOTS %&gt;%
+    as.tibble() %&gt;% 
+    print()</code></pre>
+<pre><code>## # A tibble: 128 x 7
+##    m     t     x     y     team  player quarter
+##  * &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
+##  1 0     00:14 138   41    0     12     1      
+##  2 1     00:54 38    102   0     11     1      
+##  3 1     01:14 138   35    1     22     1      
+##  4 1     01:32 211   146   0     11     1      
+##  5 0     01:40 177   163   0     11     1      
+##  6 1     01:49 170   164   1     22     1      
+##  7 1     02:11 147   26    0     15     1      
+##  8 0     02:35 134   159   1     4      1      
+##  9 0     02:48 72    140   1     4      1      
+## 10 1     03:28 115   163   1     7      1      
+## # ... with 118 more rows</code></pre>
+<p>Y aquí lo tenemos, un simple <em>data frame</em> con los datos que queríamos. Si miramos la ficha de estadísticas del partido, podemos comprobar que se hicieron 128 tiros entre los dos equipos, exactamente el número de filas en nuestra tabla de datos.</p>
+<p>Podemos deducir fácilmente qué representa cada variable:</p>
+<ul>
+<li><p><code>m</code> = Fallo (0) o acierto (1)</p></li>
+<li><p><code>t</code> = Tiempo</p></li>
+<li><p><code>x</code> = Coordenada en el eje horizontal</p></li>
+<li><p><code>y</code> = Coordenada en el eje vertical</p></li>
+<li><p><code>team</code> = Equipo al que pertenece el jugador realizando el tiro (0 equipo de casa, 1 equipo visitante)</p></li>
+<li><p><code>player</code> = Dorsal del jugador que realiza el tiro</p></li>
+<li><p><code>quarter</code> = Cuarto del partido en el que se realizó el tiro</p></li>
+</ul>
+<p>Observamos que todas la variables en nuestro data frame son de tipo <code>character</code>. Modificamos la clase de cada variable en base a lo que representa:</p>
+<pre class="r"><code>shotchart_df &lt;- shotchart_raw %&gt;%
+    transmute(made = as.factor(m),
+              time = parse_time(t, &quot;%M:%S&quot;),
+              x = as.numeric(x),
+              y = as.numeric(y),
+              team = factor(team, labels = c(&quot;Granada&quot;, &quot;Coruña&quot;)),
+              player = as.factor(player),
+              quarter = as.factor(quarter))
+shotchart_df</code></pre>
+<pre><code>## # A tibble: 128 x 7
+##    made  time       x     y team    player quarter
+##    &lt;fct&gt; &lt;time&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;   &lt;fct&gt;  &lt;fct&gt;  
+##  1 0     00&#39;14&quot;   138    41 Granada 12     1      
+##  2 1     00&#39;54&quot;    38   102 Granada 11     1      
+##  3 1     01&#39;14&quot;   138    35 Coruña  22     1      
+##  4 1     01&#39;32&quot;   211   146 Granada 11     1      
+##  5 0     01&#39;40&quot;   177   163 Granada 11     1      
+##  6 1     01&#39;49&quot;   170   164 Coruña  22     1      
+##  7 1     02&#39;11&quot;   147    26 Granada 15     1      
+##  8 0     02&#39;35&quot;   134   159 Coruña  4      1      
+##  9 0     02&#39;48&quot;    72   140 Coruña  4      1      
+## 10 1     03&#39;28&quot;   115   163 Coruña  7      1      
+## # ... with 118 more rows</code></pre>
+<p>Vamos a visualizar los tiros según sus coordenadas:</p>
+<pre class="r"><code>ggplot(shotchart_df, aes(x, y)) +
+    geom_point(aes(color = team, shape = made)) +
+    theme_minimal()</code></pre>
+<p><img src="/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="dibujar-la-cancha" class="section level2">
+<h2>2. Dibujar la cancha</h2>
+<p>En el gráfico de arriba nos falta dibujar las líneas que delimitan la cancha de juego. En concreto, vamos a dibujar media pista con el aro en la parte inferior. Al parecer, la plataforma Baloncesto en Vivo apunta la localización de los tiros en base a la antigua línea de triple a 6.25 metros, así como la antigua zona, : confused : .</p>
+<p>El siguiente bloque de código utiliza <code>ggplot2</code> y la extensión <code>ggforce</code> para dibujar la pista de baloncesto con <a href="http://www.csd.gob.es/csd/estaticos/inst-dep/nide/campos-peq/reglamentarias/baloncesto/blc1_el_campo_de_juego.pdf">estas medidas</a>:</p>
+<pre class="r"><code>library(ggforce)  ## For geom_circle() and geom_arc()
+
+outer_edges &lt;- tribble(
+    ~x,    ~y,
+     0,    0,
+     0,    1400,
+     1500, 1400,
+     1500, 0,
+     0,    0
+)
+mid_x &lt;- 15 / 2
+paint_rectangle &lt;- tribble(
+    ~x,           ~y,
+    750 - 175,     0,
+    750 - 175,     580,
+    750 + 175,     580,
+    750 + 175,     0
+)
+
+court &lt;- ggplot() +
+    
+    # Outer edges
+    geom_path(aes(x, y), data = outer_edges) +
+    
+    # Free throw circle
+    geom_circle(aes(x0 = 750, y0 = 580, r = 175)) +
+    
+    # Paint rectangle
+    geom_path(aes(x, y), data = paint_rectangle) +
+    
+    # Three point arc
+    ## Top arc
+    geom_arc(aes(x0 = 750, y0 = 157.5, r = 625,
+                 start = pi / 2, end = - pi / 2)) +
+    ## Corner lines
+    geom_path(aes(c(125, 125), c(157.5, 0))) +
+    geom_path(aes(c(1500 - 125, 1500 - 125), c(157.5, 0))) +
+    
+    # Basket
+    ## Rim
+    geom_circle(aes(x0 = 750, y0 = 120 + 45, r = 22.5)) +
+    ## Backboard
+    geom_path(aes(x = c(750 - 90, 750 + 90),
+                  y = c(120, 120))) +
+    coord_fixed()
+
+court</code></pre>
+<p><img src="/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="crear-el-grafico-de-tiro" class="section level2">
+<h2>Crear el gráfico de tiro</h2>
+<p>Ahora debemos sobreponer los puntos que representan los tiros en la pista que hemos dibujado. Sin embargo, vemos que <strong>las escalas son diferentes</strong>:</p>
+<pre class="r"><code>court + geom_point(data = shotchart_df, aes(x, y, color = made))</code></pre>
+<p><img src="/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Deberemos transformar los valores de las coordenadas de los tiros para que se ajusten a la pista que hemos dibujado. Esto es, debemos encontrar un valor <span class="math inline">\(c\)</span> tal que multiplicándolo por el valor de las coordenadas obtengamos valores en la escala de nuestra pista.</p>
+<p><strong>No he encontrado una solución fácil a este problema</strong>. Una opción es ir probando diferentes valores y ver qué valor nos da un resultado razonable. En una posible segunda entrada intentaré aportar una mejor solución.</p>
+<hr />
+<p>Otra opción más formal es elegir <span class="math inline">\(c\)</span> de modo que el producto entre éste y el mayor valor de la coordenada en el eje horizontal <span class="math inline">\(x_{max}\)</span>, quede dentro de la pista, esto es, elegir <span class="math inline">\(c\)</span> tal que <span class="math inline">\(c x_{max} &lt; 1500\)</span>. Podemos fijar un valor <span class="math inline">\(d\)</span> de modo que <span class="math inline">\(c x_{max}\)</span> no quede demasiado</p>
+<p><span class="math display">\[c x_{max} = 1500 - d,\]</span></p>
+<p>donde <span class="math inline">\(c\)</span> es el valor por el que multiplicaremos las coordenad</p>
+<p>podemos elegir el valor los valores de las coordenadas por la siguiente cantidad</p>
+<p><span class="math display">\[\frac{1500 - e} {max (x)}\]</span></p>
+<hr />
+<pre class="r"><code>shots &lt;- shotchart_df %&gt;% 
+    mutate(x = x * 5.45,
+           y = y * 5.45,
+           x_flipped = 2 * 750 - x)
+court +
+    geom_point(aes(x_flipped, y, color = made), data = shots)</code></pre>
+<p><img src="/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>max_x &lt;- max(shotchart_df$x)
+trns &lt;- (1500 - 25) / max_x
+shots &lt;- shotchart_df %&gt;% 
+    mutate(x = x * trns,
+           y = y * trns,
+           x_flipped = 2 * 750 - x)
+court +
+    geom_point(aes(x_flipped, y, color = made), data = shots) +
+    geom_text(aes(x_flipped, y, label = time), size = 4, data = shots)</code></pre>
+<p><img src="/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code>court +
+    geom_point(aes(x_flipped, y, color = made), data = shots)</code></pre>
+<p><img src="/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+
+    </div>
+
+    
+
+
+
+
+    
+
+
+
+
+
+
+<div class="media author-card" itemscope itemtype="http://schema.org/Person">
+  
+  <img class="portrait mr-3" src="/img/foto_perfil.jpg" itemprop="image" alt="Avatar">
+  
+  <div class="media-body">
+    <h5 class="card-title" itemprop="name"><a href="/">Sergio Olmos Pardo</a></h5>
+    <h6 class="card-subtitle">Statistician and Basketball Player</h6>
+    
+    <ul class="network-icon" aria-hidden="true">
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="solmos41@gmail.com" target="_blank" rel="noopener">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//twitter.com/solmos41" target="_blank" rel="noopener">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//github.com/solmos" target="_blank" rel="noopener">
+          <i class="fab fa-github"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//linkedin.com/in/sergio-olmos" target="_blank" rel="noopener">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="files/cv.pdf" target="_blank" rel="noopener">
+          <i class="ai ai-cv"></i>
+        </a>
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+
+
+    
+    
+
+    
+
+    
+
+
+  </div>
+</article>
+
+<div class="container">
+  <footer class="site-footer">
+  
+  <p class="powered-by">
+    <a href="/privacy/">Privacy Policy</a>
+  </p>
+  
+
+  <p class="powered-by">
+    &copy; 2018 &middot; 
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" id="back_to_top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+</div>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    
+    
+    <script src="/js/mathjax-config.500a6cbb2c0f345fcecc21b3116d6637aa78f1f11db8081ea581abe05390c2e8f3bbffe61be3cf0217baf785c40efceabe51050a4f007e69af94efd3643260e8.js" integrity="sha512-UApsuywPNF/OzCGzEW1mN6p48fEduAgepYGr4FOQwujzu//mG&#43;PPAhe694XEDvzqvlEFCk8AfmmvlO/TZDJg6A=="></script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha512-+NqPlbbtM1QqiK8ZAo4Yrj2c4lNQoGv8P79DPtKzj++l5jnN39rHA/xsqn8zE9l0uSoxaCdrOgFs6yjyfbBxSg==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+
+    
+    
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/index.json";
+      const i18n = {
+        'placeholder': "Search...",
+        'results': "Search Results",
+        'no_results': "No results found"
+      };
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    <script src="/js/search.js"></script>
+    
+
+    
+    
+
+  </body>
+</html>
+
