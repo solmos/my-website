@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Fri, 30 Nov 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 10 Dec 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/basketball/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Gráficos de tiro con R</title>
+      <link>/post/shot-chart/</link>
+      <pubDate>Mon, 10 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/shot-chart/</guid>
+      <description>Kirk Goldsberry es una de las figuras más destacadas en el mundo de la estadística avanzada en la NBA. Se le conoce principalmente por el uso de gráficos de tiro en sus análisis. Este es un ejemplo en el que se muestran todos los tiros que ha realizado Lebron James a lo largo de su carrera:
+LeBron James: every shot ever...https://t.co/kTRnh0eqcv pic.twitter.com/2zpuUgRgor
+&amp;mdash; Kirk Goldsberry (@kirkgoldsberry) October 18, 2018  Los gráficos de tiro (shot charts en inglés) pueden ser útiles para, por ejemplo, identificar tendencias en ataque de un determinado jugador/equipo, mostrar en qué zonas del campo un jugador es más efectivo o analizar qué tipo de tiros un equipo permite al rival.</description>
+    </item>
     
     <item>
       <title>Gráficos de tiro con R</title>
@@ -19,7 +30,6 @@
       
       <guid>/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/</guid>
       <description>Kirk Goldsberry es una de las figuras más destacadas en el mundo de la estadística avanzada en la NBA. Se le conoce principalmente por el uso de gráficos de tiro en sus análisis. Este es un ejemplo en el que se muestran todos los tiros que ha realizado Lebron James a lo largo de su carrera:
-Gráfica de tiro de Lebron James
  Los gráficos de tiro (shot charts en inglés) pueden ser útiles para, por ejemplo, identificar tendencias en ataque de un determinado jugador/equipo, mostrar en qué zonas del campo un jugador es más efectivo o analizar qué tipo de tiros un equipo permite al rival.</description>
     </item>
     

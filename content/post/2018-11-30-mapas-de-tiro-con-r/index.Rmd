@@ -16,7 +16,7 @@ image:
 
 [Kirk Goldsberry](https://twitter.com/kirkgoldsberry) es una de las figuras más destacadas en el mundo de la estadística avanzada en la NBA. Se le conoce principalmente por el uso de gráficos de tiro en sus análisis. Este es un ejemplo en el que se muestran todos los tiros que ha realizado Lebron James a lo largo de su carrera:
 
-![Gráfica de tiro de Lebron James](http://a.espncdn.com/i/infographics/20181017_goldsberry/Figure2_Constellation.png)
+![](http://a.espncdn.com/i/infographics/20181017_goldsberry/Figure2_Constellation.png)
 
 Los gráficos de tiro (*shot charts* en inglés) pueden ser útiles para, por ejemplo, identificar tendencias en ataque de un determinado jugador/equipo, mostrar en qué zonas del campo un jugador es más efectivo o analizar qué tipo de tiros un equipo permite al rival.
 
@@ -26,7 +26,7 @@ En esta entrada voy a crear un gráfico de tiro de un partido de la liga en la q
 
 Cada jornada, en la plataforma de [Baloncesto en Vivo](http://baloncestoenvivo.feb.es/) podemos seguir la evolución de las estadísticas de los partidos en directo. En esta plataforma no sólo se puede ver la tabla de estadísticas a la que estamos acostumbrados, también es posible ver las estadísticas jugada a jugada o los gráficos de tiro.
 
-Sin embargo, **la página web de la FEB no lo pone muy fácil a la hora de acceder a estos datos**. Baloncesto en vivo no proporciona menús de selección de ningún tipo que nos permitan elegir partidos de jornadas (o temporadas) anteriores. En la página principal tan solo aparecen los partidos de la jornada vigente en ese momento.
+Sin embargo, **la página web de la FEB no lo pone muy fácil a la hora de acceder a estos datos**. Baloncesto en Vivo no proporciona menús de selección de ningún tipo que nos permitan elegir partidos de jornadas (o temporadas) anteriores. En la página principal tan solo aparecen los partidos de la jornada vigente en ese momento.
 
 A simple vista parece que cada jornada se eliminen los datos de la jornada anterior. No es así. Las páginas siguen siendo accesibles, aunque solo si has apuntado la dirección web cuando estaba visible en su momento ¯\\\_(ツ)\_/¯.
 

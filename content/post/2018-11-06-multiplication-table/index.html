@@ -16,7 +16,7 @@ image:
 
 
 
-<p>I was reading about the Hidden beauty of multiplication tables and I thought it could be fun to make some of the cool plots in that article with R. While we are at it, we can tweak some of them and play around with the tables to see what we get.</p>
+<p>I was reading about the <a href="https://plus.maths.org/content/hidden-beauty-multiplication-tables">Hidden beauty of multiplication tables</a> and I thought it could be fun to make some of the cool plots in that article with R. While we are at it, we can tweak some of them and play around with the tables to see what we get.</p>
 <div id="the-multiplication-table" class="section level2">
 <h2>The multiplication table</h2>
 <p>Consider the standard <span class="math inline">\(10 \times 10\)</span> multiplication table, with the first row and the first column taking the values <span class="math inline">\(1\)</span> through <span class="math inline">\(10\)</span>, forming a grid with the corresponding products.</p>
@@ -38,7 +38,7 @@ ggplot(multiplication_table, aes(x, y)) +
     # We want to always display the tables as squares
     coord_fixed() +
     theme_void()</code></pre>
-<p><img src="/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p><img src="/post/2018-11-06-multiplication-table/index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 <p>For purposes that we will see next, I am going to add a row and a column of zeros above and to the left of our table, respectively:</p>
 <pre class="r"><code>multiplication_table &lt;- tibble(
     x = 0:10,
@@ -52,7 +52,7 @@ ggplot(multiplication_table, aes(x, y)) +
     scale_y_continuous(trans = &quot;reverse&quot;) +
     coord_fixed() +
     theme_void()</code></pre>
-<p><img src="/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="/post/2018-11-06-multiplication-table/index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>Next, we will discover some beautiful symmetries by coloring the rectangles of the multiplication table that correspond to multiples of a number <span class="math inline">\(k\)</span> for various values of <span class="math inline">\(k\)</span>.</p>
 </div>
 <div id="single-multiples" class="section level2">
@@ -73,7 +73,7 @@ ggplot(m2, aes(x, y)) +
                       name = &quot;Multiple of 2?&quot;,
                       labels = c(&quot;No&quot;, &quot;Yes&quot;)) +
     theme_void()</code></pre>
-<p><img src="/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="/post/2018-11-06-multiplication-table/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>If we look closely we can see that the whole pattern above can be pieced together using the following fundamental block:</p>
 <pre class="r"><code>block_2 &lt;- tibble(
     x = c(0,1),
@@ -89,8 +89,8 @@ ggplot(block_2, aes(x, y)) +
     scale_fill_manual(values = colors,
                       guide = FALSE) +
     theme_void()</code></pre>
-<p><img src="/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-4-1.png" width="192" /></p>
-<p>As Zoheir Barka explains in his article mentioned in the beginning, the fundamental building block contains <span class="math inline">\(k \times k = 2 \times 2 = 4\)</span> cells of the multiplication table. The fact that, in the case of a single multiple, each side of the fundamental building block is <span class="math inline">\(k\)</span> can be useful when plotting our tables.</p>
+<p><img src="/post/2018-11-06-multiplication-table/index_files/figure-html/unnamed-chunk-4-1.png" width="192" /></p>
+<p>As Zoheir Barka explains in his article mentioned at the beginning, the fundamental building block contains <span class="math inline">\(k \times k = 2 \times 2 = 4\)</span> cells of the multiplication table. The fact that, in the case of a single multiple, each side of the fundamental building block is <span class="math inline">\(k\)</span> can be useful when plotting our tables.</p>
 <p>We want to explore the patterns for different values of <span class="math inline">\(k\)</span> so I created a simple function that plots a colored multiplication table for the supplied <span class="math inline">\(k\)</span> and the supplied dimensions. Multiples and non-multiples are coloured the same way as before so I chose to drop the legend for aesthetic reasons. I will add more arguments to this function later to easily customize the resulting table.</p>
 <pre class="r"><code># Auxiliary function to create a data frame 
 # with the values of the multiplication table
@@ -122,10 +122,10 @@ draw_pattern &lt;- function(k, xmax, ymax) {
 <p>We can now easily plot the colored tables for different values of <span class="math inline">\(k\)</span> and see what patterns emerge:</p>
 <pre class="r"><code>draw_pattern(k = 4, xmax = 4 * 3, ymax = 4 * 3) +
     labs(title = &quot;Multiples of 4&quot;)</code></pre>
-<p><img src="/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-6-1.png" width="480" /></p>
+<p><img src="/post/2018-11-06-multiplication-table/index_files/figure-html/unnamed-chunk-6-1.png" width="480" /></p>
 <pre class="r"><code>draw_pattern(6, 6 * 2, 6 * 2) +
     labs(title = &quot;Multiples of 6&quot;)</code></pre>
-<p><img src="/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-6-2.png" width="480" /></p>
+<p><img src="/post/2018-11-06-multiplication-table/index_files/figure-html/unnamed-chunk-6-2.png" width="480" /></p>
 <p>Notice that we set the “length” of each side of the tables to multiples of <span class="math inline">\(k\)</span> so that the pattern is symmetric.</p>
 </div>
 <div id="multiple-multiples" class="section level2">
@@ -159,10 +159,14 @@ ggplot(multiple_multiples, aes(x, y)) +
                       name = element_blank()) +
     scale_y_continuous(trans = &quot;reverse&quot;) +
     theme_void()</code></pre>
-<p><img src="/post/2018-11-06-multiplication-table-with-r_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="/post/2018-11-06-multiplication-table/index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <p>Notice that I used a <span class="math inline">\(12 \times 12\)</span> table so that I got a symmetric pattern. I did this because I knew that the fundamental building block is given by the least common multiple of <span class="math inline">\(2\)</span> and <span class="math inline">\(3\)</span>. That is, in this case the fundamental block consists of <span class="math inline">\(6 \times 6 = 36\)</span> little cells.</p>
 </div>
 <div id="creating-beautiful-patterns" class="section level2">
 <h2>Creating beautiful patterns</h2>
-<p>Next I show some beautiful patterns obtained by playing around with this idea of coloring multiples of several numbers. You can find the full code used to create these visualizations here.</p>
+<p>Next I show some beautiful patterns obtained by playing around with this idea of coloring multiples of several numbers.</p>
+<div class="figure">
+<img src="multiple_tables.png" />
+
+</div>
 </div>

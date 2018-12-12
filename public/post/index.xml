@@ -13,12 +13,14 @@
     
     
     <item>
-      <title>test</title>
-      <link>/post/test/</link>
-      <pubDate>Fri, 07 Dec 2018 00:00:00 +0000</pubDate>
+      <title>Gráficos de tiro con R</title>
+      <link>/post/shot-chart/</link>
+      <pubDate>Mon, 10 Dec 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/test/</guid>
-      <description>Hello I am 😕</description>
+      <guid>/post/shot-chart/</guid>
+      <description>Kirk Goldsberry es una de las figuras más destacadas en el mundo de la estadística avanzada en la NBA. Se le conoce principalmente por el uso de gráficos de tiro en sus análisis. Este es un ejemplo en el que se muestran todos los tiros que ha realizado Lebron James a lo largo de su carrera:
+LeBron James: every shot ever...https://t.co/kTRnh0eqcv pic.twitter.com/2zpuUgRgor
+&amp;mdash; Kirk Goldsberry (@kirkgoldsberry) October 18, 2018  Los gráficos de tiro (shot charts en inglés) pueden ser útiles para, por ejemplo, identificar tendencias en ataque de un determinado jugador/equipo, mostrar en qué zonas del campo un jugador es más efectivo o analizar qué tipo de tiros un equipo permite al rival.</description>
     </item>
     
     <item>
@@ -28,16 +30,15 @@
       
       <guid>/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/</guid>
       <description>Kirk Goldsberry es una de las figuras más destacadas en el mundo de la estadística avanzada en la NBA. Se le conoce principalmente por el uso de gráficos de tiro en sus análisis. Este es un ejemplo en el que se muestran todos los tiros que ha realizado Lebron James a lo largo de su carrera:
-Gráfica de tiro de Lebron James
  Los gráficos de tiro (shot charts en inglés) pueden ser útiles para, por ejemplo, identificar tendencias en ataque de un determinado jugador/equipo, mostrar en qué zonas del campo un jugador es más efectivo o analizar qué tipo de tiros un equipo permite al rival.</description>
     </item>
     
     <item>
       <title>Exploring the multiplication table with R</title>
-      <link>/post/multiplication-table-with-r/</link>
+      <link>/post/2018-11-06-multiplication-table/multiplication-table-with-r/</link>
       <pubDate>Tue, 06 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/multiplication-table-with-r/</guid>
+      <guid>/post/2018-11-06-multiplication-table/multiplication-table-with-r/</guid>
       <description>I was reading about the Hidden beauty of multiplication tables and I thought it could be fun to make some of the cool plots in that article with R. While we are at it, we can tweak some of them and play around with the tables to see what we get.
 The multiplication table Consider the standard \(10 \times 10\) multiplication table, with the first row and the first column taking the values \(1\) through \(10\), forming a grid with the corresponding products.</description>
     </item>
@@ -52,16 +53,6 @@ The multiplication table Consider the standard \(10 \times 10\) multiplication t
     </item>
     
     <item>
-      <title>Post 1</title>
-      <link>/post/post-1/</link>
-      <pubDate>Wed, 24 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/post/post-1/</guid>
-      <description>Plot something
-summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.:19.0 3rd Qu.: 56.00 ## Max. :25.0 Max. :120.00 plot(cars$speed, cars$dist) </description>
-    </item>
-    
-    <item>
       <title>Academic: the website designer for Hugo</title>
       <link>/post/getting-started/</link>
       <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
@@ -70,17 +61,6 @@ summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 2
       <description>Academic makes it easy to create a beautiful website for free using Markdown. Customize anything on your site with widgets, themes, and language packs.
 Follow our easy step by step guide to learn how to build your own free website with Academic. Check out the personal demo or the business demo of what you&amp;rsquo;ll get in less than 10 minutes.
  View the documentation Ask a question Request a feature or report a bug Updating?</description>
-    </item>
-    
-    <item>
-      <title>Hello R Markdown</title>
-      <link>/post/2015-07-23-r-rmarkdown/</link>
-      <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
-      
-      <guid>/post/2015-07-23-r-rmarkdown/</guid>
-      <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
-You can embed an R code chunk like this:
-summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
     </item>
     
   </channel>

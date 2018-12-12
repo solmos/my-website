@@ -14,7 +14,7 @@ image:
   focal_point: ''
 ---
 
-I was reading about the Hidden beauty of multiplication tables and I thought it could be fun to make some of the cool plots in that article with R. While we are at it, we can tweak some of them and play around with the tables to see what we get.
+I was reading about the [Hidden beauty of multiplication tables](https://plus.maths.org/content/hidden-beauty-multiplication-tables) and I thought it could be fun to make some of the cool plots in that article with R. While we are at it, we can tweak some of them and play around with the tables to see what we get.
 
 ## The multiplication table
 
@@ -102,7 +102,7 @@ ggplot(block_2, aes(x, y)) +
     theme_void()
 ```
 
-As Zoheir Barka explains in his article mentioned in the beginning, the fundamental building block contains $k \times k = 2 \times 2 = 4$ cells of the multiplication table. The fact that, in the case of a single multiple, each side of the fundamental building block is $k$ can be useful when plotting our tables.
+As Zoheir Barka explains in his article mentioned at the beginning, the fundamental building block contains $k \times k = 2 \times 2 = 4$ cells of the multiplication table. The fact that, in the case of a single multiple, each side of the fundamental building block is $k$ can be useful when plotting our tables.
 
 We want to explore the patterns for different values of $k$ so I created a simple function that plots a colored multiplication table for the supplied $k$ and the supplied dimensions. Multiples and non-multiples are coloured the same way as before so I chose to drop the legend for aesthetic reasons. I will add more arguments to this function later to easily customize the resulting table.
 
@@ -190,7 +190,9 @@ Notice that I used a $12 \times 12$ table so that I got a symmetric pattern. I d
 
 ## Creating beautiful patterns
 
-Next I show some beautiful patterns obtained by playing around with this idea of coloring multiples of several numbers. You can find the full code used to create these visualizations here.
+Next I show some beautiful patterns obtained by playing around with this idea of coloring multiples of several numbers.
+
+![](multiple_tables.png)
 
 
 
