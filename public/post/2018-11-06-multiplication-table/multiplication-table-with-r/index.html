@@ -15,8 +15,7 @@
   
     
   
-  <meta name="description" content="I was reading about the Hidden beauty of multiplication tables and I thought it could be fun to make some of the cool plots in that article with R. While we are at it, we can tweak some of them and play around with the tables to see what we get.
-The multiplication table Consider the standard \(10 \times 10\) multiplication table, with the first row and the first column taking the values \(1\) through \(10\), forming a grid with the corresponding products.">
+  <meta name="description" content="I show how to visualize the patterns that emerge in the multiplication table and present an R package I have created for this purpose">
 
   
   <link rel="alternate" hreflang="en-us" href="/post/2018-11-06-multiplication-table/multiplication-table-with-r/">
@@ -94,8 +93,7 @@ The multiplication table Consider the standard \(10 \times 10\) multiplication t
   <meta property="og:site_name" content="Sergio Olmos">
   <meta property="og:url" content="/post/2018-11-06-multiplication-table/multiplication-table-with-r/">
   <meta property="og:title" content="Exploring the multiplication table with R | Sergio Olmos">
-  <meta property="og:description" content="I was reading about the Hidden beauty of multiplication tables and I thought it could be fun to make some of the cool plots in that article with R. While we are at it, we can tweak some of them and play around with the tables to see what we get.
-The multiplication table Consider the standard \(10 \times 10\) multiplication table, with the first row and the first column taking the values \(1\) through \(10\), forming a grid with the corresponding products.">
+  <meta property="og:description" content="I show how to visualize the patterns that emerge in the multiplication table and present an R package I have created for this purpose">
   
   
     
@@ -229,6 +227,8 @@ The multiplication table Consider the standard \(10 \times 10\) multiplication t
   <h1 itemprop="name">Exploring the multiplication table with R</h1>
 
   
+  <p class="page-subtitle">I show how to visualize the patterns that emerge in the multiplication table and present an R package I have created for this purpose</p>
+  
 
   
     
@@ -256,11 +256,14 @@ The multiplication table Consider the standard \(10 \times 10\) multiplication t
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    5 min read
+    6 min read
   </span>
   
 
   
+  
+  <span class="middot-divider"></span>
+  <a href="/post/2018-11-06-multiplication-table/multiplication-table-with-r/#disqus_thread"></a>
   
 
   
@@ -379,7 +382,7 @@ ggplot(multiplication_table, aes(x, y)) +
 m2 &lt;- multiplication_table %&gt;% 
     mutate(multiple_of_2 = product %% 2 == 0)
 # Color palette chosen from the wesanderson package
-colors &lt;- wesanderson::wes_palette(name = &quot;Zissou1&quot;, n = 2)
+colors &lt;- wes_palette(name = &quot;Zissou1&quot;, n = 2)
 ggplot(m2, aes(x, y)) +
     geom_tile(aes(fill = multiple_of_2), color = &quot;white&quot;) +
     geom_text(aes(label = product), color = &quot;white&quot;) +
@@ -407,7 +410,7 @@ ggplot(block_2, aes(x, y)) +
     theme_void()</code></pre>
 <p><img src="/post/2018-11-06-multiplication-table/index_files/figure-html/unnamed-chunk-4-1.png" width="192" /></p>
 <p>As Zoheir Barka explains in his article mentioned at the beginning, the fundamental building block contains <span class="math inline">\(k \times k = 2 \times 2 = 4\)</span> cells of the multiplication table. The fact that, in the case of a single multiple, each side of the fundamental building block is <span class="math inline">\(k\)</span> can be useful when plotting our tables.</p>
-<p>We want to explore the patterns for different values of <span class="math inline">\(k\)</span> so I created a simple function that plots a colored multiplication table for the supplied <span class="math inline">\(k\)</span> and the supplied dimensions. Multiples and non-multiples are coloured the same way as before so I chose to drop the legend for aesthetic reasons. I will add more arguments to this function later to easily customize the resulting table.</p>
+<p>We want to explore the patterns for different values of <span class="math inline">\(k\)</span> so I created a simple function that plots a colored multiplication table for the supplied <span class="math inline">\(k\)</span> and the supplied dimensions. Multiples and non-multiples are colored the same way as before so I chose to drop the legend for aesthetic reasons. I will add more arguments to this function later to easily customize the resulting table.</p>
 <pre class="r"><code># Auxiliary function to create a data frame 
 # with the values of the multiplication table
 create_mtable &lt;- function(xmax, ymax) {
@@ -474,13 +477,22 @@ ggplot(multiple_multiples, aes(x, y)) +
     scale_fill_brewer(palette = &quot;Pastel1&quot;,
                       name = element_blank()) +
     scale_y_continuous(trans = &quot;reverse&quot;) +
+    coord_fixed() +
     theme_void()</code></pre>
 <p><img src="/post/2018-11-06-multiplication-table/index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <p>Notice that I used a <span class="math inline">\(12 \times 12\)</span> table so that I got a symmetric pattern. I did this because I knew that the fundamental building block is given by the least common multiple of <span class="math inline">\(2\)</span> and <span class="math inline">\(3\)</span>. That is, in this case the fundamental block consists of <span class="math inline">\(6 \times 6 = 36\)</span> little cells.</p>
 </div>
-<div id="creating-beautiful-patterns" class="section level2">
-<h2>Creating beautiful patterns</h2>
-<p>Next I show some beautiful patterns obtained by playing around with this idea of coloring multiples of several numbers.</p>
+<div id="multable-package" class="section level2">
+<h2>multable package</h2>
+<p>I have created a simple R package out of this idea of coloring the factors of different numbers, called <code>multable</code>. You can install it with</p>
+<pre class="r"><code># install.packages(&quot;devtools&quot;)
+devtools::install_github(&quot;solmos/multable&quot;)</code></pre>
+<p>As of now, the package contains just two functions:</p>
+<ul>
+<li><p><code>create_table()</code> generates a data frame with the grid values and identifies the factors for different values of <code>k</code></p></li>
+<li><p><code>draw_pattern()</code> plots the multiplication table coloring the different cells according to what value of <code>k</code> a given cell is a factor of</p></li>
+</ul>
+<p>Check out the code for these functions <a href="https://github.com/solmos/multable">here</a>. My plan is to add more functionality to this package but you can actually do some pretty cool visualizations as it is.</p>
 <div class="figure">
 <img src="multiple_tables.png" />
 
@@ -581,20 +593,33 @@ ggplot(multiple_multiples, aes(x, y)) +
 
     
     
-    <div class="article-widget">
-      <div class="hr-light"></div>
-      <h3>Related</h3>
-      <ul>
-        
-        <li><a href="/post/web_con_blogdown/">Cómo creé mi página web con blogdown</a></li>
-        
-      </ul>
-    </div>
-    
 
     
 
     
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_YRXpIjgvPM" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
 
 
   </div>
@@ -695,6 +720,8 @@ ggplot(multiple_multiples, aes(x, y)) +
 
     
     
+    
+    <script id="dsq-count-scr" src="//disqus_YRXpIjgvPM.disqus.com/count.js" async></script>
     
 
     

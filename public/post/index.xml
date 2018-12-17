@@ -13,27 +13,6 @@
     
     
     <item>
-      <title>Gráficos de tiro con R</title>
-      <link>/post/shot-chart/</link>
-      <pubDate>Mon, 10 Dec 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/post/shot-chart/</guid>
-      <description>Kirk Goldsberry es una de las figuras más destacadas en el mundo de la estadística avanzada en la NBA. Se le conoce principalmente por el uso de gráficos de tiro en sus análisis. Este es un ejemplo en el que se muestran todos los tiros que ha realizado Lebron James a lo largo de su carrera:
-LeBron James: every shot ever...https://t.co/kTRnh0eqcv pic.twitter.com/2zpuUgRgor
-&amp;mdash; Kirk Goldsberry (@kirkgoldsberry) October 18, 2018  Los gráficos de tiro (shot charts en inglés) pueden ser útiles para, por ejemplo, identificar tendencias en ataque de un determinado jugador/equipo, mostrar en qué zonas del campo un jugador es más efectivo o analizar qué tipo de tiros un equipo permite al rival.</description>
-    </item>
-    
-    <item>
-      <title>Gráficos de tiro con R</title>
-      <link>/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/</link>
-      <pubDate>Fri, 30 Nov 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/</guid>
-      <description>Kirk Goldsberry es una de las figuras más destacadas en el mundo de la estadística avanzada en la NBA. Se le conoce principalmente por el uso de gráficos de tiro en sus análisis. Este es un ejemplo en el que se muestran todos los tiros que ha realizado Lebron James a lo largo de su carrera:
- Los gráficos de tiro (shot charts en inglés) pueden ser útiles para, por ejemplo, identificar tendencias en ataque de un determinado jugador/equipo, mostrar en qué zonas del campo un jugador es más efectivo o analizar qué tipo de tiros un equipo permite al rival.</description>
-    </item>
-    
-    <item>
       <title>Exploring the multiplication table with R</title>
       <link>/post/2018-11-06-multiplication-table/multiplication-table-with-r/</link>
       <pubDate>Tue, 06 Nov 2018 00:00:00 +0000</pubDate>
@@ -41,26 +20,6 @@ LeBron James: every shot ever...https://t.co/kTRnh0eqcv pic.twitter.com/2zpuUgRg
       <guid>/post/2018-11-06-multiplication-table/multiplication-table-with-r/</guid>
       <description>I was reading about the Hidden beauty of multiplication tables and I thought it could be fun to make some of the cool plots in that article with R. While we are at it, we can tweak some of them and play around with the tables to see what we get.
 The multiplication table Consider the standard \(10 \times 10\) multiplication table, with the first row and the first column taking the values \(1\) through \(10\), forming a grid with the corresponding products.</description>
-    </item>
-    
-    <item>
-      <title>Cómo creé mi página web con blogdown</title>
-      <link>/post/web_con_blogdown/</link>
-      <pubDate>Sun, 28 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/post/web_con_blogdown/</guid>
-      <description>Después de muchas pruebas e intentos he decidido por fin publicar mi página web personal. Llevaba queriendo hacerlo desde hace meses, pero siempre lo dejaba para más adelante por una cosa o la otra. Que si no tenía tiempo, que si el tema (theme) no es perfecto, que si lo hago en inglés o en español… En realidad eran excusas de un introvertido para no poner su trabajo a la vista de todos.</description>
-    </item>
-    
-    <item>
-      <title>Academic: the website designer for Hugo</title>
-      <link>/post/getting-started/</link>
-      <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
-      
-      <guid>/post/getting-started/</guid>
-      <description>Academic makes it easy to create a beautiful website for free using Markdown. Customize anything on your site with widgets, themes, and language packs.
-Follow our easy step by step guide to learn how to build your own free website with Academic. Check out the personal demo or the business demo of what you&amp;rsquo;ll get in less than 10 minutes.
- View the documentation Ask a question Request a feature or report a bug Updating?</description>
     </item>
     
   </channel>

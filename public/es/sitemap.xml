@@ -4,17 +4,6 @@
     
     <url>
     
-      <xhtml:link rel="alternate" href="/es/post/web_con_blogdown/" hreflang="es"/>
-      <xhtml:link rel="alternate" href="/post/web_con_blogdown/" hreflang="en"/>
-    
-      <loc>/es/post/web_con_blogdown/</loc>
-      <lastmod>2018-10-28T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    <url>
-    
       <xhtml:link rel="alternate" href="/es/project/tfm/" hreflang="es"/>
       <xhtml:link rel="alternate" href="/project/tfm/" hreflang="en"/>
     
@@ -30,30 +19,6 @@
       <xhtml:link rel="alternate" href="/categories/" hreflang="en"/>
     
       <loc>/es/categories/</loc>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    <url>
-    
-      <xhtml:link rel="alternate" href="/es/categories/espa%C3%B1ol/" hreflang="es"/>
-      <xhtml:link rel="alternate" href="/categories/espa%C3%B1ol/" hreflang="en"/>
-    
-      <loc>/es/categories/espa%C3%B1ol/</loc>
-      <lastmod>2018-10-28T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    <url>
-    
-      <xhtml:link rel="alternate" href="/es/post/" hreflang="es"/>
-      <xhtml:link rel="alternate" href="/post/" hreflang="en"/>
-    
-      <loc>/es/post/</loc>
-      <lastmod>2018-10-28T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -84,30 +49,6 @@
     
     <url>
     
-      <xhtml:link rel="alternate" href="/es/tags/r/" hreflang="es"/>
-      <xhtml:link rel="alternate" href="/tags/r/" hreflang="en"/>
-    
-      <loc>/es/tags/r/</loc>
-      <lastmod>2018-10-28T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    <url>
-    
-      <xhtml:link rel="alternate" href="/es/categories/r/" hreflang="es"/>
-      <xhtml:link rel="alternate" href="/categories/r/" hreflang="en"/>
-    
-      <loc>/es/categories/r/</loc>
-      <lastmod>2018-10-28T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    <url>
-    
       <xhtml:link rel="alternate" href="/es/" hreflang="es"/>
       <xhtml:link rel="alternate" href="/" hreflang="en"/>
     
@@ -124,7 +65,6 @@
       <xhtml:link rel="alternate" href="/tags/" hreflang="en"/>
     
       <loc>/es/tags/</loc>
-      <lastmod>2018-10-28T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     

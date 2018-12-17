@@ -4,35 +4,8 @@
     
     <url>
     
-      <loc>/post/shot-chart/</loc>
-      <lastmod>2018-12-10T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    <url>
-    
-      <loc>/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/</loc>
-      <lastmod>2018-11-30T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    <url>
-    
       <loc>/post/2018-11-06-multiplication-table/multiplication-table-with-r/</loc>
       <lastmod>2018-11-06T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    <url>
-    
-      <xhtml:link rel="alternate" href="/post/web_con_blogdown/" hreflang="en"/>
-      <xhtml:link rel="alternate" href="/es/post/web_con_blogdown/" hreflang="es"/>
-    
-      <loc>/post/web_con_blogdown/</loc>
-      <lastmod>2018-10-28T00:00:00+00:00</lastmod>
     </url>
     
   
@@ -71,9 +44,6 @@
     
     <url>
     
-      <xhtml:link rel="alternate" href="/post/" hreflang="en"/>
-      <xhtml:link rel="alternate" href="/es/post/" hreflang="es"/>
-    
       <loc>/post/</loc>
       <lastmod>2017-01-01T00:00:00+01:00</lastmod>
     </url>
@@ -103,14 +73,6 @@
     
       <loc>/project/tfm/</loc>
       <lastmod>2016-04-27T00:00:00+02:00</lastmod>
-    </url>
-    
-  
-    
-    <url>
-    
-      <loc>/post/getting-started/</loc>
-      <lastmod>2018-01-13T00:00:00+01:00</lastmod>
     </url>
     
   
@@ -151,41 +113,10 @@
     
     <url>
     
-      <loc>/tags/academic/</loc>
-      <lastmod>2018-01-13T00:00:00+01:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    <url>
-    
-      <loc>/categories/basketball/</loc>
-      <lastmod>2018-12-10T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    <url>
-    
       <xhtml:link rel="alternate" href="/categories/" hreflang="en"/>
       <xhtml:link rel="alternate" href="/es/categories/" hreflang="es"/>
     
       <loc>/categories/</loc>
-      <lastmod>2018-12-10T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    <url>
-    
-      <xhtml:link rel="alternate" href="/categories/espa%C3%B1ol/" hreflang="en"/>
-      <xhtml:link rel="alternate" href="/es/categories/espa%C3%B1ol/" hreflang="es"/>
-    
-      <loc>/categories/espa%C3%B1ol/</loc>
-      <lastmod>2018-10-28T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -235,9 +166,6 @@
     
     <url>
     
-      <xhtml:link rel="alternate" href="/tags/r/" hreflang="en"/>
-      <xhtml:link rel="alternate" href="/es/tags/r/" hreflang="es"/>
-    
       <loc>/tags/r/</loc>
       <lastmod>2018-11-06T00:00:00+00:00</lastmod>
       <priority>0</priority>
@@ -247,11 +175,8 @@
     
     <url>
     
-      <xhtml:link rel="alternate" href="/categories/r/" hreflang="en"/>
-      <xhtml:link rel="alternate" href="/es/categories/r/" hreflang="es"/>
-    
       <loc>/categories/r/</loc>
-      <lastmod>2018-12-10T00:00:00+00:00</lastmod>
+      <lastmod>2018-11-06T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -290,7 +215,7 @@
       <xhtml:link rel="alternate" href="/es/tags/" hreflang="es"/>
     
       <loc>/tags/</loc>
-      <lastmod>2018-01-13T00:00:00+01:00</lastmod>
+      <lastmod>2018-11-06T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     

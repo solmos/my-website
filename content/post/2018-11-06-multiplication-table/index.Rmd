@@ -1,6 +1,8 @@
 ---
 title: Exploring the multiplication table with R
+subtitle: I show how to visualize the patterns that emerge in the multiplication table and present an R package I have created for this purpose
 author: Sergio Olmos Pardo
+summary: I show how to visualize the patterns that emerge in the multiplication table and present an R package I have created for this purpose
 date: '2018-11-06'
 slug: multiplication-table-with-r
 categories:
@@ -71,7 +73,7 @@ library(wesanderson)
 m2 <- multiplication_table %>% 
     mutate(multiple_of_2 = product %% 2 == 0)
 # Color palette chosen from the wesanderson package
-colors <- wesanderson::wes_palette(name = "Zissou1", n = 2)
+colors <- wes_palette(name = "Zissou1", n = 2)
 ggplot(m2, aes(x, y)) +
     geom_tile(aes(fill = multiple_of_2), color = "white") +
     geom_text(aes(label = product), color = "white") +
@@ -104,7 +106,7 @@ ggplot(block_2, aes(x, y)) +
 
 As Zoheir Barka explains in his article mentioned at the beginning, the fundamental building block contains $k \times k = 2 \times 2 = 4$ cells of the multiplication table. The fact that, in the case of a single multiple, each side of the fundamental building block is $k$ can be useful when plotting our tables.
 
-We want to explore the patterns for different values of $k$ so I created a simple function that plots a colored multiplication table for the supplied $k$ and the supplied dimensions. Multiples and non-multiples are coloured the same way as before so I chose to drop the legend for aesthetic reasons. I will add more arguments to this function later to easily customize the resulting table.
+We want to explore the patterns for different values of $k$ so I created a simple function that plots a colored multiplication table for the supplied $k$ and the supplied dimensions. Multiples and non-multiples are colored the same way as before so I chose to drop the legend for aesthetic reasons. I will add more arguments to this function later to easily customize the resulting table.
 
 ```{r}
 # Auxiliary function to create a data frame 
@@ -182,15 +184,28 @@ ggplot(multiple_multiples, aes(x, y)) +
     scale_fill_brewer(palette = "Pastel1",
                       name = element_blank()) +
     scale_y_continuous(trans = "reverse") +
+    coord_fixed() +
     theme_void()
 ```
 
 Notice that I used a $12 \times 12$ table so that I got a symmetric pattern. I did this because I knew that the fundamental building block is given by the least common multiple of $2$ and $3$. That is, in this case the fundamental block consists of $6 \times 6 = 36$ little cells.
 
 
-## Creating beautiful patterns
+## multable package
 
-Next I show some beautiful patterns obtained by playing around with this idea of coloring multiples of several numbers.
+I have created a simple R package out of this idea of coloring the factors of different numbers, called `multable`. You can install it with
+```{r, eval = FALSE}
+# install.packages("devtools")
+devtools::install_github("solmos/multable")
+```
+
+As of now, the package contains just two functions:
+
+* `create_table()` generates a data frame with the grid values and identifies the factors for different values of `k`
+
+* `draw_pattern()` plots the multiplication table coloring the different cells according to what value of `k` a given cell is a factor of
+
+Check out the code for these functions [here](https://github.com/solmos/multable). My plan is to add more functionality to this package but you can actually do some pretty cool visualizations as it is.
 
 ![](multiple_tables.png)
 
