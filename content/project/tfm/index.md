@@ -9,7 +9,7 @@ date = 2016-04-27T00:00:00
 summary = "Master's thesis"
 
 # Tags: can be used for filtering projects.
-# Example: `tags = ["statistics", "linear mixed models"]`
+# Example: `tags = ["Statistics", "linear mixed models"]`
 tags = ["statistics", "linear mixed models", "multilevel models", "hierarchical models"]
 
 # Optional external URL for project (replaces project detail page).

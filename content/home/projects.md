@@ -34,12 +34,12 @@ filter_default = 0
   tag = "*"
 
 [[filter]]
-  name = "Deep Learning"
-  tag = "Deep Learning"
+  name = "Statistics"
+  tag = "Statistics"
 
-[[filter]]
-  name = "Other"
-  tag = "Demo"
+#[[filter]]
+#  name = "Other"
+#  tag = "Demo"
 
 +++
 

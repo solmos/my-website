@@ -209,12 +209,5 @@ As of now, the package contains just two functions:
 
 Check out the code for these functions [here](https://github.com/solmos/multable). My plan is to add more functionality to this package but you can actually do some pretty cool visualizations as it is.
 
+
 ![](multiple_tables.png)
-
-
-
-
-
-
-
-
