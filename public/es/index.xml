@@ -11,6 +11,179 @@
     <atom:link href="/es/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Exploring the multiplication table with R</title>
+      <link>/es/post/2018-11-06-multiplication-table/multiplication-table-with-r/</link>
+      <pubDate>Tue, 06 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/es/post/2018-11-06-multiplication-table/multiplication-table-with-r/</guid>
+      <description>&lt;p&gt;I was reading about the &lt;a href=&#34;https://plus.maths.org/content/hidden-beauty-multiplication-tables&#34;&gt;Hidden beauty of multiplication tables&lt;/a&gt; and I thought it could be fun to make some of the cool plots in that article with R.&lt;/p&gt;
+&lt;p&gt;As I was trying to visualize new patterns in the multiplication table, I ended up with some useful fuctions that I decided to put in a simple R package called &lt;code&gt;multable&lt;/code&gt; that you can install from &lt;a href=&#34;https://github.com/solmos/multable&#34;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
+&lt;div id=&#34;the-multiplication-table&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The multiplication table&lt;/h2&gt;
+&lt;p&gt;Consider the standard &lt;span class=&#34;math inline&#34;&gt;\(10 \times 10\)&lt;/span&gt; multiplication table, with the first row and the first column taking the values &lt;span class=&#34;math inline&#34;&gt;\(1\)&lt;/span&gt; through &lt;span class=&#34;math inline&#34;&gt;\(10\)&lt;/span&gt;, forming a grid with the corresponding products.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+
+# Data frame with all the values of the 10x10 multiplication table
+multiplication_table &amp;lt;- tibble(
+    x = 1:10,
+    y = 1:10
+) %&amp;gt;% # Get all combination of x and y
+    complete(x, y) %&amp;gt;% # Get the product of all combinations
+    mutate(product = x * y)
+
+ggplot(multiplication_table, aes(x, y)) +
+    geom_tile(color = &amp;quot;white&amp;quot;) +
+    geom_text(aes(label = product), color = &amp;quot;white&amp;quot;) +
+    # We want the table to start with 1 in the upper-left corner
+    scale_y_continuous(trans = &amp;quot;reverse&amp;quot;) +
+    # We want to always display the tables as squares
+    coord_fixed() +
+    theme_void()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table/index.es_files/figure-html/unnamed-chunk-1-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;For purposes that we will see next, I am going to add a row and a column of zeros above and to the left of our table, respectively:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;multiplication_table &amp;lt;- tibble(
+    x = 0:10,
+    y = 0:10
+) %&amp;gt;% 
+    complete(x, y) %&amp;gt;% 
+    mutate(product = x * y)
+ggplot(multiplication_table, aes(x, y)) +
+    geom_tile(color = &amp;quot;white&amp;quot;) +
+    geom_text(aes(label = product), color = &amp;quot;white&amp;quot;) +
+    scale_y_continuous(trans = &amp;quot;reverse&amp;quot;) +
+    coord_fixed() +
+    theme_void()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table/index.es_files/figure-html/unnamed-chunk-2-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Next, we will discover some beautiful symmetries by coloring the rectangles of the multiplication table that correspond to multiples of a number &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; for various values of &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;single-multiples&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Single multiples&lt;/h2&gt;
+&lt;p&gt;We say that &lt;span class=&#34;math inline&#34;&gt;\(c\)&lt;/span&gt; is a multiple of &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; if &lt;span class=&#34;math inline&#34;&gt;\(c = n k\)&lt;/span&gt; for some integer &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt;, which is called the multiplier. So we can tell if a given number &lt;span class=&#34;math inline&#34;&gt;\(c\)&lt;/span&gt; is a multiple of &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; if the division &lt;span class=&#34;math inline&#34;&gt;\(c\)&lt;/span&gt; over &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; has remainder 0.&lt;/p&gt;
+&lt;p&gt;Let’s begin with &lt;span class=&#34;math inline&#34;&gt;\(k = 2\)&lt;/span&gt;. I am going to color the cells corresponding to multiples of &lt;span class=&#34;math inline&#34;&gt;\(2\)&lt;/span&gt; in one color and non-multiples of &lt;span class=&#34;math inline&#34;&gt;\(2\)&lt;/span&gt; in another color. Check out the pattern it emerges:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(wesanderson)
+m2 &amp;lt;- multiplication_table %&amp;gt;% 
+    mutate(multiple_of_2 = product %% 2 == 0)
+# Color palette chosen from the wesanderson package
+colors &amp;lt;- wes_palette(name = &amp;quot;Zissou1&amp;quot;, n = 2)
+ggplot(m2, aes(x, y)) +
+    geom_tile(aes(fill = multiple_of_2), color = &amp;quot;white&amp;quot;) +
+    geom_text(aes(label = product), color = &amp;quot;white&amp;quot;) +
+    scale_y_continuous(trans = &amp;quot;reverse&amp;quot;) +
+    coord_fixed() +
+    scale_fill_manual(values = colors,
+                      name = &amp;quot;Multiple of 2?&amp;quot;,
+                      labels = c(&amp;quot;No&amp;quot;, &amp;quot;Yes&amp;quot;)) +
+    theme_void()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table/index.es_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;If we look closely we can see that the whole pattern above can be pieced together using the following fundamental block:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;block_2 &amp;lt;- tibble(
+    x = c(0,1),
+    y = c(0,1)
+) %&amp;gt;% 
+    complete(x, y) %&amp;gt;% 
+    distinct() %&amp;gt;% 
+    mutate(product = x * y,
+           multiple = product %% 2 == 0)
+ggplot(block_2, aes(x, y)) +
+    geom_tile(aes(fill = multiple), color = &amp;quot;white&amp;quot;) +
+    scale_y_continuous(trans = &amp;quot;reverse&amp;quot;) +
+    scale_fill_manual(values = colors,
+                      guide = FALSE) +
+    theme_void()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table/index.es_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;192&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;As Zoheir Barka explains in his article mentioned at the beginning, the fundamental building block contains &lt;span class=&#34;math inline&#34;&gt;\(k \times k = 2 \times 2 = 4\)&lt;/span&gt; cells of the multiplication table. The fact that, in the case of a single multiple, each side of the fundamental building block is &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; can be useful when plotting our tables.&lt;/p&gt;
+&lt;p&gt;We want to explore the patterns for different values of &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; so I created a simple function that plots a colored multiplication table for the supplied &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; and the supplied dimensions. Multiples and non-multiples are colored the same way as before so I chose to drop the legend for aesthetic reasons.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Auxiliary function to create a data frame 
+# with the values of the multiplication table
+create_mtable &amp;lt;- function(xmax, ymax) {
+    data.frame(
+        x = 0:xmax,
+        y = 0:ymax
+    ) %&amp;gt;% 
+        complete(x, y) %&amp;gt;% 
+        mutate(product = x * y)
+}
+
+# Plot the colored table
+draw_pattern &amp;lt;- function(k, xmax, ymax) {
+    # Colors chosen from the Zissou1 palette in the wesanderson package
+    colors &amp;lt;- wesanderson::wes_palette(name = &amp;quot;Zissou1&amp;quot;, n = 2)
+    tab &amp;lt;- create_mtable(xmax, ymax) %&amp;gt;% 
+        mutate(multiple = product %% k == 0) %&amp;gt;% 
+        ggplot(aes(x, y)) +
+        geom_tile(aes(fill = multiple), color = &amp;quot;white&amp;quot;) +
+        geom_text(aes(label = product), color = &amp;quot;white&amp;quot;) +
+        scale_y_continuous(trans = &amp;quot;reverse&amp;quot;) +
+        coord_fixed() +
+        scale_fill_manual(values = colors) +
+        theme_void() +
+        guides(fill = FALSE)
+    tab
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can now easily plot the colored tables for different values of &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; and see what patterns emerge:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;draw_pattern(k = 4, xmax = 4 * 3, ymax = 4 * 3) +
+    labs(title = &amp;quot;Multiples of 4&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table/index.es_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;480&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;draw_pattern(6, 6 * 2, 6 * 2) +
+    labs(title = &amp;quot;Multiples of 6&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table/index.es_files/figure-html/unnamed-chunk-6-2.png&#34; width=&#34;480&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Notice that we set the “length” of each side of the tables to multiples of &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; so that the pattern is symmetric.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;multiple-multiples&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Multiple multiples&lt;/h2&gt;
+&lt;p&gt;We can plot more interesting (and beautiful) patterns if we use multiple multiples, and corresponding to them, multiple colors.&lt;/p&gt;
+&lt;p&gt;Consider the multiples of &lt;span class=&#34;math inline&#34;&gt;\(k_1 = 2\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(k_2 = 3\)&lt;/span&gt;. I will color each square of the multiplication table according to the following criteria:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Not multiple of neither 2 nor 3&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Multiple only of 2&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Multiple only of 3&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Multiple of both 2 and 3&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;multiple_multiples &amp;lt;- tibble(
+    x = 0:12,
+    y = 0:12
+) %&amp;gt;% 
+    complete(x, y) %&amp;gt;% 
+    mutate(product = x * y,
+           m2 = product %% 2 == 0,
+           m3 = product %% 3 == 0,
+           inter = interaction(m2, m3)) %&amp;gt;% 
+    mutate(interaction = recode_factor(inter,
+                                       FALSE.FALSE = &amp;quot;Multple of neither&amp;quot;,
+                                       TRUE.FALSE = &amp;quot;Multiple of 2&amp;quot;,
+                                       FALSE.TRUE = &amp;quot;Multiple of 3&amp;quot;,
+                                       TRUE.TRUE = &amp;quot;Multiple of both&amp;quot;))
+ggplot(multiple_multiples, aes(x, y)) +
+    geom_tile(aes(fill = interaction), color = &amp;quot;white&amp;quot;) +
+    geom_text(aes(label = product), color = &amp;quot;white&amp;quot;) +
+    scale_fill_brewer(palette = &amp;quot;Pastel1&amp;quot;,
+                      name = element_blank()) +
+    scale_y_continuous(trans = &amp;quot;reverse&amp;quot;) +
+    coord_fixed() +
+    theme_void()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table/index.es_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Notice that I used a &lt;span class=&#34;math inline&#34;&gt;\(12 \times 12\)&lt;/span&gt; table so that I got a symmetric pattern. I did this because I knew that the fundamental building block is given by the least common multiple of &lt;span class=&#34;math inline&#34;&gt;\(2\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(3\)&lt;/span&gt;. That is, in this case the fundamental block consists of &lt;span class=&#34;math inline&#34;&gt;\(6 \times 6 = 36\)&lt;/span&gt; little cells.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;multable-package&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;multable package&lt;/h2&gt;
+&lt;p&gt;I have created a simple R package out of this idea of coloring the factors of different numbers, called &lt;code&gt;multable&lt;/code&gt;. You can install it with&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# install.packages(&amp;quot;devtools&amp;quot;)
+devtools::install_github(&amp;quot;solmos/multable&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As of now, the package contains just two functions:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;create_table()&lt;/code&gt; generates a data frame with the grid values and identifies the factors for different values of &lt;code&gt;k&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;draw_pattern()&lt;/code&gt; plots the multiplication table coloring the different cells according to what value of &lt;code&gt;k&lt;/code&gt; a given cell is a factor of&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Check out the code for these functions &lt;a href=&#34;https://github.com/solmos/multable&#34;&gt;here&lt;/a&gt;. My plan is to add more functionality to this package but you can actually do some pretty cool visualizations as it is.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;multiple_tables.png&#34; /&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Analysis of clustered data using linear mixed models</title>
       <link>/es/project/tfm/</link>
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>

@@ -4,6 +4,17 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/es/post/2018-11-06-multiplication-table/multiplication-table-with-r/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/post/2018-11-06-multiplication-table/multiplication-table-with-r/" hreflang="en"/>
+    
+      <loc>/es/post/2018-11-06-multiplication-table/multiplication-table-with-r/</loc>
+      <lastmod>2018-11-06T00:00:00+00:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <xhtml:link rel="alternate" href="/es/project/tfm/" hreflang="es"/>
       <xhtml:link rel="alternate" href="/project/tfm/" hreflang="en"/>
     
@@ -19,6 +30,42 @@
       <xhtml:link rel="alternate" href="/categories/" hreflang="en"/>
     
       <loc>/es/categories/</loc>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/es/tags/mathematics/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/tags/mathematics/" hreflang="en"/>
+    
+      <loc>/es/tags/mathematics/</loc>
+      <lastmod>2018-11-06T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/es/categories/mathematics/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/categories/mathematics/" hreflang="en"/>
+    
+      <loc>/es/categories/mathematics/</loc>
+      <lastmod>2018-11-06T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/es/post/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/post/" hreflang="en"/>
+    
+      <loc>/es/post/</loc>
+      <lastmod>2018-11-06T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -49,6 +96,30 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/es/tags/r/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/tags/r/" hreflang="en"/>
+    
+      <loc>/es/tags/r/</loc>
+      <lastmod>2018-11-06T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/es/categories/r/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/categories/r/" hreflang="en"/>
+    
+      <loc>/es/categories/r/</loc>
+      <lastmod>2018-11-06T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
       <xhtml:link rel="alternate" href="/es/" hreflang="es"/>
       <xhtml:link rel="alternate" href="/" hreflang="en"/>
     
@@ -65,6 +136,7 @@
       <xhtml:link rel="alternate" href="/tags/" hreflang="en"/>
     
       <loc>/es/tags/</loc>
+      <lastmod>2018-11-06T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     

@@ -4,6 +4,9 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/post/2018-11-06-multiplication-table/multiplication-table-with-r/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/post/2018-11-06-multiplication-table/multiplication-table-with-r/" hreflang="es"/>
+    
       <loc>/post/2018-11-06-multiplication-table/multiplication-table-with-r/</loc>
       <lastmod>2018-11-06T00:00:00+00:00</lastmod>
     </url>
@@ -43,6 +46,9 @@
   
     
     <url>
+    
+      <xhtml:link rel="alternate" href="/post/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/post/" hreflang="es"/>
     
       <loc>/post/</loc>
       <lastmod>2017-01-01T00:00:00+01:00</lastmod>
@@ -124,6 +130,9 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/tags/mathematics/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/tags/mathematics/" hreflang="es"/>
+    
       <loc>/tags/mathematics/</loc>
       <lastmod>2018-11-06T00:00:00+00:00</lastmod>
       <priority>0</priority>
@@ -132,6 +141,9 @@
   
     
     <url>
+    
+      <xhtml:link rel="alternate" href="/categories/mathematics/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/categories/mathematics/" hreflang="es"/>
     
       <loc>/categories/mathematics/</loc>
       <lastmod>2018-11-06T00:00:00+00:00</lastmod>
@@ -166,6 +178,9 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/tags/r/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/tags/r/" hreflang="es"/>
+    
       <loc>/tags/r/</loc>
       <lastmod>2018-11-06T00:00:00+00:00</lastmod>
       <priority>0</priority>
@@ -174,6 +189,9 @@
   
     
     <url>
+    
+      <xhtml:link rel="alternate" href="/categories/r/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/categories/r/" hreflang="es"/>
     
       <loc>/categories/r/</loc>
       <lastmod>2018-11-06T00:00:00+00:00</lastmod>
