@@ -1,8 +1,8 @@
 ---
 title: Exploring the multiplication table with R
-subtitle: I show how to visualize the patterns that emerge in the multiplication table and present an R package I have created for this purpose
+subtitle: I show how to visualize the patterns that emerge in the multiplication table and present an R package I created for this purpose
 author: Sergio Olmos Pardo
-summary: I show how to visualize the patterns that emerge in the multiplication table and present an R package I have created for this purpose
+summary: I show how to visualize the patterns that emerge in the multiplication table and present an R package I created for this purpose
 date: '2018-11-06'
 slug: multiplication-table-with-r
 categories:
@@ -18,7 +18,8 @@ image:
 
 
 
-<p>I was reading about the <a href="https://plus.maths.org/content/hidden-beauty-multiplication-tables">Hidden beauty of multiplication tables</a> and I thought it could be fun to make some of the cool plots in that article with R. While we are at it, we can tweak some of them and play around with the tables to see what we get.</p>
+<p>I was reading about the <a href="https://plus.maths.org/content/hidden-beauty-multiplication-tables">Hidden beauty of multiplication tables</a> and I thought it could be fun to make some of the cool plots in that article with R.</p>
+<p>As I was trying to visualize new patterns in the multiplication table, I ended up with some useful fuctions that I decided to put in a simple R package called <code>multable</code> that you can install from <a href="https://github.com/solmos/multable">GitHub</a>.</p>
 <div id="the-multiplication-table" class="section level2">
 <h2>The multiplication table</h2>
 <p>Consider the standard <span class="math inline">\(10 \times 10\)</span> multiplication table, with the first row and the first column taking the values <span class="math inline">\(1\)</span> through <span class="math inline">\(10\)</span>, forming a grid with the corresponding products.</p>
@@ -93,7 +94,7 @@ ggplot(block_2, aes(x, y)) +
     theme_void()</code></pre>
 <p><img src="/post/2018-11-06-multiplication-table/index_files/figure-html/unnamed-chunk-4-1.png" width="192" /></p>
 <p>As Zoheir Barka explains in his article mentioned at the beginning, the fundamental building block contains <span class="math inline">\(k \times k = 2 \times 2 = 4\)</span> cells of the multiplication table. The fact that, in the case of a single multiple, each side of the fundamental building block is <span class="math inline">\(k\)</span> can be useful when plotting our tables.</p>
-<p>We want to explore the patterns for different values of <span class="math inline">\(k\)</span> so I created a simple function that plots a colored multiplication table for the supplied <span class="math inline">\(k\)</span> and the supplied dimensions. Multiples and non-multiples are colored the same way as before so I chose to drop the legend for aesthetic reasons. I will add more arguments to this function later to easily customize the resulting table.</p>
+<p>We want to explore the patterns for different values of <span class="math inline">\(k\)</span> so I created a simple function that plots a colored multiplication table for the supplied <span class="math inline">\(k\)</span> and the supplied dimensions. Multiples and non-multiples are colored the same way as before so I chose to drop the legend for aesthetic reasons.</p>
 <pre class="r"><code># Auxiliary function to create a data frame 
 # with the values of the multiplication table
 create_mtable &lt;- function(xmax, ymax) {

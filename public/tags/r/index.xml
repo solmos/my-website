@@ -18,7 +18,8 @@
       <pubDate>Tue, 06 Nov 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/2018-11-06-multiplication-table/multiplication-table-with-r/</guid>
-      <description>I was reading about the Hidden beauty of multiplication tables and I thought it could be fun to make some of the cool plots in that article with R. While we are at it, we can tweak some of them and play around with the tables to see what we get.
+      <description>I was reading about the Hidden beauty of multiplication tables and I thought it could be fun to make some of the cool plots in that article with R.
+As I was trying to visualize new patterns in the multiplication table, I ended up with some useful fuctions that I decided to put in a simple R package called multable that you can install from GitHub.
 The multiplication table Consider the standard \(10 \times 10\) multiplication table, with the first row and the first column taking the values \(1\) through \(10\), forming a grid with the corresponding products.</description>
     </item>
     

@@ -16,7 +16,8 @@
       <pubDate>Tue, 06 Nov 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/2018-11-06-multiplication-table/multiplication-table-with-r/</guid>
-      <description>&lt;p&gt;I was reading about the &lt;a href=&#34;https://plus.maths.org/content/hidden-beauty-multiplication-tables&#34;&gt;Hidden beauty of multiplication tables&lt;/a&gt; and I thought it could be fun to make some of the cool plots in that article with R. While we are at it, we can tweak some of them and play around with the tables to see what we get.&lt;/p&gt;
+      <description>&lt;p&gt;I was reading about the &lt;a href=&#34;https://plus.maths.org/content/hidden-beauty-multiplication-tables&#34;&gt;Hidden beauty of multiplication tables&lt;/a&gt; and I thought it could be fun to make some of the cool plots in that article with R.&lt;/p&gt;
+&lt;p&gt;As I was trying to visualize new patterns in the multiplication table, I ended up with some useful fuctions that I decided to put in a simple R package called &lt;code&gt;multable&lt;/code&gt; that you can install from &lt;a href=&#34;https://github.com/solmos/multable&#34;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
 &lt;div id=&#34;the-multiplication-table&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;The multiplication table&lt;/h2&gt;
 &lt;p&gt;Consider the standard &lt;span class=&#34;math inline&#34;&gt;\(10 \times 10\)&lt;/span&gt; multiplication table, with the first row and the first column taking the values &lt;span class=&#34;math inline&#34;&gt;\(1\)&lt;/span&gt; through &lt;span class=&#34;math inline&#34;&gt;\(10\)&lt;/span&gt;, forming a grid with the corresponding products.&lt;/p&gt;
@@ -91,7 +92,7 @@ ggplot(block_2, aes(x, y)) +
     theme_void()&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;/post/2018-11-06-multiplication-table/index_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;192&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;As Zoheir Barka explains in his article mentioned at the beginning, the fundamental building block contains &lt;span class=&#34;math inline&#34;&gt;\(k \times k = 2 \times 2 = 4\)&lt;/span&gt; cells of the multiplication table. The fact that, in the case of a single multiple, each side of the fundamental building block is &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; can be useful when plotting our tables.&lt;/p&gt;
-&lt;p&gt;We want to explore the patterns for different values of &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; so I created a simple function that plots a colored multiplication table for the supplied &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; and the supplied dimensions. Multiples and non-multiples are colored the same way as before so I chose to drop the legend for aesthetic reasons. I will add more arguments to this function later to easily customize the resulting table.&lt;/p&gt;
+&lt;p&gt;We want to explore the patterns for different values of &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; so I created a simple function that plots a colored multiplication table for the supplied &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; and the supplied dimensions. Multiples and non-multiples are colored the same way as before so I chose to drop the legend for aesthetic reasons.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Auxiliary function to create a data frame 
 # with the values of the multiplication table
 create_mtable &amp;lt;- function(xmax, ymax) {
