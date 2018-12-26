@@ -12,10 +12,11 @@ weight = 1
   interests = [
     "Estadística",
     "Aprendizaje automático",
-    "Estadística avanzada en baloncesto",
     "R",
-    "Bioinformática",
-    "Matemáticas"
+    "Estadística avanzada en baloncesto",
+    "Matemáticas",
+    "Arte generativo",
+    "Bioinformática"
   ]
 
 # List your qualifications (such as academic degrees).
