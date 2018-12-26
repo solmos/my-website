@@ -323,7 +323,7 @@ enableGitInfo = false
 #[[menu.main]]
 #  name = "CV"
 #  url = "files/cv.pdf"
-#  weight = 7
+#  weight = 4
 
 # Search.
 [params.search]

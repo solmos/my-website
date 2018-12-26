@@ -39,7 +39,7 @@ weight = 1
 
 # ¡Hola!
 
-Me llamo Sergio y actualmente vivo en Granada. Después de graduarme en Matemáticas en 2009 comencé a jugar a baloncesto profesionalmente y ese ha sido [mi trabajo](https://www.youtube.com/watch?v=1fS4MCVzFu4) desde entonces. También soy investigador colaborador en [Biostatech](http://biostatech.com/), empresa de asesoramiento en estadística aplicada basada en Santiago de Compostela.
+Me llamo Sergio y actualmente vivo en Granada. Después de graduarme en Matemáticas en 2009 comencé a jugar a baloncesto profesionalmente y ese ha sido [mi trabajo](https://www.youtube.com/watch?v=1fS4MCVzFu4) desde entonces. También soy investigador colaborador en [Biostatech](http://biostatech.com/), empresa de asesoramiento en estadística aplicada situada en Santiago de Compostela.
 
 Como consultor he utilizado métodos estadísticos y de aprendizaje automático en varios campos científicos como la ecología, la genómica y la farmacología. Recientemente también me he puesto a jugar con datos de baloncesto.
 
