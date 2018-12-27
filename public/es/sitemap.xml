@@ -37,10 +37,10 @@
     
     <url>
     
-      <xhtml:link rel="alternate" href="/es/tags/mathematics/" hreflang="es"/>
-      <xhtml:link rel="alternate" href="/tags/mathematics/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/categories/mathematics/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/categories/mathematics/" hreflang="en"/>
     
-      <loc>/es/tags/mathematics/</loc>
+      <loc>/es/categories/mathematics/</loc>
       <lastmod>2018-11-06T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
@@ -49,10 +49,10 @@
     
     <url>
     
-      <xhtml:link rel="alternate" href="/es/categories/mathematics/" hreflang="es"/>
-      <xhtml:link rel="alternate" href="/categories/mathematics/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/tags/mathematics/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/tags/mathematics/" hreflang="en"/>
     
-      <loc>/es/categories/mathematics/</loc>
+      <loc>/es/tags/mathematics/</loc>
       <lastmod>2018-11-06T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
@@ -96,10 +96,10 @@
     
     <url>
     
-      <xhtml:link rel="alternate" href="/es/tags/r/" hreflang="es"/>
-      <xhtml:link rel="alternate" href="/tags/r/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/categories/r/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/categories/r/" hreflang="en"/>
     
-      <loc>/es/tags/r/</loc>
+      <loc>/es/categories/r/</loc>
       <lastmod>2018-11-06T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
@@ -108,10 +108,10 @@
     
     <url>
     
-      <xhtml:link rel="alternate" href="/es/categories/r/" hreflang="es"/>
-      <xhtml:link rel="alternate" href="/categories/r/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/tags/r/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/tags/r/" hreflang="en"/>
     
-      <loc>/es/categories/r/</loc>
+      <loc>/es/tags/r/</loc>
       <lastmod>2018-11-06T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
