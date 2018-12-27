@@ -6,8 +6,7 @@ summary: I show how to visualize the patterns that emerge in the multiplication 
 date: '2018-11-06'
 slug: multiplication-table-with-r
 categories:
-  - Mathematics
-  - R
+  - English
 tags:
   - R
   - Mathematics

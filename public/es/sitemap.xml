@@ -37,10 +37,10 @@
     
     <url>
     
-      <xhtml:link rel="alternate" href="/es/categories/mathematics/" hreflang="es"/>
-      <xhtml:link rel="alternate" href="/categories/mathematics/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/categories/english/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/categories/english/" hreflang="en"/>
     
-      <loc>/es/categories/mathematics/</loc>
+      <loc>/es/categories/english/</loc>
       <lastmod>2018-11-06T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
@@ -89,18 +89,6 @@
       <xhtml:link rel="alternate" href="/publication_types/" hreflang="en"/>
     
       <loc>/es/publication_types/</loc>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    <url>
-    
-      <xhtml:link rel="alternate" href="/es/categories/r/" hreflang="es"/>
-      <xhtml:link rel="alternate" href="/categories/r/" hreflang="en"/>
-    
-      <loc>/es/categories/r/</loc>
-      <lastmod>2018-11-06T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
