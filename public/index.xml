@@ -1,14 +1,92 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Sergio Olmos on Sergio Olmos</title>
+    <title>Mínimos Cuadrados on Mínimos Cuadrados</title>
     <link>/</link>
-    <description>Recent content in Sergio Olmos on Sergio Olmos</description>
+    <description>Recent content in Mínimos Cuadrados on Mínimos Cuadrados</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
     <lastBuildDate>Sun, 15 Oct 2017 00:00:00 +0200</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>rfeb: Shot charts with R</title>
+      <link>/post/2019-01-24-graficos-de-tiro-con-r/shotcharts-with-r/</link>
+      <pubDate>Thu, 24 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2019-01-24-graficos-de-tiro-con-r/shotcharts-with-r/</guid>
+      <description>&lt;p&gt;Kirk Goldsberry is one of the most popular figures in the basketball analytics world. He is known mainly for the use of shot charts in his analyses. Here there is an example with all the shots Lebron James has taken in his career:&lt;/p&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;Happy Birthday, LeBron &lt;br&gt;His constellation so far... &lt;a href=&#34;https://t.co/4HuCjTgl4x&#34;&gt;pic.twitter.com/4HuCjTgl4x&lt;/a&gt;&lt;/p&gt;&amp;mdash; Kirk Goldsberry (@kirkgoldsberry) &lt;a href=&#34;https://twitter.com/kirkgoldsberry/status/1079446773956075526?ref_src=twsrc%5Etfw&#34;&gt;December 30, 2018&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+
+&lt;p&gt;Shot charts can be useful for, say, identifying tenedencies on offense of a given player/team, showing what spots on the court a player is most effective at, or analyzing what type of shots a team allows its opponents.&lt;/p&gt;
+&lt;p&gt;The league that I play in, called &lt;a href=&#34;http://www.leboro.es/inicio.aspx&#34;&gt;LEB Oro&lt;/a&gt;, provides shot charts in its platform, &lt;a href=&#34;http://baloncestoenvivo.feb.es/&#34;&gt;Baloncesto en Vivo&lt;/a&gt;. For this blog post, I created an R package called &lt;a href=&#34;https://github.com/solmos/rfeb&#34;&gt;&lt;code&gt;rfeb&lt;/code&gt;&lt;/a&gt;, that allows us to easily scrape the shot coordinates provided by this website and plot the shot charts of the game or games we want.&lt;/p&gt;
+&lt;p&gt;Having said that, for some strange reason, the platform Baloncesto en Vivo does not provide any type of selection menu to access games played weeks before (or seasons before). Only the most recent games are visible.&lt;/p&gt;
+&lt;p&gt;It is possible to access previous games if you know the game id and adding it to the base url (&lt;a href=&#34;http://baloncestoenvivo.feb.es/Game/&#34; class=&#34;uri&#34;&gt;http://baloncestoenvivo.feb.es/Game/&lt;/a&gt;). However, it appears as if the data gets erased as time goes by. At the moment of writting this post, only the games played before week 13 of this season are available.&lt;/p&gt;
+&lt;p&gt;Moreover, the data themselves are a bit shaky. As I have come to find out, &lt;strong&gt;several gyms in the league produce shot charts that are obviously wrong&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Huesca and Real Canoe are the main suspects. I found several cases but take a look at this game between ZTE Real Canoe and Cerramimbre Valladolid played at the gym of the former. According to the &lt;a href=&#34;http://baloncestoenvivo.feb.es/Game/2010168#shotchart&#34;&gt;provided shot chart&lt;/a&gt; neither one of the two teams shot one shot inside the paint… Until these flagrant errors are eliminated, any analysis done with these data must be taken with a grain of salt.&lt;/p&gt;
+&lt;div id=&#34;shot-charts&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Shot charts&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;rfeb&lt;/code&gt; is an R package that I created to work with the data available in Baloncesto en Vivo. &lt;code&gt;rfeb&lt;/code&gt; contains two main functions at the moment:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;extract_shots()&lt;/code&gt;: Scrapes the shot data of the specified game ids&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;plot_shotchart()&lt;/code&gt;: Plots shot charts with these data&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The &lt;code&gt;rfeb&lt;/code&gt; package can be installed as follows:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# install.packages(&amp;quot;devtools&amp;quot;)
+devtools::install_github(&amp;quot;solmos/rfeb&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can check out the code of these functions in its &lt;a href=&#34;https://github.com/solmos/rfeb&#34;&gt;Github repository&lt;/a&gt;. Note that even though I am going to extract data from my league (LEB Oro), it can also be used to work with the other leagues organized FEB.&lt;/p&gt;
+&lt;p&gt;So I am going to use &lt;code&gt;rfeb&lt;/code&gt; to show how to plot shot charts with the data from the games played throughout the weekend of 01/11/2019.&lt;/p&gt;
+&lt;p&gt;The ids of these games go from 2010208 to 2010216. I use &lt;code&gt;extract_shots()&lt;/code&gt; to scrape the shot data for these 9 games. We get a data frame where each row represents a shot taken, for which the following variables were recorded:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;t&lt;/code&gt; = Time elapsed since the start of the game&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;x&lt;/code&gt;, &lt;code&gt;y&lt;/code&gt; = Shot coordinates&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;team&lt;/code&gt; = The team for which the player taking the shot plays&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;player&lt;/code&gt; = Jersey number of the player that took the shot&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;quarter&lt;/code&gt; = Quarter in which the shot was taken&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;game&lt;/code&gt; = Game id&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;made&lt;/code&gt; = Shot missed (0) or made (1)&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(rfeb)
+game_ids &amp;lt;- 2010208:2010216
+shots &amp;lt;- extract_shots(game_ids)
+head(shots)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##       t       x      y                  team player quarter    game   made
+## 1 00:39  715.20 833.85 SÁENZ HORECA ARABERRI      3       1 2010208 Missed
+## 2 00:47  824.20 245.25          LEYMA CORUÑA     22       1 2010208   Made
+## 3 01:23 1069.45 485.05          LEYMA CORUÑA      4       1 2010208 Missed
+## 4 01:35  628.00 523.20 SÁENZ HORECA ARABERRI     10       1 2010208 Missed
+## 5 01:43   72.10 283.40 SÁENZ HORECA ARABERRI      3       1 2010208 Missed
+## 6 01:48  687.95 207.10          LEYMA CORUÑA      1       1 2010208   Made&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Once we have the data, we can use &lt;code&gt;plot_shotcharts()&lt;/code&gt;. This function uses &lt;code&gt;ggplot2&lt;/code&gt; to plot the shot chart and it is possible to specify the mapping arguments that we want for the &lt;code&gt;geom_point()&lt;/code&gt; geom. For instance, we can color the points according to whether the shot was missed or made.&lt;/p&gt;
+&lt;p&gt;Below I show all the shots taken in these 9 games in one chart:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;plot_shotchart(shots, color = made)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-01-24-graficos-de-tiro-con-r/index_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;You probably do not want to show all the shots in one chart. It is possible to use other &lt;code&gt;ggplot2&lt;/code&gt; functions to adapt the plot to our needs. We can use, for instance, &lt;code&gt;facet_wrap()&lt;/code&gt; to obtain a matrix of shotcharts with the different games:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ggplot2)
+plot_shotchart(shots, color = made) + facet_wrap(~ game)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-01-24-graficos-de-tiro-con-r/index_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Lastly, I use &lt;code&gt;dplyr&lt;/code&gt; to filter the shots that we want to show. Let’s say I want to see the shots I took in the game against Palencia played during the chosen week. The id for this game is &lt;code&gt;2010215&lt;/code&gt; and I wear number &lt;code&gt;41&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(dplyr)
+shots %&amp;gt;% 
+    filter(game == 2010215 &amp;amp; player == &amp;quot;41&amp;quot;) %&amp;gt;%
+    plot_shotchart(color = made) +
+    ggtitle(&amp;quot;Sergio Olmos vs. Palencia&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-01-24-graficos-de-tiro-con-r/index_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;rfeb&lt;/code&gt; is still in development. My plan is to add more functionality to it so that not only shot data can be analyzed but regular stats or play-by-play data can be used as well. I will write more posts as I add more functions to the package.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;/div&gt;
+&lt;div id=&#34;resources&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Resources&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;http://www.gregreda.com/2015/02/15/web-scraping-finding-the-api/&#34;&gt;Web Scraping 201: finding the API&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;%22https://cran.r-project.org/web/packages/httr/vignettes/quickstart.html%22&#34;&gt;Getting started with httr&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;http://egallic.fr/drawing-a-basketball-court-with-r/&#34;&gt;Drawing a basketball court with R&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>Exploring the multiplication table with R</title>

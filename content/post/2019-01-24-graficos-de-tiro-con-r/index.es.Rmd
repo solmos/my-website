@@ -1,0 +1,112 @@
+---
+title: "rfeb: Gráficos de tiro con R"
+subtitle: Cómo obtener gráficos de tiro de la liga LEB Oro usando el paquete rfeb
+author: Sergio Olmos Pardo
+summary: Cómo obtener gráficos de tiro de la liga LEB Oro usando el paquete rfeb
+date: '2019-01-24'
+slug: shotcharts-with-r
+categories:
+  - Castellano
+tags: [R, Baloncesto]
+image:
+  caption: ''
+  focal_point: ''
+---
+
+Kirk Goldsberry es una de las figuras más destacadas en el mundo de la estadística avanzada en la NBA. Se le conoce principalmente por el uso de gráficos de tiro en sus análisis. Este es un ejemplo en el que se muestran todos los tiros que ha realizado Lebron James a lo largo de su carrera:
+
+```{r, echo = FALSE}
+blogdown::shortcode("tweet", "1079446773956075526")
+```
+
+Los gráficos de tiro pueden ser útiles para, por ejemplo, identificar tendencias en ataque de un determinado jugador/equipo, mostrar en qué zonas del campo un jugador es más efectivo o analizar qué tipo de tiros un equipo permite al rival.
+
+La liga en la que juego, la [LEB Oro](http://www.leboro.es/inicio.aspx), proporciona gráficos de tiro en la plataforma [Baloncesto en Vivo](http://baloncestoenvivo.feb.es/). Para esta entrada he creado un paquete de R, [`rfeb`](https://github.com/solmos/rfeb), con el que poder extraer las coordenadas de los tiros de esta página web para luego obtener gráficos de tiro del partido o partidos que queramos.
+
+Dicho esto, por alguna extraña razón, la plataforma Baloncesto en Vivo no ofrece ningún menú de selección para acceder a las estadísticas de partidos de jornadas anteriores (o temporadas anteriores). Tan solo son visibles los partidos de la jornada más reciente.
+
+Es posible acceder a partidos anteriores sabiendo el identificador del partido y añadiéndolo a la url base (http://baloncestoenvivo.feb.es/Game/). Sin embargo, al parecer se van eliminando los datos a medida que avanzan las jornadas. Según escribo esta entrada sólo es posible acceder a los partidos disputados después de la jornada 13 de esta temporada.
+
+Además de esta incomprensible limitación, la recogida de datos parece poco fiable. Según he podido comprobar, **varias canchas de la competición producen gráficos de tiro que obviamente no son correctos**.
+
+Huesca y Real Canoe son los principales sospechosos. He encontrado varios casos pero mirad, por ejemplo, el [partido](http://baloncestoenvivo.feb.es/Game/2010168#shotchart) en la pista del ZTE Real Canoe donde según el gráfico de tiro no se hizo ningún tiro dentro de la zona por parte de ninguno de los dos equipos... Hasta que este tipo de errores no se eliminen, cualquier análisis con estos datos será de dudosa validez.
+
+
+## Gráficos de tiro
+
+`rfeb` es un paquete de R que he creado para trabajar con datos disponibles en Baloncesto en Vivo. `rfeb` contiene dos funciones principales:
+
+* `extract_shots()`: Extrae los datos de tiro de Baloncesto en Vivo de los identificadores de partido que introducimos
+
+* `plot_shotchart()`: Crea gráficos de tiro con los datos que introducimos
+
+
+Puedes instalar `rfeb` de la siguiente manera:
+```{r, eval = FALSE}
+# install.packages("devtools")
+devtools::install_github("solmos/rfeb")
+```
+
+Puedes echarle un ojo al código de estas funciones [aquí](https://github.com/solmos/rfeb). Nótese que aunque en este caso extraeré datos de la LEB Oro, también sería posible trabajar con datos de las otras competiciones FEB disponibles en Baloncesto en Vivo.
+
+A continuación voy a mostrar, utilizando `rfeb`, cómo obtener gráficos de tiro de todos los partidos de la última jornada de la primera vuelta de la LEB Oro disputada el fin de semana del 11/01/2019.
+
+Los identificadores de los partidos en este caso van desde el 2010208 al 2010216. Usamos `extract_shots()` para obtener los datos recogidos de los tiros que se hicieron en estos partidos. Obtenemos un data frame en el que cada fila representa un tiro, de los cuales se muestran las siguientes variables:
+
+* `t` = Tiempo desde el comienzo del partido
+
+* `x`, `y` = Coordenadas del tiro
+
+* `team` = Equipo del jugador que realizó el tiro
+
+* `player` = Dorsal del jugador que realizó el tiro
+
+* `quarter` = Cuarto en el que se realizó el tiro
+
+* `game` = Identificador del partido
+
+* `made` = Tiro fallado (Missed) o metido (Made)
+
+```{r}
+library(rfeb)
+game_ids <- 2010208:2010216
+shots <- extract_shots(game_ids)
+head(shots)
+```
+
+Una vez tenemos los datos de los tiros, usamos la función `plot_shotchart()` para visualizar el gráfico de tiro. La función usa `ggplot2` para producir el gráfico y es posible especificar los argumentos que queremos para el *mapping* de la función `geom_point()`. Por ejemplo, podemos elegir el color de los puntos según fueron o no canasta.
+
+A continuación muestro todos los tiros de la jornada en un sólo gráfico:
+
+```{r}
+plot_shotchart(shots, color = made)
+```
+
+Seguramente no querramos mostrar todos los tiros. Es posible usar otras funciones de `ggplot2` para adaptar el gráfico a nuestras necesidades. Por ejemplo, podemos usar `facet_wrap()` para obtener una matriz de gráficos según el partido:
+
+```{r}
+library(ggplot2)
+plot_shotchart(shots, color = made) + facet_wrap(~ game)
+```
+
+Por último, utilizaremos `dplyr` para filtrar los tiros que queremos mostrar. Digamos que quiero ver qué tiros hice yo en el partido que disputé contra Palencia en esta jornada. Este partido se corresponde con el identificador `2010215` y el número que llevo en mi camiseta es el `41`:
+
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+shots %>% 
+    filter(game == 2010215 & player == "41") %>%
+    plot_shotchart(color = made) +
+    ggtitle("Sergio Olmos vs. Palencia")
+```
+
+`rfeb` todavía está en proceso de desarrollo. Mi idea es ampliar la funcionalidad de este paquete para poder analizar no solo datos de tiro, sino también datos jugada-a-jugada. Escribiré más entradas en el blog a medida que vaya añadiendo más funciones al paquete.
+
+***
+
+## Recursos adicionales
+
+* [Web Scraping 201: finding the API](http://www.gregreda.com/2015/02/15/web-scraping-finding-the-api/)
+
+* [Getting started with httr]("https://cran.r-project.org/web/packages/httr/vignettes/quickstart.html")
+
+* [Drawing a basketball court with R](http://egallic.fr/drawing-a-basketball-court-with-r/)

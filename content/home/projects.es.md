@@ -8,7 +8,7 @@ title = "Proyectos"
 subtitle = ""
 
 # Order that this section will appear in.
-weight = 3
+weight = 2
 
 # Content.
 # Display content from the following folder.

@@ -15,8 +15,10 @@
   
     
   
-  <meta name="description" content="Tutorial de cómo crear un gráfico de tiro de un partido de baloncesto de Leb Oro con R">
+  <meta name="description" content="How to plot shot charts for games in LEB Oro using the rfeb package">
 
+  
+  <link rel="alternate" hreflang="es" href="/es/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/">
   
   <link rel="alternate" hreflang="en-us" href="/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/">
 
@@ -75,11 +77,25 @@
 
   
   
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-131928090-1', 'auto');
+      
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
   
 
   
-  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Sergio Olmos">
-  <link rel="feed" href="/index.xml" type="application/rss+xml" title="Sergio Olmos">
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Mínimos Cuadrados">
+  <link rel="feed" href="/index.xml" type="application/rss+xml" title="Mínimos Cuadrados">
   
 
   <link rel="manifest" href="/site.webmanifest">
@@ -90,26 +106,26 @@
 
   <meta property="twitter:card" content="summary_large_image">
   
-  <meta property="og:site_name" content="Sergio Olmos">
+  <meta property="og:site_name" content="Mínimos Cuadrados">
   <meta property="og:url" content="/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/">
-  <meta property="og:title" content="Gráficos de tiro con R | Sergio Olmos">
-  <meta property="og:description" content="Tutorial de cómo crear un gráfico de tiro de un partido de baloncesto de Leb Oro con R">
+  <meta property="og:title" content="rfeb: Shot charts with R | Mínimos Cuadrados">
+  <meta property="og:description" content="How to plot shot charts for games in LEB Oro using the rfeb package">
   
   
     
   <meta property="og:image" content="/img/icon-192.png">
   <meta property="og:locale" content="en-us">
   
-  <meta property="article:published_time" content="2018-11-30T00:00:00&#43;00:00">
+  <meta property="article:published_time" content="2019-01-24T00:00:00&#43;00:00">
   
-  <meta property="article:modified_time" content="2018-11-30T00:00:00&#43;00:00">
-  
-
+  <meta property="article:modified_time" content="2019-01-24T00:00:00&#43;00:00">
   
 
   
 
-  <title>Gráficos de tiro con R | Sergio Olmos</title>
+  
+
+  <title>rfeb: Shot charts with R | Mínimos Cuadrados</title>
 
 </head>
 <body id="top" data-spy="scroll" data-target="#TableOfContents" data-offset="71" >
@@ -118,7 +134,7 @@
   <div class="container">
 
     
-      <a class="navbar-brand" href="/">Sergio Olmos</a>
+      <a class="navbar-brand" href="/">Mínimos Cuadrados</a>
       
       <button type="button" class="navbar-toggler" data-toggle="collapse"
               data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -143,28 +159,9 @@
         
 
         <li class="nav-item">
-          <a class="nav-link" href="/#about">
-            
-            <span>About</span>
-            
-          </a>
-        </li>
-
-        
-        
-
-        
-
-        
-        
-        
-          
-        
-
-        <li class="nav-item">
           <a class="nav-link" href="/#posts">
             
-            <span>Posts</span>
+            <span>Blog</span>
             
           </a>
         </li>
@@ -191,10 +188,45 @@
         
         
 
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#about">
+            
+            <span>About</span>
+            
+          </a>
+        </li>
+
+        
+        
+
       
 
         
 
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">
+            <i class="fas fa-globe" aria-hidden="true"></i>
+            <span>English</span>
+          </a>
+          <ul class="dropdown-menu">
+            
+            <li class="dropdown-item my-0 py-0 mx-0 px-0">
+              <a href="/es/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/">
+                <span>Español</span>
+              </a>
+            </li>
+            
+          </ul>
+        </li>
         
       </ul>
 
@@ -218,20 +250,24 @@
 
 
 
-  
 
+<div class="article-header d-xl-none">
+  <img src="/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/featured_hue4ab2da20c0241322d89cf983c96f7f5_3015511_1600x400_fill_q90_box_smart1_2.png" class="article-banner" itemprop="image" alt="">
   
-  
-  
-<div class="article-container pt-3">
-  <h1 itemprop="name">Gráficos de tiro con R</h1>
+</div>
 
-  
-  <p class="page-subtitle">Tutorial de cómo crear un gráfico de tiro de un partido de baloncesto de Leb Oro con R</p>
-  
 
-  
-    
+<div class="container-fluid split-header d-none d-xl-block">
+  <div class="row">
+    <div class="col-6">
+      <div class="split-header-content">
+        <h1 itemprop="name">rfeb: Shot charts with R</h1>
+
+        
+        <p class="page-subtitle">How to plot shot charts for games in LEB Oro using the rfeb package</p>
+        
+
+        
 
 <div class="article-metadata">
 
@@ -244,9 +280,9 @@
 
   <span class="article-date">
     
-    <meta content="2018-11-30 00:00:00 &#43;0000 UTC" itemprop="datePublished">
-    <time datetime="2018-11-30 00:00:00 &#43;0000 UTC" itemprop="dateModified">
-      Nov 30, 2018
+    <meta content="2019-01-24 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+    <time datetime="2019-01-24 00:00:00 &#43;0000 UTC" itemprop="dateModified">
+      Jan 24, 2019
     </time>
   </span>
   <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
@@ -256,7 +292,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    8 min read
+    5 min read
   </span>
   
 
@@ -273,21 +309,23 @@
   <span class="article-categories">
     <i class="fas fa-folder"></i>
     
-    <a href="/categories/r/">R</a>, 
-    
-    <a href="/categories/basketball/">Basketball</a>
+    <a href="/categories/english/">English</a>
     
   </span>
   
   
 
   
-  
+
+</div>
+
+
+        
 <div class="share-box" aria-hidden="true">
   <ul class="share">
     <li>
       <a class="twitter"
-         href="https://twitter.com/intent/tweet?text=Gr%c3%a1ficos%20de%20tiro%20con%20R&amp;url=%2fpost%2f2018-11-30-mapas-de-tiro-con-r%2fmapas-de-tiro-con-r%2f"
+         href="https://twitter.com/intent/tweet?text=rfeb%3a%20Shot%20charts%20with%20R&amp;url=%2fpost%2f2018-11-30-mapas-de-tiro-con-r%2fmapas-de-tiro-con-r%2f"
          target="_blank" rel="noopener">
         <i class="fab fa-twitter"></i>
       </a>
@@ -301,21 +339,129 @@
     </li>
     <li>
       <a class="linkedin"
-         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2f2018-11-30-mapas-de-tiro-con-r%2fmapas-de-tiro-con-r%2f&amp;title=Gr%c3%a1ficos%20de%20tiro%20con%20R"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2f2018-11-30-mapas-de-tiro-con-r%2fmapas-de-tiro-con-r%2f&amp;title=rfeb%3a%20Shot%20charts%20with%20R"
          target="_blank" rel="noopener">
         <i class="fab fa-linkedin-in"></i>
       </a>
     </li>
     <li>
       <a class="weibo"
-         href="http://service.weibo.com/share/share.php?url=%2fpost%2f2018-11-30-mapas-de-tiro-con-r%2fmapas-de-tiro-con-r%2f&amp;title=Gr%c3%a1ficos%20de%20tiro%20con%20R"
+         href="http://service.weibo.com/share/share.php?url=%2fpost%2f2018-11-30-mapas-de-tiro-con-r%2fmapas-de-tiro-con-r%2f&amp;title=rfeb%3a%20Shot%20charts%20with%20R"
          target="_blank" rel="noopener">
         <i class="fab fa-weibo"></i>
       </a>
     </li>
     <li>
       <a class="email"
-         href="mailto:?subject=Gr%c3%a1ficos%20de%20tiro%20con%20R&amp;body=%2fpost%2f2018-11-30-mapas-de-tiro-con-r%2fmapas-de-tiro-con-r%2f">
+         href="mailto:?subject=rfeb%3a%20Shot%20charts%20with%20R&amp;body=%2fpost%2f2018-11-30-mapas-de-tiro-con-r%2fmapas-de-tiro-con-r%2f">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="split-header-image">
+        <img src="/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/featured_hue4ab2da20c0241322d89cf983c96f7f5_3015511_680x500_fill_q90_box_smart1_2.png" itemprop="image" alt="">
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="article-container d-xl-none">
+  <h1 itemprop="name">rfeb: Shot charts with R</h1>
+
+  
+  <p class="page-subtitle">How to plot shot charts for games in LEB Oro using the rfeb package</p>
+  
+
+  
+
+<div class="article-metadata">
+
+  
+  
+  <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+  
+
+  <span class="article-date">
+    
+    <meta content="2019-01-24 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+    <time datetime="2019-01-24 00:00:00 &#43;0000 UTC" itemprop="dateModified">
+      Jan 24, 2019
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    5 min read
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="/post/2018-11-30-mapas-de-tiro-con-r/mapas-de-tiro-con-r/#disqus_thread"></a>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder"></i>
+    
+    <a href="/categories/english/">English</a>
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=rfeb%3a%20Shot%20charts%20with%20R&amp;url=%2fpost%2f2018-11-30-mapas-de-tiro-con-r%2fmapas-de-tiro-con-r%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fpost%2f2018-11-30-mapas-de-tiro-con-r%2fmapas-de-tiro-con-r%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2f2018-11-30-mapas-de-tiro-con-r%2fmapas-de-tiro-con-r%2f&amp;title=rfeb%3a%20Shot%20charts%20with%20R"
+         target="_blank" rel="noopener">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fpost%2f2018-11-30-mapas-de-tiro-con-r%2fmapas-de-tiro-con-r%2f&amp;title=rfeb%3a%20Shot%20charts%20with%20R"
+         target="_blank" rel="noopener">
+        <i class="fab fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=rfeb%3a%20Shot%20charts%20with%20R&amp;body=%2fpost%2f2018-11-30-mapas-de-tiro-con-r%2fmapas-de-tiro-con-r%2f">
         <i class="fas fa-envelope"></i>
       </a>
     </li>
@@ -327,7 +473,6 @@
 
 </div>
 
-  
 </div>
 
 
@@ -335,197 +480,88 @@
   <div class="article-container">
 
     <div class="article-style" itemprop="articleBody">
-      <p><a href="https://twitter.com/kirkgoldsberry">Kirk Goldsberry</a> es una de las figuras más destacadas en el mundo de la estadística avanzada en la NBA. Se le conoce principalmente por el uso de gráficos de tiro en sus análisis. Este es un ejemplo en el que se muestran todos los tiros que ha realizado Lebron James a lo largo de su carrera:</p>
-<div class="figure">
-<img src="http://a.espncdn.com/i/infographics/20181017_goldsberry/Figure2_Constellation.png" />
+      <p>Kirk Goldsberry is one of the most popular figures in the basketball analytics world. He is known mainly for the use of shot charts in his analyses. Here there is an example with all the shots Lebron James has taken in his career:</p>
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Happy Birthday, LeBron <br>His constellation so far... <a href="https://t.co/4HuCjTgl4x">pic.twitter.com/4HuCjTgl4x</a></p>&mdash; Kirk Goldsberry (@kirkgoldsberry) <a href="https://twitter.com/kirkgoldsberry/status/1079446773956075526?ref_src=twsrc%5Etfw">December 30, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-</div>
-<p>Los gráficos de tiro (<em>shot charts</em> en inglés) pueden ser útiles para, por ejemplo, identificar tendencias en ataque de un determinado jugador/equipo, mostrar en qué zonas del campo un jugador es más efectivo o analizar qué tipo de tiros un equipo permite al rival.</p>
-<p>En esta entrada voy a crear un gráfico de tiro de un partido de la liga en la que yo juego, la <a href="http://www.leboro.es/inicio.aspx">Leb Oro</a>. Específicamente, voy a utilizar el partido que disputé con mi equipo, el Covirán Granada, contra mi ex-equipo, el Leyma Coruña.</p>
-<div id="obtener-los-datos" class="section level2">
-<h2>1. Obtener los datos</h2>
-<p>Cada jornada, en la plataforma de <a href="http://baloncestoenvivo.feb.es/">Baloncesto en Vivo</a> podemos seguir la evolución de las estadísticas de los partidos en directo. En esta plataforma no sólo se puede ver la tabla de estadísticas a la que estamos acostumbrados, también es posible ver las estadísticas jugada a jugada o los gráficos de tiro.</p>
-<p>Sin embargo, <strong>la página web de la FEB no lo pone muy fácil a la hora de acceder a estos datos</strong>. Baloncesto en Vivo no proporciona menús de selección de ningún tipo que nos permitan elegir partidos de jornadas (o temporadas) anteriores. En la página principal tan solo aparecen los partidos de la jornada vigente en ese momento.</p>
-<p>A simple vista parece que cada jornada se eliminen los datos de la jornada anterior. No es así. Las páginas siguen siendo accesibles, aunque solo si has apuntado la dirección web cuando estaba visible en su momento ¯\_(ツ)_/¯.</p>
-<p>En este caso el enlace al partido que utilizaré en esta entrada es el siguiente:</p>
-<p><a href="http://baloncestoenvivo.feb.es/Game/2010150" class="uri">http://baloncestoenvivo.feb.es/Game/2010150</a></p>
-<p>Básicamente, debemos encontrar qué enlace o solicitud a la API nos da la información que queremos. Soy relativamente nuevo en esto de extraer datos de la web por lo que no entraré en mucho detalle de cómo lo he hecho. Esta entrada de <a href="http://www.gregreda.com/2015/02/15/web-scraping-finding-the-api/">Greg Reda</a> me ha sido de gran utilidad.</p>
-<p>Para encontrar esta solicitud a la API utilizaremos las herramientas para desarrolladores de nuestro navegador (en mi caso Chrome). Estando en la pestaña del <a href="http://baloncestoenvivo.feb.es/Game/2010150#shotchart">gráfico de tiro</a>, estos son los pasos que seguí para dar con el <em>request</em>:</p>
-<ol style="list-style-type: decimal">
-<li><p>Abrimos las herramientas para desarrolladores de nuestro navegador</p></li>
-<li><p>Vamos a la pestaña de <em>Network</em></p></li>
-<li><p>Seleccionamos el filtro <code>XHR</code></p></li>
-<li><p>Refrescamos la página</p></li>
-<li><p>Seleccionamos la entrada <code>20100150</code></p></li>
-<li><p>En la pestaña <em>Preview</em>, podemos observar que las coordenadas de los tiros se encuentran bajo la etiqueta <code>SHOTS</code> dentro de <code>SHOTCHART</code></p></li>
-</ol>
-<div class="figure">
-<img src="shotchart3.png" />
-
-</div>
-<ol start="7" style="list-style-type: decimal">
-<li>En la pestaña <em>Headers</em> copiamos el enlace de la petición bajo el título <code>Request URL</code>: <a href="http://baloncestoenvivo.feb.es/api/ShotChart/2010150" class="uri">http://baloncestoenvivo.feb.es/api/ShotChart/2010150</a></li>
-</ol>
-<p>Ya tenemos el enlace de la petición que nos dará la información que queremos. Para realizar la petición utilizaremos el paquete de R <code>httr</code>. También utilizaremos el paquete <code>jsonlite</code> para, una vez descargados los datos en formato JSON, obtener un objeto <code>list</code> con toda la información en un formato mucho más fácil de manipular en R. Ya que estamos, también cargamos el paquete <code>tidyverse</code>, que utilizaremos para manipular estos datos.</p>
-<pre class="r"><code>library(httr)
-library(jsonlite)
-library(tidyverse)
-
-api_request &lt;- GET(&quot;http://baloncestoenvivo.feb.es/api/ShotChart/2010150&quot;)
-content_list &lt;- content(api_request, as = &quot;text&quot;, encoding = &quot;UTF-8&quot;) %&gt;%
-    fromJSON</code></pre>
-<p>El objeto <code>content_list</code> es una lista con 10 elementos. La estructura de esta lista es precisamente la estructura que observamos cuando estábamos buscando el enlace de petición de la API.</p>
-<pre class="r"><code>shotchart_raw &lt;- content_list$SHOTCHART$SHOTS %&gt;%
-    as.tibble() %&gt;% 
-    print()</code></pre>
-<pre><code>## # A tibble: 128 x 7
-##    m     t     x     y     team  player quarter
-##  * &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
-##  1 0     00:14 138   41    0     12     1      
-##  2 1     00:54 38    102   0     11     1      
-##  3 1     01:14 138   35    1     22     1      
-##  4 1     01:32 211   146   0     11     1      
-##  5 0     01:40 177   163   0     11     1      
-##  6 1     01:49 170   164   1     22     1      
-##  7 1     02:11 147   26    0     15     1      
-##  8 0     02:35 134   159   1     4      1      
-##  9 0     02:48 72    140   1     4      1      
-## 10 1     03:28 115   163   1     7      1      
-## # ... with 118 more rows</code></pre>
-<p>Y aquí lo tenemos, un simple <em>data frame</em> con los datos que queríamos. Si miramos la ficha de estadísticas del partido, podemos comprobar que se hicieron 128 tiros entre los dos equipos, exactamente el número de filas en nuestra tabla de datos.</p>
-<p>Podemos deducir fácilmente qué representa cada variable:</p>
+<p>Shot charts can be useful for, say, identifying tenedencies on offense of a given player/team, showing what spots on the court a player is most effective at, or analyzing what type of shots a team allows its opponents.</p>
+<p>The league that I play in, called <a href="http://www.leboro.es/inicio.aspx">LEB Oro</a>, provides shot charts in its platform, <a href="http://baloncestoenvivo.feb.es/">Baloncesto en Vivo</a>. For this blog post, I created an R package called <a href="https://github.com/solmos/rfeb"><code>rfeb</code></a>, that allows us to easily scrape the shot coordinates provided by this website and plot the shot charts of the game or games we want.</p>
+<p>Having said that, for some strange reason, the platform Baloncesto en Vivo does not provide any type of selection menu to access games played weeks before (or seasons before). Only the most recent games are visible.</p>
+<p>It is possible to access previous games if you know the game id and adding it to the base url (<a href="http://baloncestoenvivo.feb.es/Game/" class="uri">http://baloncestoenvivo.feb.es/Game/</a>). However, it appears as if the data gets erased as time goes by. At the moment of writting this post, only the games played before week 13 of this season are available.</p>
+<p>Moreover, the data themselves are a bit shaky. As I have come to find out, <strong>several gyms in the league produce shot charts that are obviously wrong</strong>.</p>
+<p>Huesca and Real Canoe are the main suspects. I found several cases but take a look at this game between ZTE Real Canoe and Cerramimbre Valladolid played at the gym of the former. According to the <a href="http://baloncestoenvivo.feb.es/Game/2010168#shotchart">provided shot chart</a> neither one of the two teams shot one shot inside the paint… Until these flagrant errors are eliminated, any analysis done with these data must be taken with a grain of salt.</p>
+<div id="shot-charts" class="section level2">
+<h2>Shot charts</h2>
+<p><code>rfeb</code> is an R package that I created to work with the data available in Baloncesto en Vivo. <code>rfeb</code> contains two main functions at the moment:</p>
 <ul>
-<li><p><code>m</code> = Fallo (0) o acierto (1)</p></li>
-<li><p><code>t</code> = Tiempo</p></li>
-<li><p><code>x</code> = Coordenada en el eje horizontal</p></li>
-<li><p><code>y</code> = Coordenada en el eje vertical</p></li>
-<li><p><code>team</code> = Equipo al que pertenece el jugador realizando el tiro (0 equipo de casa, 1 equipo visitante)</p></li>
-<li><p><code>player</code> = Dorsal del jugador que realiza el tiro</p></li>
-<li><p><code>quarter</code> = Cuarto del partido en el que se realizó el tiro</p></li>
+<li><p><code>extract_shots()</code>: Scrapes the shot data of the specified game ids</p></li>
+<li><p><code>plot_shotchart()</code>: Plots shot charts with these data</p></li>
 </ul>
-<p>Observamos que todas la variables en nuestro data frame son de tipo <code>character</code>. Modificamos la clase de cada variable en base a lo que representa:</p>
-<pre class="r"><code>shotchart_df &lt;- shotchart_raw %&gt;%
-    transmute(made = as.factor(m),
-              time = parse_time(t, &quot;%M:%S&quot;),
-              x = as.numeric(x),
-              y = as.numeric(y),
-              team = factor(team, labels = c(&quot;Granada&quot;, &quot;Coruña&quot;)),
-              player = as.factor(player),
-              quarter = as.factor(quarter))
-shotchart_df</code></pre>
-<pre><code>## # A tibble: 128 x 7
-##    made  time       x     y team    player quarter
-##    &lt;fct&gt; &lt;time&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;   &lt;fct&gt;  &lt;fct&gt;  
-##  1 0     00&#39;14&quot;   138    41 Granada 12     1      
-##  2 1     00&#39;54&quot;    38   102 Granada 11     1      
-##  3 1     01&#39;14&quot;   138    35 Coruña  22     1      
-##  4 1     01&#39;32&quot;   211   146 Granada 11     1      
-##  5 0     01&#39;40&quot;   177   163 Granada 11     1      
-##  6 1     01&#39;49&quot;   170   164 Coruña  22     1      
-##  7 1     02&#39;11&quot;   147    26 Granada 15     1      
-##  8 0     02&#39;35&quot;   134   159 Coruña  4      1      
-##  9 0     02&#39;48&quot;    72   140 Coruña  4      1      
-## 10 1     03&#39;28&quot;   115   163 Coruña  7      1      
-## # ... with 118 more rows</code></pre>
-<p>Vamos a visualizar los tiros según sus coordenadas:</p>
-<pre class="r"><code>ggplot(shotchart_df, aes(x, y)) +
-    geom_point(aes(color = team, shape = made)) +
-    theme_minimal()</code></pre>
+<p>The <code>rfeb</code> package can be installed as follows:</p>
+<pre class="r"><code># install.packages(&quot;devtools&quot;)
+devtools::install_github(&quot;solmos/rfeb&quot;)</code></pre>
+<p>You can check out the code of these functions in its <a href="https://github.com/solmos/rfeb">Github repository</a>. Note that even though I am going to extract data from my league (LEB Oro), it can also be used to work with the other leagues organized FEB.</p>
+<p>So I am going to use <code>rfeb</code> to show how to plot shot charts with the data from the games played throughout the weekend of 01/11/2019.</p>
+<p>The ids of these games go from 2010208 to 2010216. I use <code>extract_shots()</code> to scrape the shot data for these 9 games. We get a data frame where each row represents a shot taken, for which the following variables were recorded:</p>
+<ul>
+<li><p><code>t</code> = Time elapsed since the start of the game</p></li>
+<li><p><code>x</code>, <code>y</code> = Shot coordinates</p></li>
+<li><p><code>team</code> = The team for which the player taking the shot plays</p></li>
+<li><p><code>player</code> = Jersey number of the player that took the shot</p></li>
+<li><p><code>quarter</code> = Quarter in which the shot was taken</p></li>
+<li><p><code>game</code> = Game id</p></li>
+<li><p><code>made</code> = Shot missed (0) or made (1)</p></li>
+</ul>
+<pre class="r"><code>library(rfeb)
+game_ids &lt;- 2010208:2010216
+shots &lt;- extract_shots(game_ids)
+head(shots)</code></pre>
+<pre><code>##       t       x      y                  team player quarter    game   made
+## 1 00:39  715.20 833.85 SÁENZ HORECA ARABERRI      3       1 2010208 Missed
+## 2 00:47  824.20 245.25          LEYMA CORUÑA     22       1 2010208   Made
+## 3 01:23 1069.45 485.05          LEYMA CORUÑA      4       1 2010208 Missed
+## 4 01:35  628.00 523.20 SÁENZ HORECA ARABERRI     10       1 2010208 Missed
+## 5 01:43   72.10 283.40 SÁENZ HORECA ARABERRI      3       1 2010208 Missed
+## 6 01:48  687.95 207.10          LEYMA CORUÑA      1       1 2010208   Made</code></pre>
+<p>Once we have the data, we can use <code>plot_shotcharts()</code>. This function uses <code>ggplot2</code> to plot the shot chart and it is possible to specify the mapping arguments that we want for the <code>geom_point()</code> geom. For instance, we can color the points according to whether the shot was missed or made.</p>
+<p>Below I show all the shots taken in these 9 games in one chart:</p>
+<pre class="r"><code>plot_shotchart(shots, color = made)</code></pre>
 <p><img src="/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-</div>
-<div id="dibujar-la-cancha" class="section level2">
-<h2>2. Dibujar la cancha</h2>
-<p>En el gráfico de arriba nos falta dibujar las líneas que delimitan la cancha de juego. En concreto, vamos a dibujar media pista con el aro en la parte inferior. Al parecer, la plataforma Baloncesto en Vivo apunta la localización de los tiros en base a la antigua línea de triple a 6.25 metros, así como la antigua zona, : confused : .</p>
-<p>El siguiente bloque de código utiliza <code>ggplot2</code> y la extensión <code>ggforce</code> para dibujar la pista de baloncesto con <a href="http://www.csd.gob.es/csd/estaticos/inst-dep/nide/campos-peq/reglamentarias/baloncesto/blc1_el_campo_de_juego.pdf">estas medidas</a>:</p>
-<pre class="r"><code>library(ggforce)  ## For geom_circle() and geom_arc()
-
-outer_edges &lt;- tribble(
-    ~x,    ~y,
-     0,    0,
-     0,    1400,
-     1500, 1400,
-     1500, 0,
-     0,    0
-)
-mid_x &lt;- 15 / 2
-paint_rectangle &lt;- tribble(
-    ~x,           ~y,
-    750 - 175,     0,
-    750 - 175,     580,
-    750 + 175,     580,
-    750 + 175,     0
-)
-
-court &lt;- ggplot() +
-    
-    # Outer edges
-    geom_path(aes(x, y), data = outer_edges) +
-    
-    # Free throw circle
-    geom_circle(aes(x0 = 750, y0 = 580, r = 175)) +
-    
-    # Paint rectangle
-    geom_path(aes(x, y), data = paint_rectangle) +
-    
-    # Three point arc
-    ## Top arc
-    geom_arc(aes(x0 = 750, y0 = 157.5, r = 625,
-                 start = pi / 2, end = - pi / 2)) +
-    ## Corner lines
-    geom_path(aes(c(125, 125), c(157.5, 0))) +
-    geom_path(aes(c(1500 - 125, 1500 - 125), c(157.5, 0))) +
-    
-    # Basket
-    ## Rim
-    geom_circle(aes(x0 = 750, y0 = 120 + 45, r = 22.5)) +
-    ## Backboard
-    geom_path(aes(x = c(750 - 90, 750 + 90),
-                  y = c(120, 120))) +
-    coord_fixed()
-
-court</code></pre>
+<p>You probably do not want to show all the shots in one chart. It is possible to use other <code>ggplot2</code> functions to adapt the plot to our needs. We can use, for instance, <code>facet_wrap()</code> to obtain a matrix of shotcharts with the different games:</p>
+<pre class="r"><code>library(ggplot2)
+plot_shotchart(shots, color = made) + facet_wrap(~ game)</code></pre>
 <p><img src="/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-</div>
-<div id="crear-el-grafico-de-tiro" class="section level2">
-<h2>Crear el gráfico de tiro</h2>
-<p>Ahora debemos sobreponer los puntos que representan los tiros en la pista que hemos dibujado. Sin embargo, vemos que <strong>las escalas son diferentes</strong>:</p>
-<pre class="r"><code>court + geom_point(data = shotchart_df, aes(x, y, color = made))</code></pre>
+<p>Lastly, I use <code>dplyr</code> to filter the shots that we want to show. Let’s say I want to see the shots I took in the game against Palencia played during the chosen week. The id for this game is <code>2010215</code> and I wear number <code>41</code>:</p>
+<pre class="r"><code>library(dplyr)
+shots %&gt;% 
+    filter(game == 2010215 &amp; player == &quot;41&quot;) %&gt;%
+    plot_shotchart(color = made) +
+    ggtitle(&quot;Sergio Olmos vs. Palencia&quot;)</code></pre>
 <p><img src="/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
-<p>Deberemos transformar los valores de las coordenadas de los tiros para que se ajusten a la pista que hemos dibujado. Esto es, debemos encontrar un valor <span class="math inline">\(c\)</span> tal que multiplicándolo por el valor de las coordenadas obtengamos valores en la escala de nuestra pista.</p>
-<p><strong>No he encontrado una solución fácil a este problema</strong>. Una opción es ir probando diferentes valores y ver qué valor nos da un resultado razonable. En una posible segunda entrada intentaré aportar una mejor solución.</p>
+<p><code>rfeb</code> is still in development. My plan is to add more functionality to it so that not only shot data can be analyzed but regular stats or play-by-play data can be used as well. I will write more posts as I add more functions to the package.</p>
 <hr />
-<p>Otra opción más formal es elegir <span class="math inline">\(c\)</span> de modo que el producto entre éste y el mayor valor de la coordenada en el eje horizontal <span class="math inline">\(x_{max}\)</span>, quede dentro de la pista, esto es, elegir <span class="math inline">\(c\)</span> tal que <span class="math inline">\(c x_{max} &lt; 1500\)</span>. Podemos fijar un valor <span class="math inline">\(d\)</span> de modo que <span class="math inline">\(c x_{max}\)</span> no quede demasiado</p>
-<p><span class="math display">\[c x_{max} = 1500 - d,\]</span></p>
-<p>donde <span class="math inline">\(c\)</span> es el valor por el que multiplicaremos las coordenad</p>
-<p>podemos elegir el valor los valores de las coordenadas por la siguiente cantidad</p>
-<p><span class="math display">\[\frac{1500 - e} {max (x)}\]</span></p>
-<hr />
-<pre class="r"><code>shots &lt;- shotchart_df %&gt;% 
-    mutate(x = x * 5.45,
-           y = y * 5.45,
-           x_flipped = 2 * 750 - x)
-court +
-    geom_point(aes(x_flipped, y, color = made), data = shots)</code></pre>
-<p><img src="/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<pre class="r"><code>max_x &lt;- max(shotchart_df$x)
-trns &lt;- (1500 - 25) / max_x
-shots &lt;- shotchart_df %&gt;% 
-    mutate(x = x * trns,
-           y = y * trns,
-           x_flipped = 2 * 750 - x)
-court +
-    geom_point(aes(x_flipped, y, color = made), data = shots) +
-    geom_text(aes(x_flipped, y, label = time), size = 4, data = shots)</code></pre>
-<p><img src="/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<pre class="r"><code>court +
-    geom_point(aes(x_flipped, y, color = made), data = shots)</code></pre>
-<p><img src="/post/2018-11-30-mapas-de-tiro-con-r/index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<ul>
+<li><p><a href="http://www.gregreda.com/2015/02/15/web-scraping-finding-the-api/">Web Scraping 201: finding the API</a></p></li>
+<li><p><a href="%22https://cran.r-project.org/web/packages/httr/vignettes/quickstart.html%22">Getting started with httr</a></p></li>
+<li><p><a href="http://egallic.fr/drawing-a-basketball-court-with-r/">Drawing a basketball court with R</a></p></li>
+</ul>
 </div>
 
     </div>
 
     
 
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tags/r/">R</a>
+  
+  <a class="badge badge-light" href="/tags/basketball/">Basketball</a>
+  
+</div>
 
 
 
@@ -552,7 +588,7 @@ court +
       
       
       <li>
-        <a itemprop="sameAs" href="solmos41@gmail.com" target="_blank" rel="noopener">
+        <a itemprop="sameAs" href="mailto:solmos41@gmail.com" target="_blank" rel="noopener">
           <i class="fas fa-envelope"></i>
         </a>
       </li>
@@ -608,6 +644,16 @@ court +
 
     
     
+    <div class="article-widget">
+      <div class="hr-light"></div>
+      <h3>Related</h3>
+      <ul>
+        
+        <li><a href="/post/2018-11-06-multiplication-table/multiplication-table-with-r/">Exploring the multiplication table with R</a></li>
+        
+      </ul>
+    </div>
+    
 
     
 
@@ -626,7 +672,7 @@ court +
             return;
         }
         var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "disqus_YRXpIjgvPM" + '.disqus.com/embed.js';
+        s.src = '//' + "solmos" + '.disqus.com/embed.js';
         s.setAttribute('data-timestamp', +new Date());
         (d.head || d.body).appendChild(s);
     })();
@@ -736,7 +782,7 @@ court +
     
     
     
-    <script id="dsq-count-scr" src="//disqus_YRXpIjgvPM.disqus.com/count.js" async></script>
+    <script id="dsq-count-scr" src="//solmos.disqus.com/count.js" async></script>
     
 
     

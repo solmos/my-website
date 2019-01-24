@@ -9,7 +9,7 @@
 baseurl = "/"
 
 # Title of your site
-title = "Sergio Olmos"
+title = "Mínimos Cuadrados"
 
 # Your copyright notice - appears in site footer.
 # To display a copyright symbol, type `&copy;`.
@@ -286,7 +286,7 @@ enableGitInfo = false
 [[menu.main]]
   name = "About"
   url = "#about"
-  weight = 1
+  weight = 3
 
 #[[menu.main]]
 #  name = "Publications"
@@ -294,14 +294,14 @@ enableGitInfo = false
 #  weight = 2
 
 [[menu.main]]
-  name = "Posts"
+  name = "Blog"
   url = "#posts"
-  weight = 2
+  weight = 1
 
 [[menu.main]]
   name = "Projects"
   url = "#projects"
-  weight = 3
+  weight = 2
 
 #[[menu.main]]
 #  name = "Experience"
@@ -358,22 +358,22 @@ enableGitInfo = false
 # Uncomment the lines below to configure your website in a second language.
 [languages.es]
   languageCode = "es"
-  title = "Sergio Olmos"
+  title = "Mínimos Cuadrados"
   [languages.es.params]
     name = "Sergio Olmos Pardo"
     role = "Estadístico y jugador de baloncesto"
   [[languages.es.menu.main]]
     name = "Sobre mí"
     url = "#about"
-    weight = 1
+    weight = 3
   [[languages.es.menu.main]]
     name = "Blog"
     url = "#posts"
-    weight = 2
+    weight = 1
   [[languages.es.menu.main]]
     name = "Proyectos"
     url = "#projects"
-    weight = 3
+    weight = 2
   #[[languages.es.menu.main]]
   #  name = "CV"
   #  url = "files/cv.pdf"

@@ -1,0 +1,111 @@
+---
+title: "rfeb: Shot charts with R"
+subtitle: How to plot shot charts for games in LEB Oro using the rfeb package
+author: Sergio Olmos Pardo
+summary: How to plot shot charts for games in LEB Oro using the rfeb package
+date: '2019-01-24'
+slug: shotcharts-with-r
+categories:
+  - English
+tags: [R, Basketball]
+image:
+  caption: ''
+  focal_point: ''
+---
+
+Kirk Goldsberry is one of the most popular figures in the basketball analytics world. He is known mainly for the use of shot charts in his analyses. Here there is an example with all the shots Lebron James has taken in his career:
+
+```{r, echo = FALSE}
+blogdown::shortcode("tweet", "1079446773956075526")
+```
+
+Shot charts can be useful for, say, identifying tenedencies on offense of a given player/team, showing what spots on the court a player is most effective at, or analyzing what type of shots a team allows its opponents.
+
+The league that I play in, called [LEB Oro](http://www.leboro.es/inicio.aspx), provides shot charts in its platform, [Baloncesto en Vivo](http://baloncestoenvivo.feb.es/). For this blog post, I created an R package called [`rfeb`](https://github.com/solmos/rfeb), that allows us to easily scrape the shot coordinates provided by this website and plot the shot charts of the game or games we want.
+
+Having said that, for some strange reason, the platform Baloncesto en Vivo does not provide any type of selection menu to access games played weeks before (or seasons before). Only the most recent games are visible.
+
+It is possible to access previous games if you know the game id and adding it to the base url (http://baloncestoenvivo.feb.es/Game/). However, it appears as if the data gets erased as time goes by. At the moment of writting this post, only the games played before week 13 of this season are available.
+
+Moreover, the data themselves are a bit shaky. As I have come to find out, **several gyms in the league produce shot charts that are obviously wrong**.
+
+Huesca and Real Canoe are the main suspects. I found several cases but take a look at this game between ZTE Real Canoe and Cerramimbre Valladolid played at the gym of the former. According to the [provided shot chart](http://baloncestoenvivo.feb.es/Game/2010168#shotchart) neither one of the two teams shot one shot inside the paint... Until these flagrant errors are eliminated, any analysis done with these data must be taken with a grain of salt.
+
+
+## Shot charts
+
+`rfeb`  is an R package that I created to work with the data available in Baloncesto en Vivo. `rfeb` contains two main functions at the moment:
+
+* `extract_shots()`: Scrapes the shot data of the specified game ids
+
+* `plot_shotchart()`: Plots shot charts with these data
+
+The `rfeb` package can be installed as follows:
+```{r, eval = FALSE}
+# install.packages("devtools")
+devtools::install_github("solmos/rfeb")
+```
+
+You can check out the code of these functions in its [Github repository](https://github.com/solmos/rfeb). Note that even though I am going to extract data from my league (LEB Oro), it can also be used to work with the other leagues organized FEB.
+
+So I am going to use `rfeb` to show how to plot shot charts with the data from the games played throughout the weekend of 01/11/2019. 
+
+The ids of these games go from 2010208 to 2010216. I use `extract_shots()` to scrape the shot data for these 9 games. We get a data frame where each row represents a shot taken, for which the following variables were recorded:
+
+* `t` = Time elapsed since the start of the game
+
+* `x`, `y` = Shot coordinates
+
+* `team` = The team for which the player taking the shot plays
+
+* `player` = Jersey number of the player that took the shot
+
+* `quarter` = Quarter in which the shot was taken
+
+* `game` = Game id
+
+* `made` = Shot missed (0) or made (1)
+
+```{r}
+library(rfeb)
+game_ids <- 2010208:2010216
+shots <- extract_shots(game_ids)
+head(shots)
+```
+
+Once we have the data, we can use `plot_shotcharts()`. This function uses `ggplot2` to plot the shot chart and it is possible to specify the mapping arguments that we want for the `geom_point()` geom. For instance, we can color the points according to whether the shot was missed or made.
+
+Below I show all the shots taken in these 9 games in one chart:
+```{r}
+plot_shotchart(shots, color = made)
+```
+
+
+You probably do not want to show all the shots in one chart. It is possible to use other `ggplot2` functions to adapt the plot to our needs. We can use, for instance, `facet_wrap()` to obtain a matrix of shotcharts with the different games:
+```{r}
+library(ggplot2)
+plot_shotchart(shots, color = made) + facet_wrap(~ game)
+```
+
+
+Lastly, I use `dplyr` to filter the shots that we want to show. Let's say I want to see the shots I took in the game against Palencia played during the chosen week. The id for this game is `2010215` and I wear number `41`:
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+shots %>% 
+    filter(game == 2010215 & player == "41") %>%
+    plot_shotchart(color = made) +
+    ggtitle("Sergio Olmos vs. Palencia")
+```
+
+
+`rfeb` is still in development. My plan is to add more functionality to it so that not only shot data can be analyzed but regular stats or play-by-play data can be used as well. I will write more posts as I add more functions to the package.
+
+***
+
+## Resources
+
+* [Web Scraping 201: finding the API](http://www.gregreda.com/2015/02/15/web-scraping-finding-the-api/)
+
+* [Getting started with httr]("https://cran.r-project.org/web/packages/httr/vignettes/quickstart.html")
+
+* [Drawing a basketball court with R](http://egallic.fr/drawing-a-basketball-court-with-r/)

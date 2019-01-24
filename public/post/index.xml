@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Sergio Olmos</title>
+    <title>Posts on Mínimos Cuadrados</title>
     <link>/post/</link>
-    <description>Recent content in Posts on Sergio Olmos</description>
+    <description>Recent content in Posts on Mínimos Cuadrados</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
@@ -11,6 +11,17 @@
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>rfeb: Shot charts with R</title>
+      <link>/post/2019-01-24-graficos-de-tiro-con-r/shotcharts-with-r/</link>
+      <pubDate>Thu, 24 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2019-01-24-graficos-de-tiro-con-r/shotcharts-with-r/</guid>
+      <description>Kirk Goldsberry is one of the most popular figures in the basketball analytics world. He is known mainly for the use of shot charts in his analyses. Here there is an example with all the shots Lebron James has taken in his career:
+Happy Birthday, LeBron His constellation so far... pic.twitter.com/4HuCjTgl4x
+&amp;mdash; Kirk Goldsberry (@kirkgoldsberry) December 30, 2018  Shot charts can be useful for, say, identifying tenedencies on offense of a given player/team, showing what spots on the court a player is most effective at, or analyzing what type of shots a team allows its opponents.</description>
+    </item>
     
     <item>
       <title>Exploring the multiplication table with R</title>

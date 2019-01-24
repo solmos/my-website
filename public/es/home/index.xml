@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Homes on Sergio Olmos</title>
+    <title>Homes on Mínimos Cuadrados</title>
     <link>/es/home/</link>
-    <description>Recent content in Homes on Sergio Olmos</description>
+    <description>Recent content in Homes on Mínimos Cuadrados</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>es</language>
     <copyright>&amp;copy; 2018</copyright>
@@ -11,16 +11,6 @@
     
 	<atom:link href="/es/home/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title></title>
-      <link>/es/home/about/</link>
-      <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
-      
-      <guid>/es/home/about/</guid>
-      <description>¡Hola! Me llamo Sergio y actualmente vivo en Granada. Después de graduarme en Matemáticas en 2009 comencé a jugar a baloncesto profesionalmente y ese ha sido mi trabajo desde entonces. También soy investigador colaborador en Biostatech, empresa de asesoramiento en estadística aplicada situada en Santiago de Compostela.
-Como consultor he utilizado métodos estadísticos y de aprendizaje automático en varios campos científicos como la ecología, la genómica y la farmacología. Recientemente también me he puesto a jugar con datos de baloncesto.</description>
-    </item>
     
     <item>
       <title>Blog</title>
@@ -38,6 +28,16 @@ Como consultor he utilizado métodos estadísticos y de aprendizaje automático 
       
       <guid>/es/home/projects/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/es/home/about/</link>
+      <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>/es/home/about/</guid>
+      <description>¡Hola! Me llamo Sergio y actualmente vivo en Granada. Después de graduarme en Matemáticas en 2009 comencé a jugar a baloncesto profesionalmente y ese ha sido mi trabajo desde entonces. También soy investigador colaborador en Biostatech, empresa de asesoramiento en estadística aplicada situada en Santiago de Compostela.
+Como consultor he utilizado métodos estadísticos y de aprendizaje automático en varios campos científicos como la ecología, la genómica y la farmacología. Recientemente también me he puesto a jugar con datos de baloncesto.</description>
     </item>
     
     <item>

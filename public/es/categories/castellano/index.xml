@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Castellano on Mínimos Cuadrados</title>
+    <link>/es/categories/castellano/</link>
+    <description>Recent content in Castellano on Mínimos Cuadrados</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>es</language>
+    <copyright>&amp;copy; 2018</copyright>
+    <lastBuildDate>Thu, 24 Jan 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/es/categories/castellano/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>rfeb: Gráficos de tiro con R</title>
+      <link>/es/post/2019-01-24-graficos-de-tiro-con-r/shotcharts-with-r/</link>
+      <pubDate>Thu, 24 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/es/post/2019-01-24-graficos-de-tiro-con-r/shotcharts-with-r/</guid>
+      <description>Kirk Goldsberry es una de las figuras más destacadas en el mundo de la estadística avanzada en la NBA. Se le conoce principalmente por el uso de gráficos de tiro en sus análisis. Este es un ejemplo en el que se muestran todos los tiros que ha realizado Lebron James a lo largo de su carrera:
+Happy Birthday, LeBron His constellation so far... pic.twitter.com/4HuCjTgl4x
+&amp;mdash; Kirk Goldsberry (@kirkgoldsberry) December 30, 2018  Los gráficos de tiro pueden ser útiles para, por ejemplo, identificar tendencias en ataque de un determinado jugador/equipo, mostrar en qué zonas del campo un jugador es más efectivo o analizar qué tipo de tiros un equipo permite al rival.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Categories on Sergio Olmos</title>
+    <title>Categories on Mínimos Cuadrados</title>
     <link>/es/categories/</link>
-    <description>Recent content in Categories on Sergio Olmos</description>
+    <description>Recent content in Categories on Mínimos Cuadrados</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>es</language>
     <copyright>&amp;copy; 2018</copyright>
+    <lastBuildDate>Thu, 24 Jan 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/es/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Castellano</title>
+      <link>/es/categories/castellano/</link>
+      <pubDate>Thu, 24 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/es/categories/castellano/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>English</title>

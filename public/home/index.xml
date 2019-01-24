@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Homes on Sergio Olmos</title>
+    <title>Homes on Mínimos Cuadrados</title>
     <link>/home/</link>
-    <description>Recent content in Homes on Sergio Olmos</description>
+    <description>Recent content in Homes on Mínimos Cuadrados</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
@@ -22,21 +22,20 @@
     </item>
     
     <item>
-      <title></title>
-      <link>/home/about/</link>
-      <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
-      
-      <guid>/home/about/</guid>
-      <description>Hi! My name is Sergio and I live in Granada, Spain. After graduating with a Mathematics degree in 2009 I started playing basketball professionally and that has been my job since then. I am also a research collaborator at Biostatech, a statistical consulting company based in Santiago de Compostela.
-As a consultant, I have used statistical and machine learning methods in various fields such as ecology, genomics and pharmacology. Recently, I have been playing with some sports data as well.</description>
-    </item>
-    
-    <item>
       <title>Blog</title>
       <link>/home/posts/</link>
       <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
       
       <guid>/home/posts/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Projects</title>
+      <link>/home/projects/</link>
+      <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>/home/projects/</guid>
       <description></description>
     </item>
     
@@ -50,12 +49,13 @@ As a consultant, I have used statistical and machine learning methods in various
     </item>
     
     <item>
-      <title>Projects</title>
-      <link>/home/projects/</link>
+      <title></title>
+      <link>/home/about/</link>
       <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
       
-      <guid>/home/projects/</guid>
-      <description></description>
+      <guid>/home/about/</guid>
+      <description>Hi! My name is Sergio and I live in Granada, Spain. After graduating with a Mathematics degree in 2009 I started playing basketball professionally and that has been my job since then. I am also a research collaborator at Biostatech, a statistical consulting company based in Santiago de Compostela.
+As a consultant, I have used statistical and machine learning methods in various fields such as ecology, genomics and pharmacology. Recently, I have been playing with some sports data as well.</description>
     </item>
     
     <item>

@@ -9,7 +9,7 @@ title = "Blog"
 subtitle = ""
 
 # Order that this section will appear in.
-weight = 2
+weight = 1
 
 
 # Filter posts by tag.
