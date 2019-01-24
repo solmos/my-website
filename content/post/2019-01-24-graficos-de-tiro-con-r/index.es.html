@@ -67,7 +67,7 @@ plot_shotchart(shots, color = made) + facet_wrap(~ game)</code></pre>
 <p>Por último, utilizaremos <code>dplyr</code> para filtrar los tiros que queremos mostrar. Digamos que quiero ver qué tiros hice yo en el partido que disputé contra Palencia en esta jornada. Este partido se corresponde con el identificador <code>2010215</code> y el número que llevo en mi camiseta es el <code>41</code>:</p>
 <pre class="r"><code>library(dplyr)
 shots %&gt;% 
-    filter(game == 2010215 &amp; player == &quot;41&quot;) %&gt;%
+    filter(game == 2010215 &amp; team == &quot;COVIRAN GRANADA&quot; &amp; player == &quot;41&quot;) %&gt;%
     plot_shotchart(color = made) +
     ggtitle(&quot;Sergio Olmos vs. Palencia&quot;)</code></pre>
 <p><img src="/post/2019-01-24-graficos-de-tiro-con-r/index.es_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>

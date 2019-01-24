@@ -94,7 +94,7 @@ Por último, utilizaremos `dplyr` para filtrar los tiros que queremos mostrar. D
 ```{r, message=FALSE, warning=FALSE}
 library(dplyr)
 shots %>% 
-    filter(game == 2010215 & player == "41") %>%
+    filter(game == 2010215 & team == "COVIRAN GRANADA" & player == "41") %>%
     plot_shotchart(color = made) +
     ggtitle("Sergio Olmos vs. Palencia")
 ```

@@ -534,7 +534,7 @@ plot_shotchart(shots, color = made) + facet_wrap(~ game)</code></pre>
 <p>Lastly, I use <code>dplyr</code> to filter the shots that we want to show. Let’s say I want to see the shots I took in the game against Palencia played during the chosen week. The id for this game is <code>2010215</code> and I wear number <code>41</code>:</p>
 <pre class="r"><code>library(dplyr)
 shots %&gt;% 
-    filter(game == 2010215 &amp; player == &quot;41&quot;) %&gt;%
+    filter(game == 2010215 &amp; team == &quot;COVIRAN GRANADA&quot; &amp; player == &quot;41&quot;) %&gt;%
     plot_shotchart(color = made) +
     ggtitle(&quot;Sergio Olmos vs. Palencia&quot;)</code></pre>
 <p><img src="/post/2019-01-24-graficos-de-tiro-con-r/index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
