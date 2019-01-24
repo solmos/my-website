@@ -36,7 +36,7 @@
 &lt;p&gt;The &lt;code&gt;rfeb&lt;/code&gt; package can be installed as follows:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# install.packages(&amp;quot;devtools&amp;quot;)
 devtools::install_github(&amp;quot;solmos/rfeb&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;You can check out the code of these functions in its &lt;a href=&#34;https://github.com/solmos/rfeb&#34;&gt;Github repository&lt;/a&gt;. Note that even though I am going to extract data from my league (LEB Oro), it can also be used to work with the other leagues organized FEB.&lt;/p&gt;
+&lt;p&gt;You can check out the code of these functions in its &lt;a href=&#34;https://github.com/solmos/rfeb&#34;&gt;Github repository&lt;/a&gt;. Note that even though I am going to extract data from my league (LEB Oro), it can also be used to work with the other leagues organized by the Spanish basketball federation (FEB).&lt;/p&gt;
 &lt;p&gt;So I am going to use &lt;code&gt;rfeb&lt;/code&gt; to show how to plot shot charts with the data from the games played throughout the weekend of 01/11/2019.&lt;/p&gt;
 &lt;p&gt;The ids of these games go from 2010208 to 2010216. I use &lt;code&gt;extract_shots()&lt;/code&gt; to scrape the shot data for these 9 games. We get a data frame where each row represents a shot taken, for which the following variables were recorded:&lt;/p&gt;
 &lt;ul&gt;

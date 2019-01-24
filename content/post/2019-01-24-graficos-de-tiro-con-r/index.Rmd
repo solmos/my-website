@@ -46,7 +46,7 @@ The `rfeb` package can be installed as follows:
 devtools::install_github("solmos/rfeb")
 ```
 
-You can check out the code of these functions in its [Github repository](https://github.com/solmos/rfeb). Note that even though I am going to extract data from my league (LEB Oro), it can also be used to work with the other leagues organized FEB.
+You can check out the code of these functions in its [Github repository](https://github.com/solmos/rfeb). Note that even though I am going to extract data from my league (LEB Oro), it can also be used to work with the other leagues organized by the Spanish basketball federation (FEB).
 
 So I am going to use `rfeb` to show how to plot shot charts with the data from the games played throughout the weekend of 01/11/2019. 
 
