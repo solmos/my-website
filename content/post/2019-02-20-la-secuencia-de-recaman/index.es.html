@@ -1,0 +1,57 @@
+---
+title: La secuencia de Recamán
+subtitle: "Cómo generar y dibujar la misteriosa secuencia de Recamán con R"
+author: Sergio Olmos Pardo
+summary: "Cómo generar y dibujar la misteriosa secuencia de Recamán con R"
+date: '2019-02-20'
+slug: la-secuencia-de-recaman
+categories:
+  - Castellano
+tags:
+  - Matemáticas
+  - R
+  - Arte generativo
+image:
+  caption: ''
+  focal_point: ''
+---
+
+
+
+<p>Échale un ojo a la siguiente secuencia de números:</p>
+<p><span class="math display">\[0, 1, 3, 6, 2, 7, 13, 20, 12, 21, 11, 22, \ldots\]</span></p>
+<p>Si no la has visto nunca, seguramente no consigas averiguar qué patrón sigue esta secuencia. Se trata de la llamada <a href="https://oeis.org/A005132">secuencia de Recamán</a>, atribuída al matemático colombiano Bernardo Recamán.</p>
+<p>A pesar de su aparente complejidad, las reglas para generar esta secuencia son más bien sencillas. Lo mejor para comprender el algoritmo que genera esta secuencia es dibujar una línea que vaya desde 0 hasta, por ejemplo, 7 para empezar: <img src="/post/2019-02-20-la-secuencia-de-recaman/index.es_files/figure-html/number%20line-1.png" width="672" /></p>
+<p>Básicamente se trata de, empezando desde el <span class="math inline">\(0\)</span>, en cada paso intentamos ir hacia la izquierda un número de unidades igual al paso en el que nos encontramos. Si el número en el que caemos al ir a la izquierda está a la izquierda de <span class="math inline">\(0\)</span> o ya ha aparecido en nuestra secuencia anteriormente, en lugar de ir a la izquierda vamos a la derecha.</p>
+<p>El escritor Alex Bellos lo explica mucho mejor en el siguiente vídeo de Numberphile: {{% youtube "FGC5TdIiT9U" %}}</p>
+<hr />
+<div id="implementacion-en-r" class="section level2">
+<h2>Implementación en R</h2>
+<p>Para esta entrada he utilizado R para generar y dibujar la secuencia de Recamán. En unas pocas líneas de código podemos crear una función que genere un número determinado de elementos de esta secuencia:</p>
+<pre class="r"><code># Generar los primeros n números de la secuencia de Recamán
+get_recaman &lt;- function(n) {
+    recaman_seq &lt;- numeric(n)
+    for (i in 1:length(recaman_seq)) {
+        candidate &lt;- recaman_seq[i] - i
+        if (candidate &gt; 0 &amp; !(candidate %in% recaman_seq)) {
+            recaman_seq[i + 1] &lt;- candidate
+        } else recaman_seq[i + 1] &lt;- recaman_seq[i] + i
+    }
+    recaman_seq &lt;- recaman_seq[-length(recaman_seq)]
+    recaman_seq
+}
+
+get_recaman(20)</code></pre>
+<pre><code>##  [1]  0  1  3  6  2  7 13 20 12 21 11 22 10 23  9 24  8 25 43 62</code></pre>
+<p>Para dibujar la secuencia utilizamos semicírculos que representen los saltos de un número al otro.</p>
+<p><img src="/post/2019-02-20-la-secuencia-de-recaman/index.es_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Puedes obtener el código para dibujar la secuencia <a href="https://github.com/solmos/recaman-sequence">aquí</a>.</p>
+</div>
+<div id="explorando-el-camino-de-recaman" class="section level2">
+<h2>Explorando el camino de Recamán</h2>
+<p>Juega con el código y explora la secuencia. ¿Crees que tarde o temprano aparecen todos los números enteros? Se conjetura que <a href="https://oeis.org/A005132/a005132_1.txt">no</a>, que existen ciertos agujeros en el camino de Recamán.</p>
+<p>¿No hay algo <a href="https://oeis.org/play?seq=A005132">extraño</a> en esta secuencia?</p>
+<p><img src="/post/2019-02-20-la-secuencia-de-recaman/index.es_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="/post/2019-02-20-la-secuencia-de-recaman/index.es_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="/post/2019-02-20-la-secuencia-de-recaman/index.es_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>

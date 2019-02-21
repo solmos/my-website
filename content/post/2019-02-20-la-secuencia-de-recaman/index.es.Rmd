@@ -1,0 +1,193 @@
+---
+title: La secuencia de Recamán
+subtitle: "Cómo generar y dibujar la misteriosa secuencia de Recamán con R"
+author: Sergio Olmos Pardo
+summary: "Cómo generar y dibujar la misteriosa secuencia de Recamán con R"
+date: '2019-02-20'
+slug: la-secuencia-de-recaman
+categories:
+  - Castellano
+tags:
+  - Matemáticas
+  - R
+  - Arte generativo
+image:
+  caption: ''
+  focal_point: ''
+---
+
+
+Échale un ojo a la siguiente secuencia de números:
+
+$$0, 1, 3, 6, 2, 7, 13, 20, 12, 21, 11, 22, \ldots$$
+
+Si no la has visto nunca, seguramente no consigas averiguar qué patrón sigue esta secuencia. Se trata de la llamada [secuencia de Recamán](https://oeis.org/A005132), atribuída al matemático colombiano Bernardo Recamán.
+
+A pesar de su aparente complejidad, las reglas para generar esta secuencia son más bien sencillas. Lo mejor para comprender el algoritmo que genera esta secuencia es dibujar una línea que vaya desde 0 hasta, por ejemplo, 7 para empezar:
+```{r number line, message = FALSE, fig.height = 1, echo = FALSE, warning = FALSE}
+library(tidyverse)
+number_line_df <- data.frame(x = 0:9,
+                             y = 0,
+                             number = c(as.character(0:7), NA, NA))
+ggplot(number_line_df, aes(x, y)) +
+    geom_point(shape = 124) +
+    geom_line() +
+    geom_text(aes(x, y, label = number),
+              size = 3,
+              vjust = 2.2) +
+    theme_void()
+```
+
+Básicamente se trata de, empezando desde el $0$, en cada paso intentamos ir hacia la izquierda un número de unidades igual al paso en el que nos encontramos. Si el número en el que caemos al ir a la izquierda está a la izquierda de $0$ o ya ha aparecido en nuestra secuencia anteriormente, en lugar de ir a la izquierda vamos a la derecha.
+
+El escritor Alex Bellos lo explica mucho mejor en el siguiente vídeo de Numberphile:
+```{r, echo = FALSE}
+blogdown::shortcode("youtube", "FGC5TdIiT9U")
+```
+
+***
+
+## Implementación en R
+
+Para esta entrada he utilizado R para generar y dibujar la secuencia de Recamán. En unas pocas líneas de código podemos crear una función que genere un número determinado de elementos de esta secuencia:
+```{r}
+# Generar los primeros n números de la secuencia de Recamán
+get_recaman <- function(n) {
+    recaman_seq <- numeric(n)
+    for (i in 1:length(recaman_seq)) {
+        candidate <- recaman_seq[i] - i
+        if (candidate > 0 & !(candidate %in% recaman_seq)) {
+            recaman_seq[i + 1] <- candidate
+        } else recaman_seq[i + 1] <- recaman_seq[i] + i
+    }
+    recaman_seq <- recaman_seq[-length(recaman_seq)]
+    recaman_seq
+}
+
+get_recaman(20)
+```
+
+Para dibujar la secuencia utilizamos semicírculos que representen los saltos de un número al otro.
+
+```{r, echo = FALSE, fig.height=3}
+# Get semicircle paths
+construct_arc <- function(start, stop, type) {
+    r <- abs(start - stop) / 2
+    x0 <- min(c(start, stop)) + r
+    y0 <- 0
+    if (type == "up_forward") {
+        theta <- seq(pi, 0, -0.01)
+    } else if (type == "up_backwards") {
+        theta <- seq(0, pi, 0.01)
+    } else if (type == "down_forward") {
+        theta <- seq(pi, 2 * pi, 0.01)
+    } else if (type == "down_backwards") {
+        theta <- seq(2 * pi, pi, -0.01)
+    }
+    x <- r * cos(theta) + x0
+    y <- r * sin(theta) + y0
+    df <- data.frame(x, y)
+}
+
+# Plot the Recaman's sequence
+plot_recaman <- function(n, size = 1, alpha = 0.8) {
+    recaman_seq <- get_recaman(n)
+    df <- data.frame(start = recaman_seq,
+                     stop = lead(recaman_seq),
+                     # Alternating position of the semicircles
+                     side = rep_len(c("down", "up"), length(recaman_seq))) %>% 
+        mutate(direction = ifelse(stop - start > 0, "forward", "backwards"),
+               type = paste(side, direction, sep = "_")) %>% 
+        filter(!is.na(stop))
+    l <- Map(construct_arc, start = df$start, stop = df$stop, type = df$type)
+    df2 <- do.call("rbind", l)
+    ggplot(df2, aes(x, y)) +
+        geom_path(alpha = alpha, size = size) +
+        coord_fixed() +
+        theme_void()
+}
+
+df <- data.frame(x = 0:13,
+                 y = 0,
+                 number = as.character(0:13))
+df$recaman <- df$x %in% get_recaman(7)
+plot_recaman(7, alpha = 0.6) +
+    geom_line(data = df, aes(x, y), size = 0.5, color = "grey") +
+    geom_text(data = df, aes(x, y, label = number),
+              vjust = 1.5, hjust = 1, size = 3) +
+    geom_point(data = df, aes(x, y), shape = 124)
+```
+
+Puedes obtener el código para dibujar la secuencia [aquí](https://github.com/solmos/recaman-sequence).
+
+## Explorando el camino de Recamán
+
+Juega con el código y explora la secuencia. ¿Crees que tarde o temprano aparecen todos los números enteros? Se conjetura que [no](https://oeis.org/A005132/a005132_1.txt), que existen ciertos agujeros en el camino de Recamán.
+
+¿No hay algo [extraño](https://oeis.org/play?seq=A005132) en esta secuencia?
+
+```{r, echo = FALSE}
+# Generate the first n elements of the Recaman's sequence
+get_recaman <- function(n) {
+    recaman_seq <- numeric(n)
+    for (i in 1:length(recaman_seq)) {
+        candidate <- recaman_seq[i] - i
+        if (candidate > 0 & !(candidate %in% recaman_seq)) {
+            recaman_seq[i + 1] <- candidate
+        } else recaman_seq[i + 1] <- recaman_seq[i] + i
+    }
+    recaman_seq <- recaman_seq[-length(recaman_seq)]
+    recaman_seq
+}
+
+# Get semicircle paths
+construct_arc <- function(start, stop, type) {
+    r <- abs(start - stop) / 2
+    x0 <- min(c(start, stop)) + r
+    y0 <- 0
+    if (type == "up_forward") {
+        theta <- seq(pi, 0, -0.01)
+    } else if (type == "up_backwards") {
+        theta <- seq(0, pi, 0.01)
+    } else if (type == "down_forward") {
+        theta <- seq(pi, 2 * pi, 0.01)
+    } else if (type == "down_backwards") {
+        theta <- seq(2 * pi, pi, -0.01)
+    }
+    x <- r * cos(theta) + x0
+    y <- r * sin(theta) + y0
+    df <- data.frame(x, y)
+}
+
+# Plot the first n elements of the Recaman's sequence
+plot_recaman <- function(n, size = 1, alpha = 0.8) {
+    recaman_seq <- get_recaman(n)
+    df <- data.frame(start = recaman_seq,
+                     stop = lead(recaman_seq),
+                     # Alternating position of the semicircles
+                     side = rep_len(c("down", "up"), length(recaman_seq))) %>% 
+        mutate(direction = ifelse(stop - start > 0, "forward", "backwards"),
+               type = paste(side, direction, sep = "_")) %>% 
+        filter(!is.na(stop))
+    l <- Map(construct_arc, start = df$start, stop = df$stop, type = df$type)
+    df2 <- do.call("rbind", l)
+    ggplot(df2, aes(x, y)) +
+        geom_path(alpha = alpha, size = size) +
+        coord_fixed() +
+        theme_void()
+}
+```
+
+```{r, echo = FALSE, fig.height = 3}
+plot_recaman(20, size = 2)
+```
+
+```{r, echo = FALSE}
+plot_recaman(66, size = 1)
+```
+
+```{r, echo = FALSE, fig.height = 3}
+plot_recaman(500, size = 0.5, alpha = 0.8)
+```
+
+

@@ -11,6 +11,57 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Recamán&#39;s sequence</title>
+      <link>/post/2019-02-20-la-secuencia-de-recaman/la-secuencia-de-recaman/</link>
+      <pubDate>Wed, 20 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2019-02-20-la-secuencia-de-recaman/la-secuencia-de-recaman/</guid>
+      <description>&lt;p&gt;Take a look at the following sequence of numbers:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[0, 1, 3, 6, 2, 7, 13, 20, 12, 21, 11, 22, \ldots\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;If you have not seen it before, you probably will not be able to figure out the pattern in this sequence. It is the so called &lt;a href=&#34;https://oeis.org/A005132&#34;&gt;Recamán’s sequence&lt;/a&gt;, attributed to the Colombian mathematician Bernardo Recamán.&lt;/p&gt;
+&lt;p&gt;Despite its apparent complexity, the rules that generate this sequence are quite simple. The best way to understand the generating algorithm is to draw the number line from 0 to, say, 7 to start:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-02-20-la-secuencia-de-recaman/index_files/figure-html/number%20line-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Basically, starting from &lt;span class=&#34;math inline&#34;&gt;\(0\)&lt;/span&gt;, in each step we try to move left by a number of units equal to the step we are taking. If the number in which we land is to the left of zero or it has already appeared before in our sequence, instead of moving left we move right.&lt;/p&gt;
+&lt;p&gt;The writer Alex Bellos explains it much better in the following video of Numberphile: 
+&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
+  &lt;iframe src=&#34;//www.youtube.com/embed/FGC5TdIiT9U&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;/p&gt;
+&lt;hr /&gt;
+&lt;div id=&#34;implementation-in-r&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Implementation in R&lt;/h2&gt;
+&lt;p&gt;For this blog post I have used R to generate and draw the Recamán sequence. In a few lines of code we can create a function that generates a given number of elements of this sequence:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Generate the first n numbers of the Recamán sequence
+get_recaman &amp;lt;- function(n) {
+    recaman_seq &amp;lt;- numeric(n)
+    for (i in 1:length(recaman_seq)) {
+        candidate &amp;lt;- recaman_seq[i] - i
+        if (candidate &amp;gt; 0 &amp;amp; !(candidate %in% recaman_seq)) {
+            recaman_seq[i + 1] &amp;lt;- candidate
+        } else recaman_seq[i + 1] &amp;lt;- recaman_seq[i] + i
+    }
+    recaman_seq &amp;lt;- recaman_seq[-length(recaman_seq)]
+    recaman_seq
+}
+
+get_recaman(20)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  [1]  0  1  3  6  2  7 13 20 12 21 11 22 10 23  9 24  8 25 43 62&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To draw the sequence we use semicircles that represent the jumps from one number to the other.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-02-20-la-secuencia-de-recaman/index_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Yo can find the code to draw the sequence &lt;a href=&#34;https://github.com/solmos/recaman-sequence&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;/div&gt;
+&lt;div id=&#34;exploring-recamans-path&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Exploring Recaman’s path&lt;/h2&gt;
+&lt;p&gt;Play around with the code and explore the sequence. Do you think that every integer eventually appears? It is conjectured that no, that there are holes along Recamán’s path.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-02-20-la-secuencia-de-recaman/index_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-02-20-la-secuencia-de-recaman/index_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-02-20-la-secuencia-de-recaman/index_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>rfeb: Shot charts with R</title>
       <link>/post/2019-01-24-graficos-de-tiro-con-r/shotcharts-with-r/</link>
       <pubDate>Thu, 24 Jan 2019 00:00:00 +0000</pubDate>

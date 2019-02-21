@@ -4,6 +4,17 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/post/2019-02-20-la-secuencia-de-recaman/la-secuencia-de-recaman/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/post/2019-02-20-la-secuencia-de-recaman/la-secuencia-de-recaman/" hreflang="es"/>
+    
+      <loc>/post/2019-02-20-la-secuencia-de-recaman/la-secuencia-de-recaman/</loc>
+      <lastmod>2019-02-20T00:00:00+00:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <xhtml:link rel="alternate" href="/post/2019-01-24-graficos-de-tiro-con-r/shotcharts-with-r/" hreflang="en"/>
       <xhtml:link rel="alternate" href="/es/post/2019-01-24-graficos-de-tiro-con-r/shotcharts-with-r/" hreflang="es"/>
     
@@ -154,7 +165,16 @@
       <xhtml:link rel="alternate" href="/es/categories/english/" hreflang="es"/>
     
       <loc>/categories/english/</loc>
-      <lastmod>2019-01-24T00:00:00+00:00</lastmod>
+      <lastmod>2019-02-20T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>/tags/generative-art/</loc>
+      <lastmod>2019-02-20T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -166,7 +186,7 @@
       <xhtml:link rel="alternate" href="/es/tags/mathematics/" hreflang="es"/>
     
       <loc>/tags/mathematics/</loc>
-      <lastmod>2018-11-06T00:00:00+00:00</lastmod>
+      <lastmod>2019-02-20T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -214,7 +234,7 @@
       <xhtml:link rel="alternate" href="/es/tags/r/" hreflang="es"/>
     
       <loc>/tags/r/</loc>
-      <lastmod>2019-01-24T00:00:00+00:00</lastmod>
+      <lastmod>2019-02-20T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     

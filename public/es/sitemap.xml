@@ -4,6 +4,17 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/es/post/2019-02-20-la-secuencia-de-recaman/la-secuencia-de-recaman/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/post/2019-02-20-la-secuencia-de-recaman/la-secuencia-de-recaman/" hreflang="en"/>
+    
+      <loc>/es/post/2019-02-20-la-secuencia-de-recaman/la-secuencia-de-recaman/</loc>
+      <lastmod>2019-02-20T00:00:00+00:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <xhtml:link rel="alternate" href="/es/post/2019-01-24-graficos-de-tiro-con-r/shotcharts-with-r/" hreflang="es"/>
       <xhtml:link rel="alternate" href="/post/2019-01-24-graficos-de-tiro-con-r/shotcharts-with-r/" hreflang="en"/>
     
@@ -37,6 +48,15 @@
     
     <url>
     
+      <loc>/es/tags/arte-generativo/</loc>
+      <lastmod>2019-02-20T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>/es/tags/baloncesto/</loc>
       <lastmod>2019-01-24T00:00:00+00:00</lastmod>
       <priority>0</priority>
@@ -47,7 +67,7 @@
     <url>
     
       <loc>/es/categories/castellano/</loc>
-      <lastmod>2019-01-24T00:00:00+00:00</lastmod>
+      <lastmod>2019-02-20T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -59,7 +79,7 @@
       <xhtml:link rel="alternate" href="/categories/" hreflang="en"/>
     
       <loc>/es/categories/</loc>
-      <lastmod>2019-01-24T00:00:00+00:00</lastmod>
+      <lastmod>2019-02-20T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -72,6 +92,15 @@
     
       <loc>/es/categories/english/</loc>
       <lastmod>2018-11-06T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>/es/tags/matem%C3%A1ticas/</loc>
+      <lastmod>2019-02-20T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -107,7 +136,7 @@
       <xhtml:link rel="alternate" href="/post/" hreflang="en"/>
     
       <loc>/es/post/</loc>
-      <lastmod>2019-01-24T00:00:00+00:00</lastmod>
+      <lastmod>2019-02-20T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -142,7 +171,7 @@
       <xhtml:link rel="alternate" href="/tags/r/" hreflang="en"/>
     
       <loc>/es/tags/r/</loc>
-      <lastmod>2019-01-24T00:00:00+00:00</lastmod>
+      <lastmod>2019-02-20T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -154,7 +183,7 @@
       <xhtml:link rel="alternate" href="/tags/" hreflang="en"/>
     
       <loc>/es/tags/</loc>
-      <lastmod>2019-01-24T00:00:00+00:00</lastmod>
+      <lastmod>2019-02-20T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     

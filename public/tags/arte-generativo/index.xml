@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Arte generativo on Mínimos Cuadrados</title>
+    <link>/tags/arte-generativo/</link>
+    <description>Recent content in Arte generativo on Mínimos Cuadrados</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2018</copyright>
+    <lastBuildDate>Wed, 20 Feb 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/arte-generativo/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>The Recamán sequence</title>
+      <link>/post/2019-02-20-la-secuencia-de-recaman/la-secuencia-de-recaman/</link>
+      <pubDate>Wed, 20 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2019-02-20-la-secuencia-de-recaman/la-secuencia-de-recaman/</guid>
+      <description>Take a look at the following sequence of numbers:
+\[0, 1, 3, 6, 2, 7, 13, 20, 12, 21, 11, 22, \ldots\]
+If you have not seen it before, you probably will not be able to figure out the pattern in this sequence.
+Si no la has visto nunca, seguramente no consigas averiguar qué patrón sigue esta secuencia. Se trata de la llamada secuencia de Recamán, atribuída al matemático colombiano Bernardo Recamán.</description>
+    </item>
+    
+  </channel>
+</rss>
