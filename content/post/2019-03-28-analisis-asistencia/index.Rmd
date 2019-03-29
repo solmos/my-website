@@ -4,7 +4,7 @@ subtitle: "How to use the eurolig package to analyze the patterns in assists for
 summary: "How to use the eurolig package to analyze the patterns in assists for FC Barcelona in this Euroleague season"
 author: Sergio Olmos
 date: '2019-03-28'
-slug: análisis-asistencia
+slug: analisis-asistencia
 categories:
     - English
 tags:
