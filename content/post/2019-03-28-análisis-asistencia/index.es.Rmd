@@ -1,7 +1,7 @@
 ---
 title: Análisis de los patrones de asistencias del FC Barcelona en Euroliga
-subtitle: "Cómo usar el paquete de R eurolig para analizar los patrones de asistencias del FC Barcelona en esta temporada de Euroliga"
-summary: "Cómo usar el paquete de R eurolig para analizar los patrones de asistencias del FC Barcelona en esta temporada de Euroliga"
+subtitle: "Cómo usar el paquete eurolig para analizar los patrones de asistencias del FC Barcelona en esta temporada de Euroliga"
+summary: "Cómo usar el paquete eurolig para analizar los patrones de asistencias del FC Barcelona en esta temporada de Euroliga"
 author: Sergio Olmos
 date: '2019-03-28'
 slug: análisis-asistencia
