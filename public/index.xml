@@ -12,10 +12,10 @@
     
     <item>
       <title>Analyzing FC Barcelona&#39;s assists pattern</title>
-      <link>/post/2019-03-28-analisis-asistencia/analisis-asistencia/</link>
+      <link>/post/2019-03-28-eurolig/analisis-asistencia/</link>
       <pubDate>Thu, 28 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/2019-03-28-analisis-asistencia/analisis-asistencia/</guid>
+      <guid>/post/2019-03-28-eurolig/analisis-asistencia/</guid>
       <description>&lt;div id=&#34;introduction&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&#34;https://github.com/solmos/eurolig&#34;&gt;&lt;code&gt;eurolig&lt;/code&gt;&lt;/a&gt; is an R package that I just created for obtaining and analyzing basketball data games from the Euroleague. In this post I show how to use the package to analyze different aspects of the way FC Barcelona passes the ball in this Euroleague 2018-2019. More specifically, we are interested in finding out:&lt;/p&gt;
@@ -373,7 +373,7 @@ assists&lt;/code&gt;&lt;/pre&gt;
         subtitle = &amp;quot;Euroleague 2018-2019 (first 28 games)&amp;quot;,
         x = &amp;quot;Shooter&amp;quot;,
         y = &amp;quot;Passer&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/2019-03-28-análisis-asistencia/index_files/figure-html/unnamed-chunk-12-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-03-28-eurolig/index_files/figure-html/unnamed-chunk-12-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;The vertical axis represents the passer while the horizontal axis represents the player that shoots after the pass. The diagonal contains the total number of assists for each player. The color indicates the number of assists that a given player gives to other player.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;

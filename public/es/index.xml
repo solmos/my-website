@@ -12,10 +12,10 @@
     
     <item>
       <title>Análisis de los patrones de asistencias del FC Barcelona en Euroliga</title>
-      <link>/es/post/2019-03-28-analisis-asistencia/analisis-asistencia/</link>
+      <link>/es/post/2019-03-28-eurolig/analisis-asistencia/</link>
       <pubDate>Thu, 28 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>/es/post/2019-03-28-analisis-asistencia/analisis-asistencia/</guid>
+      <guid>/es/post/2019-03-28-eurolig/analisis-asistencia/</guid>
       <description>&lt;div id=&#34;introduccion&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Introducción&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&#34;https://github.com/solmos/eurolig&#34;&gt;&lt;code&gt;eurolig&lt;/code&gt;&lt;/a&gt; es un paquete de R que he creado para facilitar la obtención y el análisis de datos de partidos de Euroliga. En esta entrada muestro cómo utilizar &lt;code&gt;eurolig&lt;/code&gt; para analizar diferentes aspectos de cómo se pasa el balón el FC Barcelona en esta Euroliga 2018-2019. En concreto, estamos interesados en averiguar:&lt;/p&gt;
@@ -373,7 +373,7 @@ assists&lt;/code&gt;&lt;/pre&gt;
         subtitle = &amp;quot;Euroliga 2018-2019 (primeros 28 partidos)&amp;quot;,
         x = &amp;quot;Tirador&amp;quot;,
         y = &amp;quot;Pasador&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/2019-03-28-análisis-asistencia/index.es_files/figure-html/unnamed-chunk-12-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-03-28-eurolig/index.es_files/figure-html/unnamed-chunk-12-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;El eje vertical representa al pasador mientras que el eje horizontal representa al jugador que tira tras el pase. La diagonal de este heatmap contiene el número total de asistencias de cada jugador. El color indica el número de asistencias que un jugador ha dado a otro jugador.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
