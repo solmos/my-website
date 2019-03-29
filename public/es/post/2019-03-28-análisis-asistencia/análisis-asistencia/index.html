@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 3.0.0">
+  <meta name="generator" content="Hugo 0.49.2" />
+  <meta name="author" content="Sergio Olmos Pardo">
+
+  
+  
+  
+  
+    
+  
+  <meta name="description" content="Cómo usar el paquete de R eurolig para analizar los patrones de asistencias del FC Barcelona en esta temporada de Euroliga">
+
+  
+  <link rel="alternate" hreflang="en" href="/post/2019-03-28-an%C3%A1lisis-asistencia/an%C3%A1lisis-asistencia/">
+  
+  <link rel="alternate" hreflang="es" href="/es/post/2019-03-28-an%C3%A1lisis-asistencia/an%C3%A1lisis-asistencia/">
+
+  
+
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" crossorigin="anonymous">
+        
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700|Roboto:400,400italic,700|Roboto+Mono">
+  
+
+  <link rel="stylesheet" href="/es/styles.css">
+  
+
+  
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-131928090-1', 'auto');
+      
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+  
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Mínimos Cuadrados">
+  <link rel="feed" href="/index.xml" type="application/rss+xml" title="Mínimos Cuadrados">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="/es/post/2019-03-28-an%C3%A1lisis-asistencia/an%C3%A1lisis-asistencia/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Mínimos Cuadrados">
+  <meta property="og:url" content="/es/post/2019-03-28-an%C3%A1lisis-asistencia/an%C3%A1lisis-asistencia/">
+  <meta property="og:title" content="Análisis de los patrones de asistencias del FC Barcelona en Euroliga | Mínimos Cuadrados">
+  <meta property="og:description" content="Cómo usar el paquete de R eurolig para analizar los patrones de asistencias del FC Barcelona en esta temporada de Euroliga">
+  
+  
+    
+  <meta property="og:image" content="/img/icon-192.png">
+  <meta property="og:locale" content="es">
+  
+  <meta property="article:published_time" content="2019-03-28T00:00:00&#43;00:00">
+  
+  <meta property="article:modified_time" content="2019-03-28T00:00:00&#43;00:00">
+  
+
+  
+
+  
+
+  <title>Análisis de los patrones de asistencias del FC Barcelona en Euroliga | Mínimos Cuadrados</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#TableOfContents" data-offset="71" >
+
+<nav class="navbar navbar-light fixed-top navbar-expand-lg py-0" id="navbar-main">
+  <div class="container">
+
+    
+      <a class="navbar-brand" href="/es">Mínimos Cuadrados</a>
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Barra de navegación">
+        <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+    
+    <div class="collapse navbar-collapse" id="navbar">
+
+      
+      
+      <ul class="navbar-nav ml-auto">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/es/#posts">
+            
+            <span>Blog</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/es/#projects">
+            
+            <span>Proyectos</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/es/#about">
+            
+            <span>Sobre mí</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+      
+
+        
+
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">
+            <i class="fas fa-globe" aria-hidden="true"></i>
+            <span>Español</span>
+          </a>
+          <ul class="dropdown-menu">
+            
+            <li class="dropdown-item my-0 py-0 mx-0 px-0">
+              <a href="/post/2019-03-28-an%C3%A1lisis-asistencia/an%C3%A1lisis-asistencia/">
+                <span>English</span>
+              </a>
+            </li>
+            
+          </ul>
+        </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="article-header d-xl-none">
+  <img src="/es/post/2019-03-28-an%C3%A1lisis-asistencia/an%C3%A1lisis-asistencia/featured_hu1ca4b0f649aae609676632e5120c8532_581502_1600x400_fill_q90_box_smart1_2.png" class="article-banner" itemprop="image" alt="">
+  
+</div>
+
+
+<div class="container-fluid split-header d-none d-xl-block">
+  <div class="row">
+    <div class="col-6">
+      <div class="split-header-content">
+        <h1 itemprop="name">Análisis de los patrones de asistencias del FC Barcelona en Euroliga</h1>
+
+        
+        <p class="page-subtitle">Cómo usar el paquete de R eurolig para analizar los patrones de asistencias del FC Barcelona en esta temporada de Euroliga</p>
+        
+
+        
+
+<div class="article-metadata">
+
+  
+  
+  <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+  
+
+  <span class="article-date">
+    
+    <meta content="2019-03-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+    <time datetime="2019-03-28 00:00:00 &#43;0000 UTC" itemprop="dateModified">
+      Mar 28, 2019
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    8 min de lectura
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="/es/post/2019-03-28-an%C3%A1lisis-asistencia/an%C3%A1lisis-asistencia/#disqus_thread"></a>
+  
+
+  
+  
+  
+  
+
+  
+
+</div>
+
+
+        
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=An%c3%a1lisis%20de%20los%20patrones%20de%20asistencias%20del%20FC%20Barcelona%20en%20Euroliga&amp;url=%2fes%2fpost%2f2019-03-28-an%25C3%25A1lisis-asistencia%2fan%25C3%25A1lisis-asistencia%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fes%2fpost%2f2019-03-28-an%25C3%25A1lisis-asistencia%2fan%25C3%25A1lisis-asistencia%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fes%2fpost%2f2019-03-28-an%25C3%25A1lisis-asistencia%2fan%25C3%25A1lisis-asistencia%2f&amp;title=An%c3%a1lisis%20de%20los%20patrones%20de%20asistencias%20del%20FC%20Barcelona%20en%20Euroliga"
+         target="_blank" rel="noopener">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fes%2fpost%2f2019-03-28-an%25C3%25A1lisis-asistencia%2fan%25C3%25A1lisis-asistencia%2f&amp;title=An%c3%a1lisis%20de%20los%20patrones%20de%20asistencias%20del%20FC%20Barcelona%20en%20Euroliga"
+         target="_blank" rel="noopener">
+        <i class="fab fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=An%c3%a1lisis%20de%20los%20patrones%20de%20asistencias%20del%20FC%20Barcelona%20en%20Euroliga&amp;body=%2fes%2fpost%2f2019-03-28-an%25C3%25A1lisis-asistencia%2fan%25C3%25A1lisis-asistencia%2f">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="split-header-image">
+        <img src="/es/post/2019-03-28-an%C3%A1lisis-asistencia/an%C3%A1lisis-asistencia/featured_hu1ca4b0f649aae609676632e5120c8532_581502_680x500_fill_q90_box_smart1_2.png" itemprop="image" alt="">
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="article-container d-xl-none">
+  <h1 itemprop="name">Análisis de los patrones de asistencias del FC Barcelona en Euroliga</h1>
+
+  
+  <p class="page-subtitle">Cómo usar el paquete de R eurolig para analizar los patrones de asistencias del FC Barcelona en esta temporada de Euroliga</p>
+  
+
+  
+
+<div class="article-metadata">
+
+  
+  
+  <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+  
+
+  <span class="article-date">
+    
+    <meta content="2019-03-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+    <time datetime="2019-03-28 00:00:00 &#43;0000 UTC" itemprop="dateModified">
+      Mar 28, 2019
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    8 min de lectura
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="/es/post/2019-03-28-an%C3%A1lisis-asistencia/an%C3%A1lisis-asistencia/#disqus_thread"></a>
+  
+
+  
+  
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=An%c3%a1lisis%20de%20los%20patrones%20de%20asistencias%20del%20FC%20Barcelona%20en%20Euroliga&amp;url=%2fes%2fpost%2f2019-03-28-an%25C3%25A1lisis-asistencia%2fan%25C3%25A1lisis-asistencia%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fes%2fpost%2f2019-03-28-an%25C3%25A1lisis-asistencia%2fan%25C3%25A1lisis-asistencia%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fes%2fpost%2f2019-03-28-an%25C3%25A1lisis-asistencia%2fan%25C3%25A1lisis-asistencia%2f&amp;title=An%c3%a1lisis%20de%20los%20patrones%20de%20asistencias%20del%20FC%20Barcelona%20en%20Euroliga"
+         target="_blank" rel="noopener">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fes%2fpost%2f2019-03-28-an%25C3%25A1lisis-asistencia%2fan%25C3%25A1lisis-asistencia%2f&amp;title=An%c3%a1lisis%20de%20los%20patrones%20de%20asistencias%20del%20FC%20Barcelona%20en%20Euroliga"
+         target="_blank" rel="noopener">
+        <i class="fab fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=An%c3%a1lisis%20de%20los%20patrones%20de%20asistencias%20del%20FC%20Barcelona%20en%20Euroliga&amp;body=%2fes%2fpost%2f2019-03-28-an%25C3%25A1lisis-asistencia%2fan%25C3%25A1lisis-asistencia%2f">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style" itemprop="articleBody">
+      <div id="introduccion" class="section level2">
+<h2>Introducción</h2>
+<p><a href="https://github.com/solmos/eurolig"><code>eurolig</code></a> es un paquete de R que he creado para facilitar la obtención y el análisis de datos de partidos de Euroliga. En esta entrada muestro cómo utilizar <code>eurolig</code> para analizar diferentes aspectos de cómo se pasa el balón el FC Barcelona en esta Euroliga 2018-2019. En concreto, estamos interesados en averiguar:</p>
+<ol style="list-style-type: decimal">
+<li><p>Qué tipo de tiro genera cada jugador cuando da una asistencia</p></li>
+<li><p>Cuántos puntos generan las asistencias de cada jugador</p></li>
+<li><p>Quién asiste a quién</p></li>
+<li><p>Cómo visualizar las asistencias del equipo</p></li>
+</ol>
+<hr />
+</div>
+<div id="eurolig" class="section level2">
+<h2>eurolig</h2>
+<p>El paquete <code>eurolig</code> está en fase experimental y todavía tiene bastantes bugs. En este momento tan solo permite descargar datos jugada-a-jugada pero espero poder incluir la posibilidad de trabajar con otro tipo de datos como la localización de los tiros o estadísticas tradicionales.</p>
+<p>Podéis instalar el paquete desde Github:</p>
+<pre class="r"><code># install.packages(&quot;devtools&quot;)
+devtools::install_github(&quot;solmos/eurolig&quot;)</code></pre>
+<p>Tened en cuenta, sin embargo, que el paquete está en su fase inicial y habrá numerosos cambios con los problemas de reproducibilidad que esto supone. Aún así, descargadlo y jugad con él. Si detectáis algún bug o pensáis en alguna funcionalidad que creáis que pueda ser útil hacédmelo saber.</p>
+<p>Podéis estar al tanto de las novedades del paquete en el archivo <code>NEWS.md</code> del <a href="https://github.com/solmos/eurolig">repositorio</a>.</p>
+<hr />
+</div>
+<div id="analisis" class="section level2">
+<h2>Análisis</h2>
+<p>Los datos jugada-a-jugada nos permiten saber muchas cosas que no vemos en la tabla de estadísticas convencional. Son este tipo de datos los que nos van a permitir responder a nuestras preguntas sobre las asistencias del FC Barcelona en esta Euroliga.</p>
+<div id="obtencion-de-los-datos" class="section level3">
+<h3>Obtención de los datos</h3>
+<p>Podemos obtener los datos jugada-a-jugada introduciendo el código del partido/s junto con el año de la temporada correspondiente a la función <code>extract_pbp()</code>.</p>
+<p>El código del partido lo podemos encontrar en la propia URL de la página del partido. Por ejemplo, el último partido que disputó el FC Barcelona en esta Euroliga en el momento de escribir esto fue contra el Bayern de Munich en la ciudad alemana. La URL para este partido en la página oficial es</p>
+<p><a href="https://www.euroleague.net/main/results/showgame?gamecode=219&amp;seasoncode=E2018" class="uri">https://www.euroleague.net/main/results/showgame?gamecode=219&amp;seasoncode=E2018</a></p>
+<p>Observamos que el código del partido es 219 (<code>gamecode=219</code>). Introduciendo este código junto con el año de inicio de esta temporada en la función <code>extract_pbp()</code> obtenemos los datos jugada-a-jugada de este partido en un data frame:</p>
+<pre class="r"><code>library(eurolig)
+game_pbp &lt;- extract_pbp(game_code = 219, season = 2018)
+game_pbp</code></pre>
+<pre><code>## # A tibble: 518 x 18
+##    game_code play_number team_code player_name play_type time_remaining
+##    &lt;fct&gt;           &lt;int&gt; &lt;fct&gt;     &lt;fct&gt;       &lt;fct&gt;     &lt;chr&gt;         
+##  1 219                 2 &lt;NA&gt;      &lt;NA&gt;        BP        10:00         
+##  2 219                 3 MUN       RADOSEVIC,… TPOFF     09:59         
+##  3 219                 4 BAR       TOMIC, ANTE TPOFF     09:59         
+##  4 219                 5 BAR       RIBAS, PAU  3FGM      09:37         
+##  5 219                 6 BAR       TOMIC, ANTE AS        09:35         
+##  6 219                 7 MUN       LUCIC, VLA… 2FGA      09:20         
+##  7 219                 8 BAR       TOMIC, ANTE D         09:18         
+##  8 219                10 BAR       PANGOS, KE… 2FGA      08:58         
+##  9 219                11 MUN       LUCIC, VLA… D         08:55         
+## 10 219                12 MUN       JOVIC, STE… TO        08:34         
+## # … with 508 more rows, and 12 more variables: quarter &lt;fct&gt;,
+## #   points_home &lt;dbl&gt;, points_away &lt;dbl&gt;, team_name &lt;fct&gt;,
+## #   player_id &lt;fct&gt;, player_dorsal &lt;dbl&gt;, play_info &lt;chr&gt;, seconds &lt;dbl&gt;,
+## #   home_team &lt;fct&gt;, away_team &lt;fct&gt;, home &lt;lgl&gt;, season &lt;int&gt;</code></pre>
+<p>En el presente análisis queremos analizar más de un partido. En concreto, queremos obtener todos los partidos del FC Barcelona en la presente campaña. En lugar de ir buscando en la página web de la Euroliga todos los códigos de los partidos disputados por el FC Barcelona, podemos utilizar la función <code>extract_team_pbp()</code>. Con esta función basta con introducir el código del equipo y el año para obtener todos los partidos que ha disputado ese equipo en esa temporada.</p>
+<p>Procedemos pues a descargar los datos de todos los partidos que ha disputado el actual FC Barcelona hasta la fecha (25 de Marzo del 2019):</p>
+<pre class="r"><code>pbp &lt;- extract_team_pbp(team = &quot;BAR&quot;, season = 2018)</code></pre>
+<p>Nótese que lleva un tiempo considerable obtener el data frame final. No es por el tamaño de los datos, ni por falta de optimización del código. La función está diseñada para ser lenta. En la documentación de la API de la Euroliga se indica que dejemos unos segundos entre petición y petición para no saturar el servidor.</p>
+</div>
+<div id="analisis-de-asistencias" class="section level3">
+<h3>Análisis de asistencias</h3>
+<p>Para averiguar las diferentes preguntas que mencionamos en la introducción echamos mano de la función <code>get_assists()</code>. Introduciendo los datos jugada-a-jugada en esta función obtenemos un data frame con el que luego podremos averiguar muchos detalles interesantes con unas pocas líneas de código. Para ello utilizaremos principalmente el paquete <code>dplyr</code>.</p>
+<pre class="r"><code>library(dplyr)
+assists &lt;- get_assists(pbp, team = &quot;BAR&quot;)
+assists</code></pre>
+<pre><code>## # A tibble: 475 x 12
+##    game_code season passer shooter shot_type points time_remaining quarter
+##    &lt;fct&gt;     &lt;fct&gt;  &lt;fct&gt;  &lt;fct&gt;   &lt;fct&gt;      &lt;dbl&gt; &lt;chr&gt;          &lt;fct&gt;  
+##  1 2         2018   HEURT… CLAVER… 2FG            1 09:43          1      
+##  2 2         2018   CLAVE… TOMIC,… 2FG            2 08:39          1      
+##  3 2         2018   HEURT… TOMIC,… 2FG            2 07:44          1      
+##  4 2         2018   HEURT… SINGLE… 2FG            2 07:34          1      
+##  5 2         2018   CLAVE… SINGLE… 2FG            3 03:19          1      
+##  6 2         2018   ORIOL… SERAPH… 2FG            2 00:46          1      
+##  7 2         2018   SERAP… KURIC,… 3FG            3 00:13          1      
+##  8 2         2018   HEURT… ORIOLA… 2FG            2 07:08          2      
+##  9 2         2018   HEURT… SERAPH… 2FG            2 04:58          2      
+## 10 2         2018   BLAZI… PUSTOV… 2FG            2 01:17          2      
+## # … with 465 more rows, and 4 more variables: seconds &lt;int&gt;, foul &lt;lgl&gt;,
+## #   and1 &lt;dbl&gt;, ftm &lt;dbl&gt;</code></pre>
+<div id="que-tipo-de-tiro-genera-cada-jugador-cuando-da-una-asistencia" class="section level4">
+<h4>¿Qué tipo de tiro genera cada jugador cuando da una asistencia?</h4>
+<p>Con el data frame <code>assists</code> podemos averiguar el tipo de acción con la que culmina la asistencia. Una asistencia puede terminar con un tiro de tres, un tiro de dos, una falta personal de tiro o un tiro de campo más un tiro libre adicional.</p>
+<p>En este caso, pongamos que estamos interesados solamente en saber si se trata de un tiro de dos o un tiro de tres. Los jugadores del FC Barcelona con más de 10 asistencias en total distribuyen sus asistencias de la siguiente manera:</p>
+<pre class="r"><code>assists %&gt;% 
+    group_by(passer) %&gt;% 
+    summarise(
+        assists = n(),
+        two_pointers = sum(shot_type == &quot;2FG&quot;, na.rm = TRUE),
+        three_pointers = sum(shot_type == &quot;3FG&quot;, na.rm = TRUE),
+        `3pt_ratio` = round(three_pointers / assists, 3)
+    ) %&gt;% 
+    arrange(desc(assists)) %&gt;% 
+    filter(assists &gt; 10)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">passer</th>
+<th align="right">assists</th>
+<th align="right">two_pointers</th>
+<th align="right">three_pointers</th>
+<th align="right">3pt_ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HEURTEL, THOMAS</td>
+<td align="right">138</td>
+<td align="right">101</td>
+<td align="right">37</td>
+<td align="right">0.268</td>
+</tr>
+<tr class="even">
+<td align="left">PANGOS, KEVIN</td>
+<td align="right">92</td>
+<td align="right">55</td>
+<td align="right">36</td>
+<td align="right">0.391</td>
+</tr>
+<tr class="odd">
+<td align="left">TOMIC, ANTE</td>
+<td align="right">53</td>
+<td align="right">34</td>
+<td align="right">19</td>
+<td align="right">0.358</td>
+</tr>
+<tr class="even">
+<td align="left">RIBAS, PAU</td>
+<td align="right">47</td>
+<td align="right">33</td>
+<td align="right">14</td>
+<td align="right">0.298</td>
+</tr>
+<tr class="odd">
+<td align="left">HANGA, ADAM</td>
+<td align="right">30</td>
+<td align="right">20</td>
+<td align="right">10</td>
+<td align="right">0.333</td>
+</tr>
+<tr class="even">
+<td align="left">SINGLETON, CHRIS</td>
+<td align="right">26</td>
+<td align="right">15</td>
+<td align="right">11</td>
+<td align="right">0.423</td>
+</tr>
+<tr class="odd">
+<td align="left">CLAVER, VICTOR</td>
+<td align="right">23</td>
+<td align="right">12</td>
+<td align="right">11</td>
+<td align="right">0.478</td>
+</tr>
+<tr class="even">
+<td align="left">KURIC, KYLE</td>
+<td align="right">21</td>
+<td align="right">13</td>
+<td align="right">8</td>
+<td align="right">0.381</td>
+</tr>
+<tr class="odd">
+<td align="left">ORIOLA, PIERRE</td>
+<td align="right">15</td>
+<td align="right">8</td>
+<td align="right">7</td>
+<td align="right">0.467</td>
+</tr>
+<tr class="even">
+<td align="left">BLAZIC, JAKA</td>
+<td align="right">12</td>
+<td align="right">9</td>
+<td align="right">3</td>
+<td align="right">0.250</td>
+</tr>
+<tr class="odd">
+<td align="left">SERAPHIN, KEVIN</td>
+<td align="right">12</td>
+<td align="right">8</td>
+<td align="right">4</td>
+<td align="right">0.333</td>
+</tr>
+</tbody>
+</table>
+<p>En este caso Heurtel tiene el segundo menor ratio de asistencias a tiros de tres con respecto al total de asistencias dadas (0.268). Pangos, por otro lado, tiene una proporción bastante mayor de asistencias que van a la línea de tres (0.391).</p>
+<p>Los jugadores grandes y móviles del FC Barcelona, como Claver, Singleton u Oriola, dan una mayor proporción de sus asistencias a tiros de tres.</p>
+</div>
+<div id="cuantos-puntos-generan-las-asistencias-de-cada-jugador" class="section level4">
+<h4>¿Cuántos puntos generan las asistencias de cada jugador?</h4>
+<p>Como hemos visto, no todas las asistencias son iguales. Una asistencia a un tiro de 3 genera dos puntos más que una asistencia que resulta en una falta de tiro en la que el tirador sólo mete un tiro libre.</p>
+<p>Con las siguientes lineas de código podemos calcular cuántos puntos ha generado cada jugador del FC Barcelona con sus asistencias:</p>
+<pre class="r"><code>assists %&gt;% 
+    group_by(passer) %&gt;% 
+    summarise(
+        assists = n(),
+        points = sum(points, na.rm = TRUE),
+        ppa = round(points / assists, 3)
+    ) %&gt;% 
+    arrange(desc(assists)) %&gt;% 
+    filter(assists &gt; 10)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">passer</th>
+<th align="right">assists</th>
+<th align="right">points</th>
+<th align="right">ppa</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HEURTEL, THOMAS</td>
+<td align="right">138</td>
+<td align="right">311</td>
+<td align="right">2.254</td>
+</tr>
+<tr class="even">
+<td align="left">PANGOS, KEVIN</td>
+<td align="right">92</td>
+<td align="right">215</td>
+<td align="right">2.337</td>
+</tr>
+<tr class="odd">
+<td align="left">TOMIC, ANTE</td>
+<td align="right">53</td>
+<td align="right">121</td>
+<td align="right">2.283</td>
+</tr>
+<tr class="even">
+<td align="left">RIBAS, PAU</td>
+<td align="right">47</td>
+<td align="right">105</td>
+<td align="right">2.234</td>
+</tr>
+<tr class="odd">
+<td align="left">HANGA, ADAM</td>
+<td align="right">30</td>
+<td align="right">68</td>
+<td align="right">2.267</td>
+</tr>
+<tr class="even">
+<td align="left">SINGLETON, CHRIS</td>
+<td align="right">26</td>
+<td align="right">63</td>
+<td align="right">2.423</td>
+</tr>
+<tr class="odd">
+<td align="left">CLAVER, VICTOR</td>
+<td align="right">23</td>
+<td align="right">58</td>
+<td align="right">2.522</td>
+</tr>
+<tr class="even">
+<td align="left">KURIC, KYLE</td>
+<td align="right">21</td>
+<td align="right">48</td>
+<td align="right">2.286</td>
+</tr>
+<tr class="odd">
+<td align="left">ORIOLA, PIERRE</td>
+<td align="right">15</td>
+<td align="right">36</td>
+<td align="right">2.400</td>
+</tr>
+<tr class="even">
+<td align="left">BLAZIC, JAKA</td>
+<td align="right">12</td>
+<td align="right">26</td>
+<td align="right">2.167</td>
+</tr>
+<tr class="odd">
+<td align="left">SERAPHIN, KEVIN</td>
+<td align="right">12</td>
+<td align="right">28</td>
+<td align="right">2.333</td>
+</tr>
+</tbody>
+</table>
+<p>La última columna de esta tabla (<code>ppa</code>) nos da los puntos por asistencia que genera cada jugador (con más de 10 asistencias). Vemos que Claver y Singleton generan el máximo valor por asistencia, dado que un porcentaje relativamente alto de sus asistencias son a tiros de tres puntos.</p>
+</div>
+<div id="quien-pasa-a-quien" class="section level4">
+<h4>¿Quién pasa a quién?</h4>
+<p>También es posible hayar a quién han ido dirigidas las asistencias de cada jugador del FC Barcelona. A continuación se muestran las 10 combinaciones pasador-tirador más comunes en lo que llevamos de temporada:</p>
+<pre class="r"><code>assists %&gt;% 
+    group_by(passer, shooter) %&gt;% 
+    count() %&gt;% 
+    arrange(desc(n)) %&gt;% 
+    head(10)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">passer</th>
+<th align="left">shooter</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HEURTEL, THOMAS</td>
+<td align="left">SERAPHIN, KEVIN</td>
+<td align="right">27</td>
+</tr>
+<tr class="even">
+<td align="left">HEURTEL, THOMAS</td>
+<td align="left">TOMIC, ANTE</td>
+<td align="right">24</td>
+</tr>
+<tr class="odd">
+<td align="left">PANGOS, KEVIN</td>
+<td align="left">TOMIC, ANTE</td>
+<td align="right">22</td>
+</tr>
+<tr class="even">
+<td align="left">HEURTEL, THOMAS</td>
+<td align="left">ORIOLA, PIERRE</td>
+<td align="right">21</td>
+</tr>
+<tr class="odd">
+<td align="left">HEURTEL, THOMAS</td>
+<td align="left">SINGLETON, CHRIS</td>
+<td align="right">17</td>
+</tr>
+<tr class="even">
+<td align="left">PANGOS, KEVIN</td>
+<td align="left">KURIC, KYLE</td>
+<td align="right">16</td>
+</tr>
+<tr class="odd">
+<td align="left">PANGOS, KEVIN</td>
+<td align="left">SERAPHIN, KEVIN</td>
+<td align="right">15</td>
+</tr>
+<tr class="even">
+<td align="left">TOMIC, ANTE</td>
+<td align="left">SINGLETON, CHRIS</td>
+<td align="right">15</td>
+</tr>
+<tr class="odd">
+<td align="left">HEURTEL, THOMAS</td>
+<td align="left">CLAVER, VICTOR</td>
+<td align="right">12</td>
+</tr>
+<tr class="even">
+<td align="left">HEURTEL, THOMAS</td>
+<td align="left">KURIC, KYLE</td>
+<td align="right">12</td>
+</tr>
+</tbody>
+</table>
+<p>Las cinco combinaciones más comunes son entre base y pivot. Observamos que Heurtel se entiende muy bien con los interiores de su equipo, especialmente los dos cincos, Seraphin y Tomic. Esto explica la baja proporción de asistencias a tiros de tres que obervamos anteriormente.</p>
+<p>Algo que debemos tener en cuenta, sin embargo, es la cantidad de minutos que estas parejas de jugadores están juntas en la cancha. Este dato permitiría tener una medida ajustada y nos permitiría identificar posibles mejoras en los quintetos que tiene en pista el equipo.</p>
+</div>
+<div id="como-visualizar-las-asistencias-del-equipo" class="section level4">
+<h4>Cómo visualizar las asistencias del equipo</h4>
+<p>Es posible resumir algunos de los datos que hemos obtenido anteriormente mediante un <em>heatmap</em> que muestre la distribución de las asistencias. Para ello hacemos uso de la función <code>plot_heatmap()</code>:</p>
+<pre class="r"><code>plot_heatmap(pbp, &quot;BAR&quot;) +
+    ggplot2::labs(
+        title = &quot;Patrón de asistencias del FC Barcelona&quot;,
+        subtitle = &quot;Euroliga 2018-2019 (primeros 28 partidos)&quot;,
+        x = &quot;Tirador&quot;,
+        y = &quot;Pasador&quot;)</code></pre>
+<p><img src="/post/2019-03-28-análisis-asistencia/index.es_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>El eje vertical representa al pasador mientras que el eje horizontal representa al jugador que tira tras el pase. La diagonal de este heatmap contiene el número total de asistencias de cada jugador. El color indica el número de asistencias que un jugador ha dado a otro jugador.</p>
+</div>
+</div>
+</div>
+
+    </div>
+
+    
+
+
+
+
+    
+
+
+
+
+
+
+<div class="media author-card" itemscope itemtype="http://schema.org/Person">
+  
+  <img class="portrait mr-3" src="/img/foto_perfil.jpg" itemprop="image" alt="Avatar">
+  
+  <div class="media-body">
+    <h5 class="card-title" itemprop="name"><a href="/es">Sergio Olmos Pardo</a></h5>
+    <h6 class="card-subtitle">Estadístico y jugador de baloncesto</h6>
+    
+    <ul class="network-icon" aria-hidden="true">
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="mailto:solmos41@gmail.com" target="_blank" rel="noopener">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//twitter.com/solmos41" target="_blank" rel="noopener">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//github.com/solmos" target="_blank" rel="noopener">
+          <i class="fab fa-github"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//linkedin.com/in/sergio-olmos" target="_blank" rel="noopener">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="files/cv.pdf" target="_blank" rel="noopener">
+          <i class="ai ai-cv"></i>
+        </a>
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+
+
+    
+    
+
+    
+
+    
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "solmos" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+  </div>
+</article>
+
+<div class="container">
+  <footer class="site-footer">
+  
+
+  <p class="powered-by">
+    &copy; 2018 &middot; 
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" id="back_to_top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+</div>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Citar</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copiar
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Descargar
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    
+    
+    <script src="/js/mathjax-config.500a6cbb2c0f345fcecc21b3116d6637aa78f1f11db8081ea581abe05390c2e8f3bbffe61be3cf0217baf785c40efceabe51050a4f007e69af94efd3643260e8.js" integrity="sha512-UApsuywPNF/OzCGzEW1mN6p48fEduAgepYGr4FOQwujzu//mG&#43;PPAhe694XEDvzqvlEFCk8AfmmvlO/TZDJg6A=="></script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha512-+NqPlbbtM1QqiK8ZAo4Yrj2c4lNQoGv8P79DPtKzj++l5jnN39rHA/xsqn8zE9l0uSoxaCdrOgFs6yjyfbBxSg==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+
+    
+    
+    
+    <script id="dsq-count-scr" src="//solmos.disqus.com/count.js" async></script>
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/index.json";
+      const i18n = {
+        'placeholder': "Search...",
+        'results': "Search Results",
+        'no_results': "No results found"
+      };
+      const content_type = {
+        'post': "Posts",
+        'project': "Proyectos",
+        'publication' : "Publicaciones",
+        'talk' : "Conferencias"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    <script src="/js/search.js"></script>
+    
+
+    
+    
+
+  </body>
+</html>
+
