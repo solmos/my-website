@@ -5,8 +5,12 @@ summary: "How to use the eurolig package to analyze the patterns in assists for 
 author: Sergio Olmos
 date: '2019-03-28'
 slug: análisis-asistencia
-categories: []
-tags: []
+categories:
+    - English
+tags:
+    - Basketball
+    - Basketball analytics
+    - R
 image:
   caption: ''
   focal_point: ''

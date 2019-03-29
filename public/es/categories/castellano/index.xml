@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>es</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Wed, 20 Feb 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 28 Mar 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/es/categories/castellano/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Análisis de los patrones de asistencias del FC Barcelona en Euroliga</title>
+      <link>/es/post/2019-03-28-an%C3%A1lisis-asistencia/an%C3%A1lisis-asistencia/</link>
+      <pubDate>Thu, 28 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/es/post/2019-03-28-an%C3%A1lisis-asistencia/an%C3%A1lisis-asistencia/</guid>
+      <description>Introducción eurolig es un paquete de R que he creado para facilitar la obtención y el análisis de datos de partidos de Euroliga. En esta entrada muestro cómo utilizar eurolig para analizar diferentes aspectos de cómo se pasa el balón el FC Barcelona en esta Euroliga 2018-2019. En concreto, estamos interesados en averiguar:
+Qué tipo de tiro genera cada jugador cuando da una asistencia
+ Cuántos puntos generan las asistencias de cada jugador</description>
+    </item>
     
     <item>
       <title>La secuencia de Recamán</title>
