@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Wed, 27 Apr 2016 00:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 01 Aug 2019 00:00:00 +0200</lastBuildDate>
     
 	<atom:link href="/tags/basketball-analytics/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,9 +15,18 @@
     <item>
       <title>eurolig</title>
       <link>/project/eurolig/</link>
-      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
+      <pubDate>Thu, 01 Aug 2019 00:00:00 +0200</pubDate>
       
       <guid>/project/eurolig/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>rfeb</title>
+      <link>/project/rfeb/</link>
+      <pubDate>Sat, 20 Jul 2019 00:00:00 +0200</pubDate>
+      
+      <guid>/project/rfeb/</guid>
       <description></description>
     </item>
     

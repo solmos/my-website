@@ -4,6 +4,28 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/project/eurolig/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/project/eurolig/" hreflang="es"/>
+    
+      <loc>/project/eurolig/</loc>
+      <lastmod>2019-08-01T00:00:00+02:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
+      <xhtml:link rel="alternate" href="/project/rfeb/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/project/rfeb/" hreflang="es"/>
+    
+      <loc>/project/rfeb/</loc>
+      <lastmod>2019-07-20T00:00:00+02:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <xhtml:link rel="alternate" href="/post/2019-03-28-eurolig/analisis-asistencia/" hreflang="en"/>
       <xhtml:link rel="alternate" href="/es/post/2019-03-28-eurolig/analisis-asistencia/" hreflang="es"/>
     
@@ -118,14 +140,6 @@
     
     <url>
     
-      <loc>/project/eurolig/</loc>
-      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
-    </url>
-    
-  
-    
-    <url>
-    
       <loc>/publication/person-re-id/</loc>
       <lastmod>2015-09-01T00:00:00+02:00</lastmod>
     </url>
@@ -226,7 +240,7 @@
       <xhtml:link rel="alternate" href="/es/project/" hreflang="es"/>
     
       <loc>/project/</loc>
-      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
+      <lastmod>2019-08-01T00:00:00+02:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -297,8 +311,11 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/tags/basketball-analytics/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/tags/basketball-analytics/" hreflang="es"/>
+    
       <loc>/tags/basketball-analytics/</loc>
-      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
+      <lastmod>2019-08-01T00:00:00+02:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -346,7 +363,7 @@
       <xhtml:link rel="alternate" href="/es/tags/statistics/" hreflang="es"/>
     
       <loc>/tags/statistics/</loc>
-      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
+      <lastmod>2019-08-01T00:00:00+02:00</lastmod>
       <priority>0</priority>
     </url>
     

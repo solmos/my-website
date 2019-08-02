@@ -52,11 +52,11 @@ enableGitInfo = false
 
   # Your details.
   name = "Sergio Olmos Pardo"
-  role = "Statistician and Basketball Player"
+  role = "Data scientist and basketball player"
 
   # Organizations/Affiliations.
   #   Separate multiple entries with a comma, using the form: `[ {name="Org1", url=""}, {name="Org2", url=""} ]`.
-  organizations = [ { name = "Biostatech", url = "http://biostatech.com" } ]
+  organizations = [ { name = "Granada, Spain", url = "" } ]
 
   gravatar = false  # Get your avatar from Gravatar.com? (true/false)
   avatar = "foto_perfil.jpg"  # Specify an avatar image (in `static/img/` folder) or delete value to disable avatar.
@@ -358,10 +358,10 @@ enableGitInfo = false
 # Uncomment the lines below to configure your website in a second language.
 [languages.es]
   languageCode = "es"
-  title = "Mínimos Cuadrados"
+  title = "Sergio Olmos"
   [languages.es.params]
     name = "Sergio Olmos Pardo"
-    role = "Estadístico y jugador de baloncesto"
+    role = "Científico de datos y jugador de baloncesto"
   [[languages.es.menu.main]]
     name = "Sobre mí"
     url = "#about"

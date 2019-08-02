@@ -3,7 +3,7 @@
 title = "eurolig"
 
 # Date this page was created.
-date = 2016-04-27T00:00:00
+date = 2019-08-01T00:00:00
 
 # Project summary to display on homepage.
 summary = "R package for analyzing basketball data from the Euroleague"
@@ -24,5 +24,5 @@ external_link = "https://github.com/solmos/eurolig"
 
   # Focal point (optional)
   # Options: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight
-  focal_point = "Smart"
+  focal_point = "Center"
 +++

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on Mínimos Cuadrados</title>
+    <title>Tags on Sergio Olmos</title>
     <link>/es/tags/</link>
-    <description>Recent content in Tags on Mínimos Cuadrados</description>
+    <description>Recent content in Tags on Sergio Olmos</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>es</language>
     <copyright>&amp;copy; 2018</copyright>
@@ -67,6 +67,15 @@
     </item>
     
     <item>
+      <title>basketball analytics</title>
+      <link>/es/tags/basketball-analytics/</link>
+      <pubDate>Thu, 01 Aug 2019 00:00:00 +0200</pubDate>
+      
+      <guid>/es/tags/basketball-analytics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>hierarchical models</title>
       <link>/es/tags/hierarchical-models/</link>
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
@@ -96,7 +105,7 @@
     <item>
       <title>statistics</title>
       <link>/es/tags/statistics/</link>
-      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
+      <pubDate>Thu, 01 Aug 2019 00:00:00 +0200</pubDate>
       
       <guid>/es/tags/statistics/</guid>
       <description></description>

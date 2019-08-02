@@ -1,16 +1,34 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Projects on Mínimos Cuadrados</title>
+    <title>Projects on Sergio Olmos</title>
     <link>/es/project/</link>
-    <description>Recent content in Projects on Mínimos Cuadrados</description>
+    <description>Recent content in Projects on Sergio Olmos</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>es</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Wed, 27 Apr 2016 00:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 01 Aug 2019 00:00:00 +0200</lastBuildDate>
     
 	<atom:link href="/es/project/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>eurolig</title>
+      <link>/es/project/eurolig/</link>
+      <pubDate>Thu, 01 Aug 2019 00:00:00 +0200</pubDate>
+      
+      <guid>/es/project/eurolig/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>rfeb</title>
+      <link>/es/project/rfeb/</link>
+      <pubDate>Sat, 20 Jul 2019 00:00:00 +0200</pubDate>
+      
+      <guid>/es/project/rfeb/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Analysis of clustered data using linear mixed models</title>
