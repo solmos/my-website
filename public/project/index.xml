@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Projects on Mínimos Cuadrados</title>
+    <title>Projects on Sergio Olmos</title>
     <link>/project/</link>
-    <description>Recent content in Projects on Mínimos Cuadrados</description>
+    <description>Recent content in Projects on Sergio Olmos</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
@@ -18,6 +18,15 @@
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
       
       <guid>/project/tfm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>eurolig</title>
+      <link>/project/eurolig/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>/project/eurolig/</guid>
       <description></description>
     </item>
     
