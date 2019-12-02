@@ -19,7 +19,7 @@ image:
 # knitr::opts_chunk$set()
 ```
 
-eurolig proporciona un kit de herramientas para obtener y analizar datos de la Euroliga. El paquete está diseñado principalmente para trabajar con dos tipos de datos de baloncesto: datos jugada a jugada y datos de localización de tiros. A pesar de que la primera temporada de la Euroliga fue en 2l 2000, los datos jugada a jugada y de localización de tiros solo están disponibles desde la temporada 2007/2008. Este artículo introduce la nueva version del paquete (0.4.0) y muestra cómo puede ser usado para realizar algunos análisis sencillos.
+eurolig proporciona un kit de herramientas para obtener y analizar datos de la Euroliga con R. El paquete está diseñado principalmente para trabajar con dos tipos de datos de baloncesto: datos jugada a jugada y datos de localización de tiros. A pesar de que la primera temporada de la Euroliga fue en el 2000, los datos jugada a jugada y de localización de tiros solo están disponibles desde la temporada 2007/2008. Este artículo introduce la nueva version del paquete (0.4.0) y muestra cómo puede ser usado para realizar algunos análisis sencillos.
 
 
 ## Cambios en la nueva versión
