@@ -11,6 +11,236 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Introduction to eurolig</title>
+      <link>/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/</link>
+      <pubDate>Thu, 28 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/</guid>
+      <description>&lt;p&gt;eurolig provides a toolkit to easily retrieve and analyze basketball generated data for the Euroleague. The package is mainly designed to work with two types of data: play-by-play data and shot location data. Although Euroleague’s first season was in 2000, play-by-play and shot location data is only available since the 2007/2008 season. This post introduces the latest realease of the package (v0.4.0) and shows how it could be used to do some basic analyses.&lt;/p&gt;
+&lt;div id=&#34;changes-in-the-new-version&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Changes in the new version&lt;/h2&gt;
+&lt;p&gt;If you already used or knew about eurolig from an earlier &lt;a href=&#34;https://solmos.netlify.com/post/2019-03-28-eurolig/analisis-asistencia/&#34;&gt;post&lt;/a&gt;, you will notice quite some changes and added functionality. The previous (and first) version (0.0.0.900) of eurolig was very raw and experimental. In the new version (0.4.0) I haved added much more functionality and provided basic documentation.&lt;/p&gt;
+&lt;p&gt;The most important changes are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;camelCase for function names (instead of snake_case).&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Removed the &lt;code&gt;plot_heatmap()&lt;/code&gt; functionality that produced assist pattern heatmaps.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Output play-by-play data frames contain different variables.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Although there are a lot of changes, I did not keep old functions in the release because I think not many people are using the package. Old code will probably not work with the new realease. Note however that adapting old code to the new version will most likely be straight forward.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;required-packages&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Required packages&lt;/h2&gt;
+&lt;p&gt;You will need to install the eurolig package from its GitHub &lt;a href=&#34;https://github.com/solmos/eurolig&#34;&gt;repository&lt;/a&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# install.packages(&amp;quot;devtools&amp;quot;)
+devtools::install_github(&amp;quot;solmos/eurolig&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In addition to eurolig, the following packages are needed to reproduce this post:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(eurolig)
+library(dplyr)
+library(ggplot2)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;getting-data&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Getting data&lt;/h2&gt;
+&lt;div id=&#34;datasets&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Datasets&lt;/h3&gt;
+&lt;p&gt;Several datasets are included in the package. You can see all the available datasets by calling:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data(package = &amp;quot;eurolig&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Sample datasets of play-by-play and shot location data are stored in &lt;code&gt;samplepbp&lt;/code&gt; and &lt;code&gt;sampleshots&lt;/code&gt;, respectively.&lt;/p&gt;
+&lt;p&gt;A particularly useful dataset in the package is &lt;code&gt;gameresults&lt;/code&gt;. It contains all game results in the Euroleague from the 2001/2002 season to the 2018/2019 season. As you will see in the next section, this dataset can be useful to find the games you want to get data from.&lt;/p&gt;
+&lt;p&gt;Finally, if we need to find the name or identifying code of teams, the &lt;code&gt;teaminfo&lt;/code&gt; dataset can be helpful.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;extract-functions&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;&lt;code&gt;extract&lt;/code&gt; functions&lt;/h3&gt;
+&lt;p&gt;Functions that retrieve data from Euroleague’s website API start with the verb &lt;code&gt;extract&lt;/code&gt;. You will need to be online for these functions to work.&lt;/p&gt;
+&lt;p&gt;The main functions to get data are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;extractPbp()&lt;/code&gt; for play-by-play data.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;extractShots()&lt;/code&gt; for shot location data.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;These functions can only retrieve data from a single game. That means that if you want to get data for several games you will need to iterate the function over the games of interest. Note, however, that &lt;strong&gt;Euroleague’s &lt;code&gt;robot.txt&lt;/code&gt; asks for a 15 (!) seconds delay between requests&lt;/strong&gt;. Take this into consideration when requesting data for a lot of games.&lt;/p&gt;
+&lt;p&gt;Games are uniquely identified by a combination of season and game code. In order to indicate the &lt;code&gt;extract&lt;/code&gt; functions what game we want to get data from, we need to pass the corresponding game code and season as arguments.&lt;/p&gt;
+&lt;p&gt;Let’s find the highest scoring games from the 2018/2019 season in the &lt;code&gt;gameresults&lt;/code&gt; dataset:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;games &amp;lt;- gameresults %&amp;gt;% 
+  filter(season == 2018) %&amp;gt;% 
+  mutate(total_points = points_home + points_away) %&amp;gt;% 
+  arrange(desc(total_points))
+
+head(games)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 6 x 14
+##   season phase round_name team_home points_home team_away points_away
+##    &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt;      &amp;lt;chr&amp;gt;           &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt;           &amp;lt;int&amp;gt;
+## 1   2018 RS    Round 21   Herbalif…         104 AX Arman…         106
+## 2   2018 RS    Round 16   AX Arman…         111 Buducnos…          94
+## 3   2018 RS    Round 1    Real Mad…         109 Darussaf…          93
+## 4   2018 RS    Round 4    Herbalif…          91 CSKA Mos…         106
+## 5   2018 RS    Round 8    CSKA Mos…          99 Zalgiris…          97
+## 6   2018 RS    Round 25   CSKA Mos…         101 AX Arman…          95
+## # … with 7 more variables: game_code &amp;lt;int&amp;gt;, date &amp;lt;chr&amp;gt;, round_code &amp;lt;int&amp;gt;,
+## #   game_url &amp;lt;chr&amp;gt;, team_code_home &amp;lt;chr&amp;gt;, team_code_away &amp;lt;chr&amp;gt;,
+## #   total_points &amp;lt;int&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can see that last season’s highest scoring game was the Herbalife Gran Canaria vs. AX Armani Exchange Olimpia Milan with 210 total points scored between the two teams. The identifying game code and season for this game are&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;games$season[1]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 2018&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;games$game_code[1]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 168&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can get play-by-play and shot location data for this game by passing these values as arguments to &lt;code&gt;extractShots()&lt;/code&gt; and &lt;code&gt;extractPbp()&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;game_shots &amp;lt;- extractShots(game_code = 168, season = 2018)
+game_pbp &amp;lt;- extractPbp(168, 2018)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you want to find games for the current season (not included in the &lt;code&gt;gameresults&lt;/code&gt; dataset), you have two options: either look up the game code in the game’s url or use &lt;code&gt;extractResults()&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;analyzing-play-by-play-data&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Analyzing play-by-play data&lt;/h2&gt;
+&lt;p&gt;Play-by-play data provides a lot of information that traditional boxscore statistics fail to communicate. In the following subsections I am going to show how we can find the following information from play-by-play data:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Plus-Minus for one or more players.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;On/Off statistics for one or more players.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Assists patterns within a team&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For these analyses I am going to use the sample dataset &lt;code&gt;samplepbp&lt;/code&gt; which contains the play-by-play data for all four games of the 2018/2019 Euroleague Final Four:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data(&amp;quot;samplepbp&amp;quot;)
+glimpse(samplepbp)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Observations: 2,121
+## Variables: 29
+## $ season         &amp;lt;int&amp;gt; 2018, 2018, 2018, 2018, 2018, 2018, 2018, 2018, 2…
+## $ game_code      &amp;lt;int&amp;gt; 257, 257, 257, 257, 257, 257, 257, 257, 257, 257,…
+## $ play_number    &amp;lt;int&amp;gt; 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 1…
+## $ team_code      &amp;lt;chr&amp;gt; NA, &amp;quot;ULK&amp;quot;, &amp;quot;IST&amp;quot;, &amp;quot;ULK&amp;quot;, &amp;quot;IST&amp;quot;, &amp;quot;IST&amp;quot;, &amp;quot;ULK&amp;quot;, &amp;quot;IS…
+## $ player_name    &amp;lt;chr&amp;gt; NA, &amp;quot;DUVERIOGLU, AHMET&amp;quot;, &amp;quot;DUNSTON, BRYANT&amp;quot;, &amp;quot;MUHA…
+## $ play_type      &amp;lt;chr&amp;gt; &amp;quot;BP&amp;quot;, &amp;quot;TPOFF&amp;quot;, &amp;quot;TPOFF&amp;quot;, &amp;quot;2FGM&amp;quot;, &amp;quot;2FGA&amp;quot;, &amp;quot;RBLK&amp;quot;, &amp;quot;…
+## $ time_remaining &amp;lt;chr&amp;gt; &amp;quot;10:00&amp;quot;, &amp;quot;09:59&amp;quot;, &amp;quot;09:59&amp;quot;, &amp;quot;09:42&amp;quot;, &amp;quot;09:19&amp;quot;, &amp;quot;09:…
+## $ quarter        &amp;lt;dbl&amp;gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+## $ points_home    &amp;lt;dbl&amp;gt; 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5, 5…
+## $ points_away    &amp;lt;dbl&amp;gt; 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2…
+## $ play_info      &amp;lt;chr&amp;gt; &amp;quot;Begin Period&amp;quot;, &amp;quot;&amp;quot;, &amp;quot;&amp;quot;, &amp;quot;Two Pointer (1/1 -  2 pt…
+## $ seconds        &amp;lt;dbl&amp;gt; 0, 1, 1, 18, 41, 41, 44, 45, 47, 56, 56, 67, 68, …
+## $ home_team      &amp;lt;chr&amp;gt; &amp;quot;Fenerbahce Beko Istanbul&amp;quot;, &amp;quot;Fenerbahce Beko Ista…
+## $ away_team      &amp;lt;chr&amp;gt; &amp;quot;Anadolu Efes Istanbul&amp;quot;, &amp;quot;Anadolu Efes Istanbul&amp;quot;,…
+## $ home           &amp;lt;lgl&amp;gt; NA, TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE,…
+## $ team_name      &amp;lt;chr&amp;gt; NA, &amp;quot;Fenerbahce Beko Istanbul&amp;quot;, &amp;quot;Anadolu Efes Ist…
+## $ last_ft        &amp;lt;lgl&amp;gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, …
+## $ and1           &amp;lt;lgl&amp;gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, …
+## $ home_player1   &amp;lt;chr&amp;gt; &amp;quot;GREEN, ERICK&amp;quot;, &amp;quot;GREEN, ERICK&amp;quot;, &amp;quot;GREEN, ERICK&amp;quot;, &amp;quot;…
+## $ home_player2   &amp;lt;chr&amp;gt; &amp;quot;MELLI, NICOLO&amp;quot;, &amp;quot;MELLI, NICOLO&amp;quot;, &amp;quot;MELLI, NICOLO&amp;quot;…
+## $ home_player3   &amp;lt;chr&amp;gt; &amp;quot;GUDURIC, MARKO&amp;quot;, &amp;quot;GUDURIC, MARKO&amp;quot;, &amp;quot;GUDURIC, MAR…
+## $ home_player4   &amp;lt;chr&amp;gt; &amp;quot;MUHAMMED, ALI&amp;quot;, &amp;quot;MUHAMMED, ALI&amp;quot;, &amp;quot;MUHAMMED, ALI&amp;quot;…
+## $ home_player5   &amp;lt;chr&amp;gt; &amp;quot;DUVERIOGLU, AHMET&amp;quot;, &amp;quot;DUVERIOGLU, AHMET&amp;quot;, &amp;quot;DUVERI…
+## $ away_player1   &amp;lt;chr&amp;gt; &amp;quot;LARKIN, SHANE&amp;quot;, &amp;quot;LARKIN, SHANE&amp;quot;, &amp;quot;LARKIN, SHANE&amp;quot;…
+## $ away_player2   &amp;lt;chr&amp;gt; &amp;quot;MOERMAN, ADRIEN&amp;quot;, &amp;quot;MOERMAN, ADRIEN&amp;quot;, &amp;quot;MOERMAN, A…
+## $ away_player3   &amp;lt;chr&amp;gt; &amp;quot;MICIC, VASILIJE&amp;quot;, &amp;quot;MICIC, VASILIJE&amp;quot;, &amp;quot;MICIC, VAS…
+## $ away_player4   &amp;lt;chr&amp;gt; &amp;quot;DUNSTON, BRYANT&amp;quot;, &amp;quot;DUNSTON, BRYANT&amp;quot;, &amp;quot;DUNSTON, B…
+## $ away_player5   &amp;lt;chr&amp;gt; &amp;quot;SIMON, KRUNOSLAV&amp;quot;, &amp;quot;SIMON, KRUNOSLAV&amp;quot;, &amp;quot;SIMON, K…
+## $ lineups        &amp;lt;chr&amp;gt; &amp;quot;GREEN, ERICK - MELLI, NICOLO - GUDURIC, MARKO - …&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;plus-minus&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Plus-Minus&lt;/h3&gt;
+&lt;p&gt;Plus-minus (+/-) measures the difference in team points scored and team points allowed while a player or a set of players of the same team are on the court. &lt;code&gt;getPlusMinus()&lt;/code&gt; parses a play-by-play data frame with one or more games and returns the indicated player/s plus-minus statistic in each game.&lt;/p&gt;
+&lt;p&gt;Although widely used nowadays, it is important to note that raw plus-minus is very unstable and totally context dependent. It is, however, the building block for other more advanced stats such as RAPM or RPM.&lt;/p&gt;
+&lt;p&gt;Let’s check what Sergio Rodriguez (aka El Chacho) plus-minus was in the two Final Four games that he played in the 2018/2019 season:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;chacho_pm &amp;lt;- getPlusMinus(pbp = samplepbp, players = &amp;quot;RODRIGUEZ, SERGIO&amp;quot;)
+# Select only a few columns so that data frame fits in the document
+chacho_pm %&amp;gt;% 
+  select(game_code, team_code_opp, poss, poss_opp, plus_minus)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 2 x 5
+##   game_code team_code_opp  poss poss_opp plus_minus
+##       &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt;         &amp;lt;dbl&amp;gt;    &amp;lt;dbl&amp;gt;      &amp;lt;dbl&amp;gt;
+## 1       258 MAD              44       42          8
+## 2       260 IST              24       25        -10&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note that you can find the plus-minus statistic for combinations of players by entering a character vector with the player names in the &lt;code&gt;players&lt;/code&gt; argument.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;onoff-statistics&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;On/Off Statistics&lt;/h3&gt;
+&lt;p&gt;On/Off statistics for a player or a set of players measure team statistics when the player or players where on the court and when they were on the bench.&lt;/p&gt;
+&lt;p&gt;You can use &lt;code&gt;getOnOffStats()&lt;/code&gt; to find on/off statistics. For instance, I can find out how Real Madrid did when Rudy and Ayón were together on the court versus when both were on the bench in the two games played in the 2018/2019 Final Four.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;getOnOffStats(pbp = samplepbp, players = c(&amp;quot;FERNANDEZ, RUDY&amp;quot;, &amp;quot;AYON, GUSTAVO&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 8 x 28
+##   season game_code players on    type  team_code home   fg2a  fg2m fg2_pct
+##    &amp;lt;int&amp;gt;     &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt;   &amp;lt;lgl&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt;     &amp;lt;lgl&amp;gt; &amp;lt;int&amp;gt; &amp;lt;int&amp;gt;   &amp;lt;dbl&amp;gt;
+## 1   2018       258 FERNAN… TRUE  defe… CSK       TRUE      5     1   0.2  
+## 2   2018       258 FERNAN… TRUE  offe… MAD       FALSE     3     2   0.667
+## 3   2018       259 FERNAN… TRUE  offe… MAD       FALSE    20    14   0.7  
+## 4   2018       259 FERNAN… TRUE  defe… ULK       TRUE     15     7   0.467
+## 5   2018       258 FERNAN… FALSE defe… CSK       TRUE     33    16   0.485
+## 6   2018       258 FERNAN… FALSE offe… MAD       FALSE    43    22   0.512
+## 7   2018       259 FERNAN… FALSE offe… MAD       FALSE    15     9   0.6  
+## 8   2018       259 FERNAN… FALSE defe… ULK       TRUE     17     9   0.529
+## # … with 18 more variables: fg3a &amp;lt;int&amp;gt;, fg3m &amp;lt;int&amp;gt;, fg3_pct &amp;lt;dbl&amp;gt;,
+## #   fga &amp;lt;int&amp;gt;, fgm &amp;lt;int&amp;gt;, fg_pct &amp;lt;dbl&amp;gt;, fta &amp;lt;int&amp;gt;, ftm &amp;lt;int&amp;gt;,
+## #   ft_pct &amp;lt;dbl&amp;gt;, orb &amp;lt;int&amp;gt;, drb &amp;lt;int&amp;gt;, tov &amp;lt;int&amp;gt;, ast &amp;lt;int&amp;gt;, stl &amp;lt;int&amp;gt;,
+## #   cpf &amp;lt;int&amp;gt;, blk &amp;lt;int&amp;gt;, pts &amp;lt;dbl&amp;gt;, poss &amp;lt;dbl&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note that &lt;code&gt;getOnOffStats()&lt;/code&gt; returns 4 rows per game corresponding to:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Team statistics when players were on the court together.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Opposing team statistics when players were on the court together.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Team statistics when players were on the bench together.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Opposing team statistics when players were on the bench together.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;assists-patterns&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Assists patterns&lt;/h3&gt;
+&lt;p&gt;Play-by-play data allows us to find out who assists who on assisted baskets. The function &lt;code&gt;getAssists()&lt;/code&gt; returns a data frame with the passer and the shooter (plus more contextual information) for all assisted baskets in the input play-by-play data.&lt;/p&gt;
+&lt;p&gt;I am going to use &lt;code&gt;getAssists()&lt;/code&gt; and some data wrangling to find out the most common assists in CSKA Moscow during the two games of the 2018/2019 Final Four:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;assists_csk &amp;lt;- getAssists(pbp = samplepbp, team = &amp;quot;CSK&amp;quot;)
+assists_csk %&amp;gt;% 
+  count(passer, shooter) %&amp;gt;% 
+  arrange(desc(n))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 25 x 3
+##    passer            shooter              n
+##    &amp;lt;chr&amp;gt;             &amp;lt;chr&amp;gt;            &amp;lt;int&amp;gt;
+##  1 CLYBURN, WILL     HIGGINS, CORY        2
+##  2 DE COLO, NANDO    HACKETT, DANIEL      2
+##  3 HACKETT, DANIEL   HUNTER, OTHELLO      2
+##  4 RODRIGUEZ, SERGIO HINES, KYLE          2
+##  5 CLYBURN, WILL     DE COLO, NANDO       1
+##  6 DE COLO, NANDO    CLYBURN, WILL        1
+##  7 DE COLO, NANDO    HUNTER, OTHELLO      1
+##  8 DE COLO, NANDO    KURBANOV, NIKITA     1
+##  9 DE COLO, NANDO    PETERS, ALEC         1
+## 10 HACKETT, DANIEL   CLYBURN, WILL        1
+## # … with 15 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;analyzing-shot-location-data&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Analyzing shot location data&lt;/h2&gt;
+&lt;p&gt;Shot location data specifies the x and y coordinates of every jump shot taken during a game. This data can be useful for, say, identifying shooting location tenedencies on offense of a given player/team, showing what spots on the court a player is most effective at, or analyzing what type of shots a team allows its opponents.&lt;/p&gt;
+&lt;p&gt;For the following analysis, I am going to use the &lt;code&gt;sampleshots&lt;/code&gt; dataset, which contains the shot location data for the four games in the 2018/2019 Final Four.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;glimpse(sampleshots)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Observations: 490
+## Variables: 25
+## $ season        &amp;lt;dbl&amp;gt; 2018, 2018, 2018, 2018, 2018, 2018, 2018, 2018, 20…
+## $ game_code     &amp;lt;int&amp;gt; 257, 257, 257, 257, 257, 257, 257, 257, 257, 257, …
+## $ num_anot      &amp;lt;int&amp;gt; 5, 6, 10, 14, 16, 18, 21, 25, 27, 30, 31, 33, 34, …
+## $ team_code     &amp;lt;chr&amp;gt; &amp;quot;ULK&amp;quot;, &amp;quot;IST&amp;quot;, &amp;quot;IST&amp;quot;, &amp;quot;ULK&amp;quot;, &amp;quot;IST&amp;quot;, &amp;quot;ULK&amp;quot;, &amp;quot;IST&amp;quot;, &amp;quot;…
+## $ player_id     &amp;lt;chr&amp;gt; &amp;quot;P001324&amp;quot;, &amp;quot;P003048&amp;quot;, &amp;quot;P003048&amp;quot;, &amp;quot;P005159&amp;quot;, &amp;quot;P0018…
+## $ player_name   &amp;lt;chr&amp;gt; &amp;quot;MUHAMMED, ALI&amp;quot;, &amp;quot;DUNSTON, BRYANT&amp;quot;, &amp;quot;DUNSTON, BRYA…
+## $ action_id     &amp;lt;chr&amp;gt; &amp;quot;2FGM&amp;quot;, &amp;quot;2FGA&amp;quot;, &amp;quot;2FGM&amp;quot;, &amp;quot;3FGM&amp;quot;, &amp;quot;2FGA&amp;quot;, &amp;quot;2FGA&amp;quot;, &amp;quot;2…
+## $ action        &amp;lt;chr&amp;gt; &amp;quot;Two Pointer&amp;quot;, &amp;quot;Missed Two Pointer&amp;quot;, &amp;quot;Two Pointer&amp;quot;…
+## $ points        &amp;lt;int&amp;gt; 2, 0, 2, 3, 0, 0, 0, 3, 0, 3, 0, 3, 3, 2, 2, 2, 0,…
+## $ coord_x       &amp;lt;dbl&amp;gt; 1.1428571, -0.3163265, -0.1836735, -5.9489796, 1.9…
+## $ coord_y       &amp;lt;dbl&amp;gt; 2.279082, 2.717857, 2.207653, 6.177041, 2.462755, …
+## $ zone          &amp;lt;chr&amp;gt; &amp;quot;C&amp;quot;, &amp;quot;B&amp;quot;, &amp;quot;B&amp;quot;, &amp;quot;H&amp;quot;, &amp;quot;C&amp;quot;, &amp;quot;C&amp;quot;, &amp;quot;B&amp;quot;, &amp;quot;H&amp;quot;, &amp;quot;G&amp;quot;, &amp;quot;I&amp;quot;, …
+## $ fastbreak     &amp;lt;lgl&amp;gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, T…
+## $ second_chance &amp;lt;lgl&amp;gt; FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FA…
+## $ off_turnover  &amp;lt;lgl&amp;gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, T…
+## $ minute        &amp;lt;int&amp;gt; 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 6, 6,…
+## $ console       &amp;lt;chr&amp;gt; &amp;quot;09:42&amp;quot;, &amp;quot;09:19&amp;quot;, &amp;quot;09:13&amp;quot;, &amp;quot;08:53&amp;quot;, &amp;quot;08:29&amp;quot;, &amp;quot;08:0…
+## $ points_a      &amp;lt;int&amp;gt; 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 8, 8, 10, 12, …
+## $ points_b      &amp;lt;int&amp;gt; 0, 0, 2, 2, 2, 2, 2, 5, 5, 8, 8, 11, 11, 13, 15, 1…
+## $ utc           &amp;lt;chr&amp;gt; &amp;quot;20190517160232&amp;quot;, &amp;quot;20190517160256&amp;quot;, &amp;quot;2019051716030…
+## $ make          &amp;lt;lgl&amp;gt; TRUE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, TRUE…
+## $ quarter       &amp;lt;int&amp;gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+## $ seconds       &amp;lt;dbl&amp;gt; 18, 41, 47, 67, 91, 117, 130, 146, 176, 185, 203, …
+## $ team_code_a   &amp;lt;chr&amp;gt; &amp;quot;ULK&amp;quot;, &amp;quot;ULK&amp;quot;, &amp;quot;ULK&amp;quot;, &amp;quot;ULK&amp;quot;, &amp;quot;ULK&amp;quot;, &amp;quot;ULK&amp;quot;, &amp;quot;ULK&amp;quot;, &amp;quot;…
+## $ team_code_b   &amp;lt;chr&amp;gt; &amp;quot;IST&amp;quot;, &amp;quot;IST&amp;quot;, &amp;quot;IST&amp;quot;, &amp;quot;IST&amp;quot;, &amp;quot;IST&amp;quot;, &amp;quot;IST&amp;quot;, &amp;quot;IST&amp;quot;, &amp;quot;…&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can see in addition to the x-y coordinates, &lt;code&gt;coord_x&lt;/code&gt; and &lt;code&gt;coord_y&lt;/code&gt;, there are variables that give you more contextual information such as the player that took the shot, the time in the clock when the shot was taken or whether the shot was after an offensive rebound. These variables can help you filter specific shot types.&lt;/p&gt;
+&lt;p&gt;The function &lt;code&gt;plotShotChart()&lt;/code&gt; allows you to show graphically where the shots were taken on the court and colored according to whether the shot went in (green) or not (red). The returned object is a ggplot object that we can customize with ggplot2 functions:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;plotShotchart(sampleshots) +
+  labs(title = &amp;quot;Euroleague 2018/2019 Final Four&amp;quot;) +
+  theme(legend.position = &amp;quot;bottom&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-11-28-introduction-to-eurolig/index_files/figure-html/shotchart-1.png&#34; width=&#34;384&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>eurolig</title>
       <link>/project/eurolig/</link>
       <pubDate>Thu, 01 Aug 2019 00:00:00 +0200</pubDate>
@@ -756,7 +986,7 @@ devtools::install_github(&amp;quot;solmos/multable&amp;quot;)&lt;/code&gt;&lt;/p
     </item>
     
     <item>
-      <title>Analysis of clustered data using linear mixed models</title>
+      <title>Master&#39;s thesis</title>
       <link>/project/tfm/</link>
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
       

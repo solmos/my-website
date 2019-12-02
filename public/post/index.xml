@@ -13,6 +13,15 @@
     
     
     <item>
+      <title>Introduction to eurolig</title>
+      <link>/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/</link>
+      <pubDate>Thu, 28 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/</guid>
+      <description>eurolig provides a toolkit to easily retrieve and analyze basketball generated data for the Euroleague. The package is mainly designed to work with two types of data: play-by-play data and shot location data. Although Euroleague’s first season was in 2000, play-by-play and shot location data is only available since the 2007/2008 season. This post introduces the latest realease of the package (v0.4.0) and shows how it could be used to do some basic analyses.</description>
+    </item>
+    
+    <item>
       <title>Analyzing FC Barcelona&#39;s assists pattern</title>
       <link>/post/2019-03-28-eurolig/analisis-asistencia/</link>
       <pubDate>Thu, 28 Mar 2019 00:00:00 +0000</pubDate>

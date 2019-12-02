@@ -4,6 +4,17 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/es/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/" hreflang="en"/>
+    
+      <loc>/es/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/</loc>
+      <lastmod>2019-11-28T00:00:00+00:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <xhtml:link rel="alternate" href="/es/project/eurolig/" hreflang="es"/>
       <xhtml:link rel="alternate" href="/project/eurolig/" hreflang="en"/>
     
@@ -99,6 +110,18 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/es/tags/basketball-analytics/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/tags/basketball-analytics/" hreflang="en"/>
+    
+      <loc>/es/tags/basketball-analytics/</loc>
+      <lastmod>2019-11-28T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>/es/categories/castellano/</loc>
       <lastmod>2019-03-28T00:00:00+00:00</lastmod>
       <priority>0</priority>
@@ -124,7 +147,7 @@
       <xhtml:link rel="alternate" href="/categories/english/" hreflang="en"/>
     
       <loc>/es/categories/english/</loc>
-      <lastmod>2018-11-06T00:00:00+00:00</lastmod>
+      <lastmod>2019-11-28T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -166,7 +189,7 @@
       <xhtml:link rel="alternate" href="/post/" hreflang="en"/>
     
       <loc>/es/post/</loc>
-      <lastmod>2019-03-28T00:00:00+00:00</lastmod>
+      <lastmod>2019-11-28T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -201,7 +224,7 @@
       <xhtml:link rel="alternate" href="/tags/r/" hreflang="en"/>
     
       <loc>/es/tags/r/</loc>
-      <lastmod>2019-03-28T00:00:00+00:00</lastmod>
+      <lastmod>2019-11-28T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     

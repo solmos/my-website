@@ -1,12 +1,12 @@
 +++
 # Project title.
-title = "Analysis of clustered data using linear mixed models"
+title = "Trabajo Fin de Máster"
 
 # Date this page was created.
 date = 2016-04-27T00:00:00
 
 # Project summary to display on homepage.
-summary = "Trabajo de fin de Máster"
+summary = "Analysis of clustered data using linear mixed models"
 
 # Tags: can be used for filtering projects.
 # Example: `tags = ["statistics", "linear mixed models"]`

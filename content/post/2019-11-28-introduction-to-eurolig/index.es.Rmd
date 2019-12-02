@@ -1,0 +1,202 @@
+---
+title: Introducción a eurolig
+subtitle: "Breve introducción a la nueva versión de eurolig para analizar datos jugada a jugada y de localización de tiros para la Euroliga."
+author: Sergio Olmos Pardo
+summary: "Breve introducción a la nueva versión de eurolig para analizar datos jugada a jugada y de localización de tiros para la Euroliga."
+date: '2019-11-28'
+slug: introduction-to-eurolig
+categories:
+  - English
+tags:
+  - Basketball analytics
+  - R
+image:
+  caption: ''
+  focal_point: ''
+---
+
+```{r, include = FALSE}
+# knitr::opts_chunk$set()
+```
+
+eurolig proporciona una kit de herramientas para obtener y analizar datos de la Euroliga. El paquete está diseñado principalmente para trabajar con dos tipos de datos de baloncesto: datos jugada a jugada y datos de localización de tiros. A pesar de que la primera temporada de la Euroliga fue en 2l 2000, los datos jugada a jugada y de localización de tiros solo están disponibles desde la temporada 2007/2008. Este artículo introduce la nueva version del paquete (0.4.0) y muestra cómo puede ser usado para realizar algunos análisis sencillos.
+
+
+## Cambios en la nueva versión
+
+Si ya habías usado o conocías eurolig de mi [entrada anterior](https://solmos.netlify.com/es/post/2019-03-28-eurolig/analisis-asistencia/), te darás cuenta de que hay bastantes cambios y nuevas funcionalidades. La versión anterior de eurolig (0.0.0.900) estaba aún muy cruda y en su fase más experimental. Para la nueva versión (0.4.0) he añadido mucha más funcionalidad y documentación básica.
+
+Los cambios más importantes son:
+
+* camelCase para nombres de funciones (en lugar de snake_case).
+
+* He eliminado la función `plot_heatmap()` para producir heatmaps de los patrones de asistencias.
+
+* Los data frames de datos jugada a jugada contienen variables distintas.
+
+Aunque hay bastantes cambios no he mantenido funciones viejas en esta nueva versión porque creo que no hay mucha gente usando el paquete. Código antiguo seguramente no funcionará con esta nueva versión. No obstante, adaptar el código antiguo para la nueva versión debería de ser bastante sencillo.
+
+## Paquetes necesarios
+
+Necesitarás instalar el paquete eurolig desde su [repositorio](https://github.com/solmos/eurolig) en GitHub:
+```{r, eval = FALSE}
+# install.packages("devtools")
+devtools::install_github("solmos/eurolig")
+```
+
+Además de eurolig, los siguientes paquetes son necesarios para reproducir esta entrada:
+
+```{r setup, message = FALSE}
+library(eurolig)
+library(dplyr)
+library(ggplot2)
+```
+
+## Obtener los datos
+
+### Conjuntos de datos
+
+Varios conjuntos de datos van incluídos en el paquete. Puedes ver una lista con:
+```{r, eval = FALSE}
+data(package = "eurolig")
+```
+
+Los conjuntos de datos `samplepbp` y `sampleshots` contienen datos ejemplo de datos jugada a jugada y de localización de tiro, respectivamente.
+
+Un conjunto de datos bastante útil es `gameresults`. Contiene todos los resultados de todos los partidos disputados en la Euroliga desde la temporada 2001/2002 hasta la temporada 2018/2019. Como podrás ver en la siguiente sección, este conjunto de datos puede ser útil para encontrar los partidos para los que quieres obtener datos.
+
+Finalmente, si necesitas encontrar nombres o códigos de equipos, el conjunto de datos `teaminfo` puede ser útil.
+
+
+### Funciones `extract`
+
+Funciones que obtienen datos a traves de la API de la web de la Euroliga empiezan con el verbo `extract`. Necesitarás estar conectado a internet para que estas funciones funcionen.
+
+Las principales funciones para obtener datos son:
+
+* `extractPbp()` para datos jugada a jugada.
+
+* `extractShots()` para datos de localización de tiros.
+
+Estas funciones solo pueden obtener datos de un sólo partido. Esto quiere decir que si necesitas conseguir datos para varios partidos deberás iterar la función para todos los partidos de interés. Nótese, sin embargo, que **el archivo `robot.txt` de la Euroliga pide que se esperen 15 segundos (!) entre cada petición**. Ten esto en cuenta al realizar un gran número de peticiones.
+
+Cada partido se identifica con una combinación única de temporada y código de partido. Para indicar a las funciones `extract` de qué partido queremos obtener datos necesitamos introducir como argumentos el código y la temporada correspondiente.
+
+Vamos a encontrar, por ejemplo, los partidos de la temporada 2018/2019 con el mayor número de puntos totales:
+
+```{r}
+games <- gameresults %>% 
+  filter(season == 2018) %>% 
+  mutate(total_points = points_home + points_away) %>% 
+  arrange(desc(total_points))
+
+head(games)
+```
+
+Podemos comprobar que el partido con mayor puntuación fue el disputado entre el Herbalife Gran Canaria y el AX Armani Exchange Olimpia Milan con 210 puntos totales. La temporada y código que identifican este partido son:
+```{r}
+games$season[1]
+games$game_code[1]
+```
+
+Podemos obtener datos de localización de tiro y de jugada a jugada para este partido introduciendo estos valores como argumentos en `extractShots()` y `extractPbp()`:
+```{r, eval = FALSE}
+game_shots <- extractShots(game_code = 168, season = 2018)
+game_pbp <- extractPbp(168, 2018)
+```
+
+Si quisiésemos encontrar partidos para la temporada actual (no incluida en `gameresults`) tenemos dos opciones: mirar el código del partido en la url del partido o usar `extractResults()`.
+
+
+## Análisis de datos jugada a jugada
+
+Los datos jugada a jugada contienen mucha información que no está en las estadísticas del boxscore tradicional. En el análisis que sigue voy a mostrar cómo utilizar eurolig para encontrar la siguiente información a partir de los datos jugada a jugada:
+
+* Mas-Menos (+/-) para uno o más jugadores.
+
+* Estadísticas On/Off para uno o más jugadores.
+
+* Patrones de asistencias dentro de un equipo.
+
+Para estos análisis voy a utilizar el conjunto de datos `samplepbp` que contiene los datos jugada a jugada de los cuatro partidos de la Final Four de la Euroliga 2018/2019:
+```{r}
+data("samplepbp")
+glimpse(samplepbp)
+```
+
+
+### Más-Menos
+
+El más-menos (+/-) mide la diferencia entre los puntos anotados por el equipo y los puntos que permite al equipo rival en el tiempo que uno o más jugadores del equipo están en la pista. `getPlusMinus()` utiliza los datos jugada a jugada para uno o más partidos y calcula el +/- en cada partido de los jugadores especificados.
+
+Aunque esta estadística está siendo muy usada últimamente, es importante recalcar que el +/- crudo es muy inestable y depende por completo del contexto. Por otro lado, es la pieza clave para construir otras estadísticas más avanzadas como RAPM o RPM.
+
+Dicho esto, vamos a averiguar, por ejemplo, cuál fue el +/- de Sergio Rodriguez en los dos partidos que disputó en la Final Four 2018/2019:
+
+```{r}
+chacho_pm <- getPlusMinus(pbp = samplepbp, players = "RODRIGUEZ, SERGIO")
+# Select only a few columns so that data frame fits in the document
+chacho_pm %>% 
+  select(game_code, team_code_opp, poss, poss_opp, plus_minus)
+```
+
+Nótese que también es posible calcular el más-menos para combinaciones de jugadores introduciendo un vector de caracteres con los nombres de los jugadores como argumento en `players`.
+
+
+### Estadísticas On/Off
+
+Las estadísticas on/off de un jugador o una combinación de jugadores miden las estadísticas del equipo y del rival cuando ese jugador o jugadores están en pista y cuando están en el banquillo.
+
+Puedes usar `getOnOffStats()` para averiguar las estadísticas on/off. Por ejemplo, podemos comparar cómo rindió el Real Madrid cuando Rudy y Ayón estaban en pista y cómo rindió cuando ambos estaban en el banquillo en los dos partidos de la Final Four 2018/2019.
+
+```{r}
+getOnOffStats(pbp = samplepbp, players = c("FERNANDEZ, RUDY", "AYON, GUSTAVO"))
+```
+
+Nótese que `getOnOffStats()` genera 4 filas por partido que corresponden a:
+
+* Estadísticas del equipo cuando los jugadores están en pista juntos.
+
+* Estadísitcas del equipo rival cuando los jugadores están en pista juntos.
+
+* Estadísticas del equipo cuando los jugadores están en el banquillo.
+
+* Estadísticas del equipo rival cuando los jugadores están en el banquillo.
+
+
+### Patrones de asistencias
+
+Los datos jugada a jugada nos permiten averiguar quién asiste a quién en canastas asistidas. La función `getAssists()` genera un data frame con el pasador y el tirador (junto con más variables) de todas las canastas asistidas en los datos jugada a jugada.
+
+Voy a usar `getAssists()` y un poco de manipulación de datos para hayar las asistencias más comunes en el CSK de Moscú en los dos partidos de la Final Four 2018/2019:
+
+```{r}
+assists_csk <- getAssists(pbp = samplepbp, team = "CSK")
+assists_csk %>% 
+  count(passer, shooter) %>% 
+  arrange(desc(n))
+```
+
+
+
+## Análisis de datos de localización de tiros
+
+Los datos de localización de tiros indican las coordenadas x-y de todos los tiros hechos durante un partido. Estos datos pueden ser útiles para, por ejemplo, identificar tendencias en ataque de un jugador o equipo, mostrar qué lugares de la pista un jugador es más efectivo o analizar qué tipo de tiros permite un equipo al rival.
+
+Para el siguiente análisis voy a usar el conjunto de datos `sampleshots` que contiene los datos de localización de tiros de los cuatro partidos de la Final Four 2018/2019.
+
+```{r}
+glimpse(sampleshots)
+```
+
+Puedes comprobar que además de las coordenadas x-y, `coord_x` y `coord_y`, hay variables que dan información contextual como el jugador que realizó el tiro, el tiempo que quedaba en el marcador cuando el tiro ocurrió o si el tiro se hizo tras un rebote ofensivo. Estas variables pueden ayudar a filtrar tiros de características específicas.
+
+La función `plotShotChart()` permite mostrar gráficamente el lugar de la pista en el que se realizaron los tiros, coloreados según se metieron (verde) o se fallaron (rojo). El objeto resultante es un objeto ggplot que podemos modificar con funciones de ggplot2:
+
+```{r shotchart, fig.height = 4, fig.width = 4}
+plotShotchart(sampleshots) +
+  labs(title = "Euroleague 2018/2019 Final Four") +
+  theme(legend.position = "bottom")
+```
+
+

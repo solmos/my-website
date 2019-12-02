@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 3.0.0">
+  <meta name="generator" content="Hugo 0.49.2" />
+  <meta name="author" content="Sergio Olmos Pardo">
+
+  
+  
+  
+  
+    
+  
+  <meta name="description" content="Breve introducción a la nueva versión de eurolig para analizar datos jugada a jugada y de localización de tiros para la Euroliga.">
+
+  
+  <link rel="alternate" hreflang="en" href="/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/">
+  
+  <link rel="alternate" hreflang="es" href="/es/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/">
+
+  
+
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" crossorigin="anonymous">
+        
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700|Roboto:400,400italic,700|Roboto+Mono">
+  
+
+  <link rel="stylesheet" href="/es/styles.css">
+  
+
+  
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-131928090-1', 'auto');
+      
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+  
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Sergio Olmos">
+  <link rel="feed" href="/index.xml" type="application/rss+xml" title="Sergio Olmos">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="/es/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="twitter:site" content="@solmos41">
+  <meta property="twitter:creator" content="@solmos41">
+  
+  <meta property="og:site_name" content="Sergio Olmos">
+  <meta property="og:url" content="/es/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/">
+  <meta property="og:title" content="Introducción a eurolig | Sergio Olmos">
+  <meta property="og:description" content="Breve introducción a la nueva versión de eurolig para analizar datos jugada a jugada y de localización de tiros para la Euroliga.">
+  
+  
+    
+  <meta property="og:image" content="/img/p8.png">
+  <meta property="og:locale" content="es">
+  
+  <meta property="article:published_time" content="2019-11-28T00:00:00&#43;00:00">
+  
+  <meta property="article:modified_time" content="2019-11-28T00:00:00&#43;00:00">
+  
+
+  
+
+  
+
+  <title>Introducción a eurolig | Sergio Olmos</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#TableOfContents" data-offset="71" >
+
+<nav class="navbar navbar-light fixed-top navbar-expand-lg py-0" id="navbar-main">
+  <div class="container">
+
+    
+      <a class="navbar-brand" href="/es">Sergio Olmos</a>
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Barra de navegación">
+        <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+    
+    <div class="collapse navbar-collapse" id="navbar">
+
+      
+      
+      <ul class="navbar-nav ml-auto">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/es/#posts">
+            
+            <span>Blog</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/es/#projects">
+            
+            <span>Proyectos</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/es/#about">
+            
+            <span>Sobre mí</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+      
+
+        
+
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">
+            <i class="fas fa-globe" aria-hidden="true"></i>
+            <span>Español</span>
+          </a>
+          <ul class="dropdown-menu">
+            
+            <li class="dropdown-item my-0 py-0 mx-0 px-0">
+              <a href="/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/">
+                <span>English</span>
+              </a>
+            </li>
+            
+          </ul>
+        </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1 itemprop="name">Introducción a eurolig</h1>
+
+  
+  <p class="page-subtitle">Breve introducción a la nueva versión de eurolig para analizar datos jugada a jugada y de localización de tiros para la Euroliga.</p>
+  
+
+  
+    
+
+<div class="article-metadata">
+
+  
+  
+  <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+  
+
+  <span class="article-date">
+    
+    <meta content="2019-11-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+    <time datetime="2019-11-28 00:00:00 &#43;0000 UTC" itemprop="dateModified">
+      Nov 28, 2019
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    12 min de lectura
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="/es/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/#disqus_thread"></a>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder"></i>
+    
+    <a href="/es/categories/english/">English</a>
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Introducci%c3%b3n%20a%20eurolig&amp;url=%2fes%2fpost%2f2019-11-28-introduction-to-eurolig%2fintroduction-to-eurolig%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fes%2fpost%2f2019-11-28-introduction-to-eurolig%2fintroduction-to-eurolig%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fes%2fpost%2f2019-11-28-introduction-to-eurolig%2fintroduction-to-eurolig%2f&amp;title=Introducci%c3%b3n%20a%20eurolig"
+         target="_blank" rel="noopener">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fes%2fpost%2f2019-11-28-introduction-to-eurolig%2fintroduction-to-eurolig%2f&amp;title=Introducci%c3%b3n%20a%20eurolig"
+         target="_blank" rel="noopener">
+        <i class="fab fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Introducci%c3%b3n%20a%20eurolig&amp;body=%2fes%2fpost%2f2019-11-28-introduction-to-eurolig%2fintroduction-to-eurolig%2f">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style" itemprop="articleBody">
+      <p>eurolig proporciona una kit de herramientas para obtener y analizar datos de la Euroliga. El paquete está diseñado principalmente para trabajar con dos tipos de datos de baloncesto: datos jugada a jugada y datos de localización de tiros. A pesar de que la primera temporada de la Euroliga fue en 2l 2000, los datos jugada a jugada y de localización de tiros solo están disponibles desde la temporada 2007/2008. Este artículo introduce la nueva version del paquete (0.4.0) y muestra cómo puede ser usado para realizar algunos análisis sencillos.</p>
+<div id="cambios-en-la-nueva-version" class="section level2">
+<h2>Cambios en la nueva versión</h2>
+<p>Si ya habías usado o conocías eurolig de mi <a href="https://solmos.netlify.com/es/post/2019-03-28-eurolig/analisis-asistencia/">entrada anterior</a>, te darás cuenta de que hay bastantes cambios y nuevas funcionalidades. La versión anterior de eurolig (0.0.0.900) estaba aún muy cruda y en su fase más experimental. Para la nueva versión (0.4.0) he añadido mucha más funcionalidad y documentación básica.</p>
+<p>Los cambios más importantes son:</p>
+<ul>
+<li><p>camelCase para nombres de funciones (en lugar de snake_case).</p></li>
+<li><p>He eliminado la función <code>plot_heatmap()</code> para producir heatmaps de los patrones de asistencias.</p></li>
+<li><p>Los data frames de datos jugada a jugada contienen variables distintas.</p></li>
+</ul>
+<p>Aunque hay bastantes cambios no he mantenido funciones viejas en esta nueva versión porque creo que no hay mucha gente usando el paquete. Código antiguo seguramente no funcionará con esta nueva versión. No obstante, adaptar el código antiguo para la nueva versión debería de ser bastante sencillo.</p>
+</div>
+<div id="paquetes-necesarios" class="section level2">
+<h2>Paquetes necesarios</h2>
+<p>Necesitarás instalar el paquete eurolig desde su <a href="https://github.com/solmos/eurolig">repositorio</a> en GitHub:</p>
+<pre class="r"><code># install.packages(&quot;devtools&quot;)
+devtools::install_github(&quot;solmos/eurolig&quot;)</code></pre>
+<p>Además de eurolig, los siguientes paquetes son necesarios para reproducir esta entrada:</p>
+<pre class="r"><code>library(eurolig)
+library(dplyr)
+library(ggplot2)</code></pre>
+</div>
+<div id="obtener-los-datos" class="section level2">
+<h2>Obtener los datos</h2>
+<div id="conjuntos-de-datos" class="section level3">
+<h3>Conjuntos de datos</h3>
+<p>Varios conjuntos de datos van incluídos en el paquete. Puedes ver una lista con:</p>
+<pre class="r"><code>data(package = &quot;eurolig&quot;)</code></pre>
+<p>Los conjuntos de datos <code>samplepbp</code> y <code>sampleshots</code> contienen datos ejemplo de datos jugada a jugada y de localización de tiro, respectivamente.</p>
+<p>Un conjunto de datos bastante útil es <code>gameresults</code>. Contiene todos los resultados de todos los partidos disputados en la Euroliga desde la temporada 2001/2002 hasta la temporada 2018/2019. Como podrás ver en la siguiente sección, este conjunto de datos puede ser útil para encontrar los partidos para los que quieres obtener datos.</p>
+<p>Finalmente, si necesitas encontrar nombres o códigos de equipos, el conjunto de datos <code>teaminfo</code> puede ser útil.</p>
+</div>
+<div id="funciones-extract" class="section level3">
+<h3>Funciones <code>extract</code></h3>
+<p>Funciones que obtienen datos a traves de la API de la web de la Euroliga empiezan con el verbo <code>extract</code>. Necesitarás estar conectado a internet para que estas funciones funcionen.</p>
+<p>Las principales funciones para obtener datos son:</p>
+<ul>
+<li><p><code>extractPbp()</code> para datos jugada a jugada.</p></li>
+<li><p><code>extractShots()</code> para datos de localización de tiros.</p></li>
+</ul>
+<p>Estas funciones solo pueden obtener datos de un sólo partido. Esto quiere decir que si necesitas conseguir datos para varios partidos deberás iterar la función para todos los partidos de interés. Nótese, sin embargo, que <strong>el archivo <code>robot.txt</code> de la Euroliga pide que se esperen 15 segundos (!) entre cada petición</strong>. Ten esto en cuenta al realizar un gran número de peticiones.</p>
+<p>Cada partido se identifica con una combinación única de temporada y código de partido. Para indicar a las funciones <code>extract</code> de qué partido queremos obtener datos necesitamos introducir como argumentos el código y la temporada correspondiente.</p>
+<p>Vamos a encontrar, por ejemplo, los partidos de la temporada 2018/2019 con el mayor número de puntos totales:</p>
+<pre class="r"><code>games &lt;- gameresults %&gt;% 
+  filter(season == 2018) %&gt;% 
+  mutate(total_points = points_home + points_away) %&gt;% 
+  arrange(desc(total_points))
+
+head(games)</code></pre>
+<pre><code>## # A tibble: 6 x 14
+##   season phase round_name team_home points_home team_away points_away
+##    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;           &lt;int&gt; &lt;chr&gt;           &lt;int&gt;
+## 1   2018 RS    Round 21   Herbalif…         104 AX Arman…         106
+## 2   2018 RS    Round 16   AX Arman…         111 Buducnos…          94
+## 3   2018 RS    Round 1    Real Mad…         109 Darussaf…          93
+## 4   2018 RS    Round 4    Herbalif…          91 CSKA Mos…         106
+## 5   2018 RS    Round 8    CSKA Mos…          99 Zalgiris…          97
+## 6   2018 RS    Round 25   CSKA Mos…         101 AX Arman…          95
+## # … with 7 more variables: game_code &lt;int&gt;, date &lt;chr&gt;, round_code &lt;int&gt;,
+## #   game_url &lt;chr&gt;, team_code_home &lt;chr&gt;, team_code_away &lt;chr&gt;,
+## #   total_points &lt;int&gt;</code></pre>
+<p>Podemos comprobar que el partido con mayor puntuación fue el disputado entre el Herbalife Gran Canaria y el AX Armani Exchange Olimpia Milan con 210 puntos totales. La temporada y código que identifican este partido son:</p>
+<pre class="r"><code>games$season[1]</code></pre>
+<pre><code>## [1] 2018</code></pre>
+<pre class="r"><code>games$game_code[1]</code></pre>
+<pre><code>## [1] 168</code></pre>
+<p>Podemos obtener datos de localización de tiro y de jugada a jugada para este partido introduciendo estos valores como argumentos en <code>extractShots()</code> y <code>extractPbp()</code>:</p>
+<pre class="r"><code>game_shots &lt;- extractShots(game_code = 168, season = 2018)
+game_pbp &lt;- extractPbp(168, 2018)</code></pre>
+<p>Si quisiésemos encontrar partidos para la temporada actual (no incluida en <code>gameresults</code>) tenemos dos opciones: mirar el código del partido en la url del partido o usar <code>extractResults()</code>.</p>
+</div>
+</div>
+<div id="analisis-de-datos-jugada-a-jugada" class="section level2">
+<h2>Análisis de datos jugada a jugada</h2>
+<p>Los datos jugada a jugada contienen mucha información que no está en las estadísticas del boxscore tradicional. En el análisis que sigue voy a mostrar cómo utilizar eurolig para encontrar la siguiente información a partir de los datos jugada a jugada:</p>
+<ul>
+<li><p>Mas-Menos (+/-) para uno o más jugadores.</p></li>
+<li><p>Estadísticas On/Off para uno o más jugadores.</p></li>
+<li><p>Patrones de asistencias dentro de un equipo.</p></li>
+</ul>
+<p>Para estos análisis voy a utilizar el conjunto de datos <code>samplepbp</code> que contiene los datos jugada a jugada de los cuatro partidos de la Final Four de la Euroliga 2018/2019:</p>
+<pre class="r"><code>data(&quot;samplepbp&quot;)
+glimpse(samplepbp)</code></pre>
+<pre><code>## Observations: 2,121
+## Variables: 29
+## $ season         &lt;int&gt; 2018, 2018, 2018, 2018, 2018, 2018, 2018, 2018, 2…
+## $ game_code      &lt;int&gt; 257, 257, 257, 257, 257, 257, 257, 257, 257, 257,…
+## $ play_number    &lt;int&gt; 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 1…
+## $ team_code      &lt;chr&gt; NA, &quot;ULK&quot;, &quot;IST&quot;, &quot;ULK&quot;, &quot;IST&quot;, &quot;IST&quot;, &quot;ULK&quot;, &quot;IS…
+## $ player_name    &lt;chr&gt; NA, &quot;DUVERIOGLU, AHMET&quot;, &quot;DUNSTON, BRYANT&quot;, &quot;MUHA…
+## $ play_type      &lt;chr&gt; &quot;BP&quot;, &quot;TPOFF&quot;, &quot;TPOFF&quot;, &quot;2FGM&quot;, &quot;2FGA&quot;, &quot;RBLK&quot;, &quot;…
+## $ time_remaining &lt;chr&gt; &quot;10:00&quot;, &quot;09:59&quot;, &quot;09:59&quot;, &quot;09:42&quot;, &quot;09:19&quot;, &quot;09:…
+## $ quarter        &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+## $ points_home    &lt;dbl&gt; 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5, 5…
+## $ points_away    &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2…
+## $ play_info      &lt;chr&gt; &quot;Begin Period&quot;, &quot;&quot;, &quot;&quot;, &quot;Two Pointer (1/1 -  2 pt…
+## $ seconds        &lt;dbl&gt; 0, 1, 1, 18, 41, 41, 44, 45, 47, 56, 56, 67, 68, …
+## $ home_team      &lt;chr&gt; &quot;Fenerbahce Beko Istanbul&quot;, &quot;Fenerbahce Beko Ista…
+## $ away_team      &lt;chr&gt; &quot;Anadolu Efes Istanbul&quot;, &quot;Anadolu Efes Istanbul&quot;,…
+## $ home           &lt;lgl&gt; NA, TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE,…
+## $ team_name      &lt;chr&gt; NA, &quot;Fenerbahce Beko Istanbul&quot;, &quot;Anadolu Efes Ist…
+## $ last_ft        &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, …
+## $ and1           &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, …
+## $ home_player1   &lt;chr&gt; &quot;GREEN, ERICK&quot;, &quot;GREEN, ERICK&quot;, &quot;GREEN, ERICK&quot;, &quot;…
+## $ home_player2   &lt;chr&gt; &quot;MELLI, NICOLO&quot;, &quot;MELLI, NICOLO&quot;, &quot;MELLI, NICOLO&quot;…
+## $ home_player3   &lt;chr&gt; &quot;GUDURIC, MARKO&quot;, &quot;GUDURIC, MARKO&quot;, &quot;GUDURIC, MAR…
+## $ home_player4   &lt;chr&gt; &quot;MUHAMMED, ALI&quot;, &quot;MUHAMMED, ALI&quot;, &quot;MUHAMMED, ALI&quot;…
+## $ home_player5   &lt;chr&gt; &quot;DUVERIOGLU, AHMET&quot;, &quot;DUVERIOGLU, AHMET&quot;, &quot;DUVERI…
+## $ away_player1   &lt;chr&gt; &quot;LARKIN, SHANE&quot;, &quot;LARKIN, SHANE&quot;, &quot;LARKIN, SHANE&quot;…
+## $ away_player2   &lt;chr&gt; &quot;MOERMAN, ADRIEN&quot;, &quot;MOERMAN, ADRIEN&quot;, &quot;MOERMAN, A…
+## $ away_player3   &lt;chr&gt; &quot;MICIC, VASILIJE&quot;, &quot;MICIC, VASILIJE&quot;, &quot;MICIC, VAS…
+## $ away_player4   &lt;chr&gt; &quot;DUNSTON, BRYANT&quot;, &quot;DUNSTON, BRYANT&quot;, &quot;DUNSTON, B…
+## $ away_player5   &lt;chr&gt; &quot;SIMON, KRUNOSLAV&quot;, &quot;SIMON, KRUNOSLAV&quot;, &quot;SIMON, K…
+## $ lineups        &lt;chr&gt; &quot;GREEN, ERICK - MELLI, NICOLO - GUDURIC, MARKO - …</code></pre>
+<div id="mas-menos" class="section level3">
+<h3>Más-Menos</h3>
+<p>El más-menos (+/-) mide la diferencia entre los puntos anotados por el equipo y los puntos que permite al equipo rival en el tiempo que uno o más jugadores del equipo están en la pista. <code>getPlusMinus()</code> utiliza los datos jugada a jugada para uno o más partidos y calcula el +/- en cada partido de los jugadores especificados.</p>
+<p>Aunque esta estadística está siendo muy usada últimamente, es importante recalcar que el +/- crudo es muy inestable y depende por completo del contexto. Por otro lado, es la pieza clave para construir otras estadísticas más avanzadas como RAPM o RPM.</p>
+<p>Dicho esto, vamos a averiguar, por ejemplo, cuál fue el +/- de Sergio Rodriguez en los dos partidos que disputó en la Final Four 2018/2019:</p>
+<pre class="r"><code>chacho_pm &lt;- getPlusMinus(pbp = samplepbp, players = &quot;RODRIGUEZ, SERGIO&quot;)
+# Select only a few columns so that data frame fits in the document
+chacho_pm %&gt;% 
+  select(game_code, team_code_opp, poss, poss_opp, plus_minus)</code></pre>
+<pre><code>## # A tibble: 2 x 5
+##   game_code team_code_opp  poss poss_opp plus_minus
+##       &lt;int&gt; &lt;chr&gt;         &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+## 1       258 MAD              44       42          8
+## 2       260 IST              24       25        -10</code></pre>
+<p>Nótese que también es posible calcular el más-menos para combinaciones de jugadores introduciendo un vector de caracteres con los nombres de los jugadores como argumento en <code>players</code>.</p>
+</div>
+<div id="estadisticas-onoff" class="section level3">
+<h3>Estadísticas On/Off</h3>
+<p>Las estadísticas on/off de un jugador o una combinación de jugadores miden las estadísticas del equipo y del rival cuando ese jugador o jugadores están en pista y cuando están en el banquillo.</p>
+<p>Puedes usar <code>getOnOffStats()</code> para averiguar las estadísticas on/off. Por ejemplo, podemos comparar cómo rindió el Real Madrid cuando Rudy y Ayón estaban en pista y cómo rindió cuando ambos estaban en el banquillo en los dos partidos de la Final Four 2018/2019.</p>
+<pre class="r"><code>getOnOffStats(pbp = samplepbp, players = c(&quot;FERNANDEZ, RUDY&quot;, &quot;AYON, GUSTAVO&quot;))</code></pre>
+<pre><code>## # A tibble: 8 x 28
+##   season game_code players on    type  team_code home   fg2a  fg2m fg2_pct
+##    &lt;int&gt;     &lt;int&gt; &lt;chr&gt;   &lt;lgl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;lgl&gt; &lt;int&gt; &lt;int&gt;   &lt;dbl&gt;
+## 1   2018       258 FERNAN… TRUE  defe… CSK       TRUE      5     1   0.2  
+## 2   2018       258 FERNAN… TRUE  offe… MAD       FALSE     3     2   0.667
+## 3   2018       259 FERNAN… TRUE  offe… MAD       FALSE    20    14   0.7  
+## 4   2018       259 FERNAN… TRUE  defe… ULK       TRUE     15     7   0.467
+## 5   2018       258 FERNAN… FALSE defe… CSK       TRUE     33    16   0.485
+## 6   2018       258 FERNAN… FALSE offe… MAD       FALSE    43    22   0.512
+## 7   2018       259 FERNAN… FALSE offe… MAD       FALSE    15     9   0.6  
+## 8   2018       259 FERNAN… FALSE defe… ULK       TRUE     17     9   0.529
+## # … with 18 more variables: fg3a &lt;int&gt;, fg3m &lt;int&gt;, fg3_pct &lt;dbl&gt;,
+## #   fga &lt;int&gt;, fgm &lt;int&gt;, fg_pct &lt;dbl&gt;, fta &lt;int&gt;, ftm &lt;int&gt;,
+## #   ft_pct &lt;dbl&gt;, orb &lt;int&gt;, drb &lt;int&gt;, tov &lt;int&gt;, ast &lt;int&gt;, stl &lt;int&gt;,
+## #   cpf &lt;int&gt;, blk &lt;int&gt;, pts &lt;dbl&gt;, poss &lt;dbl&gt;</code></pre>
+<p>Nótese que <code>getOnOffStats()</code> genera 4 filas por partido que corresponden a:</p>
+<ul>
+<li><p>Estadísticas del equipo cuando los jugadores están en pista juntos.</p></li>
+<li><p>Estadísitcas del equipo rival cuando los jugadores están en pista juntos.</p></li>
+<li><p>Estadísticas del equipo cuando los jugadores están en el banquillo.</p></li>
+<li><p>Estadísticas del equipo rival cuando los jugadores están en el banquillo.</p></li>
+</ul>
+</div>
+<div id="patrones-de-asistencias" class="section level3">
+<h3>Patrones de asistencias</h3>
+<p>Los datos jugada a jugada nos permiten averiguar quién asiste a quién en canastas asistidas. La función <code>getAssists()</code> genera un data frame con el pasador y el tirador (junto con más variables) de todas las canastas asistidas en los datos jugada a jugada.</p>
+<p>Voy a usar <code>getAssists()</code> y un poco de manipulación de datos para hayar las asistencias más comunes en el CSK de Moscú en los dos partidos de la Final Four 2018/2019:</p>
+<pre class="r"><code>assists_csk &lt;- getAssists(pbp = samplepbp, team = &quot;CSK&quot;)
+assists_csk %&gt;% 
+  count(passer, shooter) %&gt;% 
+  arrange(desc(n))</code></pre>
+<pre><code>## # A tibble: 25 x 3
+##    passer            shooter              n
+##    &lt;chr&gt;             &lt;chr&gt;            &lt;int&gt;
+##  1 CLYBURN, WILL     HIGGINS, CORY        2
+##  2 DE COLO, NANDO    HACKETT, DANIEL      2
+##  3 HACKETT, DANIEL   HUNTER, OTHELLO      2
+##  4 RODRIGUEZ, SERGIO HINES, KYLE          2
+##  5 CLYBURN, WILL     DE COLO, NANDO       1
+##  6 DE COLO, NANDO    CLYBURN, WILL        1
+##  7 DE COLO, NANDO    HUNTER, OTHELLO      1
+##  8 DE COLO, NANDO    KURBANOV, NIKITA     1
+##  9 DE COLO, NANDO    PETERS, ALEC         1
+## 10 HACKETT, DANIEL   CLYBURN, WILL        1
+## # … with 15 more rows</code></pre>
+</div>
+</div>
+<div id="analisis-de-datos-de-localizacion-de-tiros" class="section level2">
+<h2>Análisis de datos de localización de tiros</h2>
+<p>Los datos de localización de tiros indican las coordenadas x-y de todos los tiros hechos durante un partido. Estos datos pueden ser útiles para, por ejemplo, identificar tendencias en ataque de un jugador o equipo, mostrar qué lugares de la pista un jugador es más efectivo o analizar qué tipo de tiros permite un equipo al rival.</p>
+<p>Para el siguiente análisis voy a usar el conjunto de datos <code>sampleshots</code> que contiene los datos de localización de tiros de los cuatro partidos de la Final Four 2018/2019.</p>
+<pre class="r"><code>glimpse(sampleshots)</code></pre>
+<pre><code>## Observations: 490
+## Variables: 25
+## $ season        &lt;dbl&gt; 2018, 2018, 2018, 2018, 2018, 2018, 2018, 2018, 20…
+## $ game_code     &lt;int&gt; 257, 257, 257, 257, 257, 257, 257, 257, 257, 257, …
+## $ num_anot      &lt;int&gt; 5, 6, 10, 14, 16, 18, 21, 25, 27, 30, 31, 33, 34, …
+## $ team_code     &lt;chr&gt; &quot;ULK&quot;, &quot;IST&quot;, &quot;IST&quot;, &quot;ULK&quot;, &quot;IST&quot;, &quot;ULK&quot;, &quot;IST&quot;, &quot;…
+## $ player_id     &lt;chr&gt; &quot;P001324&quot;, &quot;P003048&quot;, &quot;P003048&quot;, &quot;P005159&quot;, &quot;P0018…
+## $ player_name   &lt;chr&gt; &quot;MUHAMMED, ALI&quot;, &quot;DUNSTON, BRYANT&quot;, &quot;DUNSTON, BRYA…
+## $ action_id     &lt;chr&gt; &quot;2FGM&quot;, &quot;2FGA&quot;, &quot;2FGM&quot;, &quot;3FGM&quot;, &quot;2FGA&quot;, &quot;2FGA&quot;, &quot;2…
+## $ action        &lt;chr&gt; &quot;Two Pointer&quot;, &quot;Missed Two Pointer&quot;, &quot;Two Pointer&quot;…
+## $ points        &lt;int&gt; 2, 0, 2, 3, 0, 0, 0, 3, 0, 3, 0, 3, 3, 2, 2, 2, 0,…
+## $ coord_x       &lt;dbl&gt; 1.1428571, -0.3163265, -0.1836735, -5.9489796, 1.9…
+## $ coord_y       &lt;dbl&gt; 2.279082, 2.717857, 2.207653, 6.177041, 2.462755, …
+## $ zone          &lt;chr&gt; &quot;C&quot;, &quot;B&quot;, &quot;B&quot;, &quot;H&quot;, &quot;C&quot;, &quot;C&quot;, &quot;B&quot;, &quot;H&quot;, &quot;G&quot;, &quot;I&quot;, …
+## $ fastbreak     &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, T…
+## $ second_chance &lt;lgl&gt; FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FA…
+## $ off_turnover  &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, T…
+## $ minute        &lt;int&gt; 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 6, 6,…
+## $ console       &lt;chr&gt; &quot;09:42&quot;, &quot;09:19&quot;, &quot;09:13&quot;, &quot;08:53&quot;, &quot;08:29&quot;, &quot;08:0…
+## $ points_a      &lt;int&gt; 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 8, 8, 10, 12, …
+## $ points_b      &lt;int&gt; 0, 0, 2, 2, 2, 2, 2, 5, 5, 8, 8, 11, 11, 13, 15, 1…
+## $ utc           &lt;chr&gt; &quot;20190517160232&quot;, &quot;20190517160256&quot;, &quot;2019051716030…
+## $ make          &lt;lgl&gt; TRUE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, TRUE…
+## $ quarter       &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+## $ seconds       &lt;dbl&gt; 18, 41, 47, 67, 91, 117, 130, 146, 176, 185, 203, …
+## $ team_code_a   &lt;chr&gt; &quot;ULK&quot;, &quot;ULK&quot;, &quot;ULK&quot;, &quot;ULK&quot;, &quot;ULK&quot;, &quot;ULK&quot;, &quot;ULK&quot;, &quot;…
+## $ team_code_b   &lt;chr&gt; &quot;IST&quot;, &quot;IST&quot;, &quot;IST&quot;, &quot;IST&quot;, &quot;IST&quot;, &quot;IST&quot;, &quot;IST&quot;, &quot;…</code></pre>
+<p>Puedes comprobar que además de las coordenadas x-y, <code>coord_x</code> y <code>coord_y</code>, hay variables que dan información contextual como el jugador que realizó el tiro, el tiempo que quedaba en el marcador cuando el tiro ocurrió o si el tiro se hizo tras un rebote ofensivo. Estas variables pueden ayudar a filtrar tiros de características específicas.</p>
+<p>La función <code>plotShotChart()</code> permite mostrar gráficamente el lugar de la pista en el que se realizaron los tiros, coloreados según se metieron (verde) o se fallaron (rojo). El objeto resultante es un objeto ggplot que podemos modificar con funciones de ggplot2:</p>
+<pre class="r"><code>plotShotchart(sampleshots) +
+  labs(title = &quot;Euroleague 2018/2019 Final Four&quot;) +
+  theme(legend.position = &quot;bottom&quot;)</code></pre>
+<p><img src="/post/2019-11-28-introduction-to-eurolig/index.es_files/figure-html/shotchart-1.png" width="384" /></p>
+</div>
+
+    </div>
+
+    
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/es/tags/basketball-analytics/">Basketball analytics</a>
+  
+  <a class="badge badge-light" href="/es/tags/r/">R</a>
+  
+</div>
+
+
+
+    
+
+
+
+
+
+
+<div class="media author-card" itemscope itemtype="http://schema.org/Person">
+  
+  <img class="portrait mr-3" src="/img/foto_perfil.jpg" itemprop="image" alt="Avatar">
+  
+  <div class="media-body">
+    <h5 class="card-title" itemprop="name"><a href="/es">Sergio Olmos Pardo</a></h5>
+    <h6 class="card-subtitle">Científico de datos y jugador de baloncesto</h6>
+    
+    <ul class="network-icon" aria-hidden="true">
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="mailto:solmos41@gmail.com" target="_blank" rel="noopener">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//twitter.com/solmos41" target="_blank" rel="noopener">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//github.com/solmos" target="_blank" rel="noopener">
+          <i class="fab fa-github"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//linkedin.com/in/sergio-olmos" target="_blank" rel="noopener">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="files/cv.pdf" target="_blank" rel="noopener">
+          <i class="ai ai-cv"></i>
+        </a>
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+
+
+    
+    
+    <div class="article-widget">
+      <div class="hr-light"></div>
+      <h3>Relacionado</h3>
+      <ul>
+        
+        <li><a href="/es/post/2019-03-28-eurolig/analisis-asistencia/">Análisis de los patrones de asistencias del FC Barcelona en Euroliga</a></li>
+        
+        <li><a href="/es/post/2019-02-20-la-secuencia-de-recaman/la-secuencia-de-recaman/">La secuencia de Recamán</a></li>
+        
+        <li><a href="/es/post/2019-01-24-graficos-de-tiro-con-r/shotcharts-with-r/">rfeb: Gráficos de tiro con R</a></li>
+        
+        <li><a href="/es/post/2018-11-06-multiplication-table/multiplication-table-with-r/">Exploring the multiplication table with R</a></li>
+        
+      </ul>
+    </div>
+    
+
+    
+
+    
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "solmos" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+  </div>
+</article>
+
+<div class="container">
+  <footer class="site-footer">
+  
+
+  <p class="powered-by">
+    &copy; 2018 &middot; 
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" id="back_to_top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+</div>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Citar</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copiar
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Descargar
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    
+    
+    <script src="/js/mathjax-config.500a6cbb2c0f345fcecc21b3116d6637aa78f1f11db8081ea581abe05390c2e8f3bbffe61be3cf0217baf785c40efceabe51050a4f007e69af94efd3643260e8.js" integrity="sha512-UApsuywPNF/OzCGzEW1mN6p48fEduAgepYGr4FOQwujzu//mG&#43;PPAhe694XEDvzqvlEFCk8AfmmvlO/TZDJg6A=="></script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha512-+NqPlbbtM1QqiK8ZAo4Yrj2c4lNQoGv8P79DPtKzj++l5jnN39rHA/xsqn8zE9l0uSoxaCdrOgFs6yjyfbBxSg==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+
+    
+    
+    
+    <script id="dsq-count-scr" src="//solmos.disqus.com/count.js" async></script>
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/index.json";
+      const i18n = {
+        'placeholder': "Search...",
+        'results': "Search Results",
+        'no_results': "No results found"
+      };
+      const content_type = {
+        'post': "Posts",
+        'project': "Proyectos",
+        'publication' : "Publicaciones",
+        'talk' : "Conferencias"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    <script src="/js/search.js"></script>
+    
+
+    
+    
+
+  </body>
+</html>
+
