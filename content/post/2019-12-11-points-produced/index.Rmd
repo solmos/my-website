@@ -1,0 +1,20 @@
+---
+title: Points produced by players in the Euroleague
+author: Sergio Olmos
+date: '2019-12-11'
+slug: points-produced
+categories:
+  - English
+tags:
+  - Basketball
+  - Basketball analytics
+  - R
+image:
+  caption: ''
+  focal_point: ''
+---
+
+```{r}
+load("pbp2019.RData")
+```
+
