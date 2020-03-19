@@ -4,6 +4,17 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/post/2020-03-10-elo-rating-system/elo-rating-system/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/post/2020-03-10-elo-rating-system/elo-rating-system/" hreflang="es"/>
+    
+      <loc>/post/2020-03-10-elo-rating-system/elo-rating-system/</loc>
+      <lastmod>2020-03-10T00:00:00+00:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <xhtml:link rel="alternate" href="/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/" hreflang="en"/>
       <xhtml:link rel="alternate" href="/es/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/" hreflang="es"/>
     
@@ -185,8 +196,11 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/tags/basketball/" hreflang="en"/>
+      <xhtml:link rel="alternate" href="/es/tags/basketball/" hreflang="es"/>
+    
       <loc>/tags/basketball/</loc>
-      <lastmod>2019-03-28T00:00:00+00:00</lastmod>
+      <lastmod>2020-03-10T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -198,7 +212,7 @@
       <xhtml:link rel="alternate" href="/es/tags/basketball-analytics/" hreflang="es"/>
     
       <loc>/tags/basketball-analytics/</loc>
-      <lastmod>2019-11-28T00:00:00+00:00</lastmod>
+      <lastmod>2020-03-10T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -221,7 +235,7 @@
       <xhtml:link rel="alternate" href="/es/categories/english/" hreflang="es"/>
     
       <loc>/categories/english/</loc>
-      <lastmod>2019-11-28T00:00:00+00:00</lastmod>
+      <lastmod>2020-03-10T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -278,7 +292,7 @@
       <xhtml:link rel="alternate" href="/es/tags/r/" hreflang="es"/>
     
       <loc>/tags/r/</loc>
-      <lastmod>2019-11-28T00:00:00+00:00</lastmod>
+      <lastmod>2020-03-10T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -317,7 +331,7 @@
       <xhtml:link rel="alternate" href="/es/tags/" hreflang="es"/>
     
       <loc>/tags/</loc>
-      <lastmod>2019-03-28T00:00:00+00:00</lastmod>
+      <lastmod>2020-03-10T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     

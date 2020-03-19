@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>es</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Thu, 28 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 10 Mar 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/es/categories/castellano/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Sistema de puntuación Elo para toda la historia de la Euroliga</title>
+      <link>/es/post/2020-03-10-elo-rating-system/elo-rating-system/</link>
+      <pubDate>Tue, 10 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/es/post/2020-03-10-elo-rating-system/elo-rating-system/</guid>
+      <description>El otro día me puse a construir un modelo de probabilidad de victoria para la Euroliga pero pronto me topé con un problema. Este tipo de modelos utiliza una serie de covariables para predecir la probabilidad de victoria de un equipo a medida que avanza un partido. Una de estas covariables suele ser algún tipo de indicador de lo bueno que es un equipo antes del partido. Muchos de estos modelos utilizan las cuotas de las casas de apuestas como indicador.</description>
+    </item>
     
     <item>
       <title>Análisis de los patrones de asistencias del FC Barcelona en Euroliga</title>

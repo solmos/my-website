@@ -1,0 +1,132 @@
+---
+title: Sistema de puntuación Elo para toda la historia de la Euroliga
+subtitle: Implementación de un sistema de puntuación Elo para evaluar la calidad de todos los equipos de la historia de la Euroliga.
+summary: Implementación de un sistema de puntuación Elo para evaluar la calidad de todos los equipos de la historia de la Euroliga.
+author: Sergio Olmos
+date: '2020-03-10'
+slug: elo-rating-system
+categories:
+  - Castellano
+tags:
+  - Basketball analytics
+  - R
+  - Basketball
+image:
+  caption: ''
+  focal_point: ''
+---
+
+
+
+<p>El otro día me puse a construir un <a href="https://en.wikipedia.org/wiki/Win_probability">modelo de probabilidad de victoria</a> para la Euroliga pero pronto me topé con un problema. Este tipo de modelos utiliza una serie de covariables para predecir la probabilidad de victoria de un equipo a medida que avanza un partido. Una de estas covariables suele ser algún tipo de indicador de lo bueno que es un equipo antes del partido. Muchos de estos modelos utilizan las cuotas de las casas de apuestas como indicador. Algunos otros utilizan algún tipo de sistema de puntuación que asigna un valor númerico a cada equipo en base a los resultados.</p>
+<p>Necesitaba obtener algún indicador de este tipo para todos los partidos disputados en la Euroliga desde el 2001. En lugar de ensuciarme las manos en el código HTML de los portales de apuestas, decidí construir un sistema de puntuación Elo para la Euroliga, que es mucho más divertido y puede ser interesante en sí mismo.</p>
+<div id="sistema-de-puntuacion-elo" class="section level2">
+<h2>Sistema de puntuación Elo</h2>
+<p>El <a href="https://en.wikipedia.org/wiki/Elo_rating_system">sistema de puntuación Elo</a> es un método para estimar la habilidad relativa de jugadores o equipos en juegos de suma cero. Este método se inventó como un sistema de puntuación para jugadores de ajedrez, pero posteriormente se ha utilizado en multitud de deportes como el fútbol, el tenis, el baloncesto o el Scrabble.</p>
+<p>Las ideas básicas de un sistema Elo son:</p>
+<ul>
+<li><p>La puntuación (Elo) del equipo se actualiza después de cada partido.</p></li>
+<li><p>Los equipos ganan puntos Elo cuando ganan partidos y pierden puntos Elo cuando pierden partidos. El sistema es de suma cero, lo que quiere decir que el ganador y el perdedor ganan y pierden el mismo número de puntos Elo, respectivamente.</p></li>
+<li><p>El valor de cada victoria o derrota depende de la calidad relativa del rival.</p></li>
+</ul>
+<p>A partir de estas ideas básicas podemos construir un sistema de puntuación que nos indique la calidad de los equipos de Euroliga a lo largo de la historia.</p>
+<p>A continuación voy a explicar los detalles del modelo que he construido.</p>
+<div id="algoritmo-basico" class="section level3">
+<h3>Algoritmo básico</h3>
+<p>Para actualizar la puntuación Elo de un equipo después de un partido se le añade o se le resta un número de puntos que viene determinado por la diferencia entre el resultado real y el resultado esperado por el sistema según las puntuaciones Elo de los dos equipos antes de empezar el partido.</p>
+<p>Vamos a expresar este algoritmo formalmente. Si <span class="math inline">\(R_A\)</span> es la puntuación Elo del equipo A antes del partido y <span class="math inline">\(R&#39;_A\)</span> es la puntuación Elo del equipo A después del partido, la ecuación básica que actualiza la puntuación Elo de un equipo después de un partido es</p>
+<p><span class="math display">\[R&#39;_A = R_A + k (S_A - P_A)\]</span></p>
+<p>donde</p>
+<ul>
+<li><p><span class="math inline">\(k\)</span> es un parámetro a estimar.</p></li>
+<li><p><span class="math inline">\(S_A\)</span> asigna un valor entre 0 y 1 según derrota o victoria respectivamente.</p></li>
+<li><p><span class="math inline">\(P_A\)</span> es la probabilidad de victoria del equipo A esperada por el modelo.</p></li>
+</ul>
+<p>A continuación veremos qué son realmente los elementos <span class="math inline">\(P_A\)</span> y <span class="math inline">\(k\)</span> de esta ecuación y añadiremos algunos ajustes que podrían ayudar a que nuestro sistema de puntuación sea más predictivo.</p>
+</div>
+<div id="probabilidad-de-victoria-esperada" class="section level3">
+<h3>Probabilidad de victoria esperada</h3>
+<p>Para cada partido, nuestro sistema de calificación Elo asigna una probabilidad de victoria a cada equipo según la diferencia de puntos Elo entre los dos equipos. La probabilidad de que un equipo A gane un partido contra equipo B viene dada por</p>
+<p><span class="math display">\[P_A = \frac{1}{1 + 10^{-\Delta_{AB} / s}}\]</span>
+donde <span class="math inline">\(\Delta_{AB}\)</span> es la diferencia de puntos Elo entre el equipo A y el equipo B y <span class="math inline">\(s\)</span> es un parámetro de escalado de la función. La diferencia de puntos Elo, <span class="math inline">\(\Delta_{AB}\)</span>, incluye los diferentes ajustes que incorporaremos más adelante para tener en cuenta cosas como qué equipo juega en casa.</p>
+<p>Esta <a href="https://en.wikipedia.org/wiki/Sigmoid_function">función sigmoide</a> resulta en valores entre 0 y 1, por lo que es apropiada para estimar probabilidades. Para entender cómo funciona esta función, podemos dibujarla en un gráfico para distintos valores de <span class="math inline">\(\Delta_{AB}\)</span> y <span class="math inline">\(s\)</span>.</p>
+<p><img src="/post/2020-03-10-elo-rating-system/index.es_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>Podemos observar que cuanto menor es el valor del parámetro <span class="math inline">\(s\)</span>, la probabilidad de victoria cambia mucho más rápido a medida que la diferencia absoluta en puntos Elo aumenta. Queremos elegir un valor de <span class="math inline">\(s\)</span> que resulte en probabilidades de victoria que concuerden lo máximo posible con los resultados de los partidos. Más adelante explico cómo elijo este valor.</p>
+</div>
+<div id="diferencia-de-puntos-elo" class="section level3">
+<h3>Diferencia de puntos Elo</h3>
+<p>Como hemos visto, la probabilidad de victoria depende de la diferencia de puntos Elo entre los dos equipos que juegan el partido.</p>
+<p>Siguiendo la notación anterior, la diferencia de puntos Elo entre dos equipos, <span class="math inline">\(\Delta_{AB}\)</span>, viene dada por
+<span class="math display">\[\Delta_{AB} = R_A - R_B\]</span></p>
+<p>Sin embargo, ya mencioné que en esta diferencia podemos incluir ciertos ajustes que puden influir en las opciones de victoria. Para este modelo simplemente voy a tener en cuenta si se juega en casa o fuera. Pero en un futuro espero poder incluir algunos ajustes más como la distancia que ha tenido que viajar el equipo visitante.</p>
+<p>Como todos sabemos, el equipo que juega en casa parece tener una ligera ventaja. La diferencia de puntos entre equipos locales y visitantes es de alrededor de +4 puntos.</p>
+<p><img src="/post/2020-03-10-elo-rating-system/index.es_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Para incluir este factor en el modelo, debemos introducir una variable <span class="math inline">\(H_A\)</span> que reduzca en la diferencia de puntos Elo, <span class="math inline">\(\Delta_{AB}\)</span>, cuando equipo A juega en casa y que la aumente cuando equipo A juega en casa del equipo B. También deberemos tener en cuenta que en ocasiones como la Final Four, ambos equipos pueden jugar fuera de casa en tal caso la diferencia quedará inalterada.</p>
+<p>Esto es,</p>
+<p><span class="math display">\[\Delta_{AB} = R_A + H_A - R_B\]</span></p>
+<p>donde</p>
+<p><span class="math display">\[H_A = \cases{
+h, &amp;\text{ si equipo A juega en casa.} \\
+-h, &amp;\text{ si equipo A juega en casa de B.} \\
+0, &amp;\text{ si ambos equipos juegan fuera de casa.}
+}\]</span></p>
+<p>Mostraré cómo he elegido el valor de <span class="math inline">\(h\)</span> más adelante.</p>
+</div>
+<div id="margen-de-victoria" class="section level3">
+<h3>Margen de victoria</h3>
+<p>Otro aspecto a tener en cuenta a la hora de otorgar puntos al ganador/perdedor de un partido es por cuántos puntos ha ganado/perdido ese equipo. Podemos introducir un multiplicador en la ecuación principal del modelo que asigne más puntos a victorias/derrotas amplias que a victorias/derrotas ajustadas, permaneciendo el resto de variables constante.</p>
+<p>De esta forma actualizaremos la puntuación Elo según la siguiente ecuación:</p>
+<p><span class="math display">\[R&#39;_A = R_A + k \times m_{A}(S_A - P_A)\]</span></p>
+<p>La variable <span class="math inline">\(m_A\)</span> es el multiplicador por margen de victoria y viene dado por</p>
+<p><span class="math display">\[m_{A} = \frac{(d + 3)^{0.8}}{7.5 + 0.006 \Delta_{AB}}\]</span>
+donde <span class="math inline">\(d\)</span> es la diferencia de puntos anotados en el partido entre el equipo A y el equipo B en valor absoluto. Esta fórmula la he sacado del modelo Elo para la NBA de <a href="https://fivethirtyeight.com/features/how-we-calculate-nba-elo-ratings/">FiveThirtyEight</a>.</p>
+<p>Esta fórmula un tanto extraña tiene en cuenta que la diferencia de puntos de los equipos favoritos en las vicorias tienden a ser más grande que en las derrotas. Si no tenemos en cuenta esto estaríamos introduciendo un elemento de autocorrelación que haría las puntuaciones menos estables.</p>
+</div>
+<div id="evolucion-temporada-a-temporada" class="section level3">
+<h3>Evolución temporada a temporada</h3>
+<p>La última pieza del modelo que tenemos que definir es en qué medida se conservan las puntuaciones Elo de una temporada a la siguiente. En la primera temporada de la que tenemos datos, la 2001/2002, todos los equipos empiezan con una puntuación Elo de 1300. Una vez acabada esa temporada los equipos terminarán con una puntuación distinta a la que empezaron. Volver a asignar 1300 puntos a todos los equipos al inicio de la siguiente temporada conllevaría deshechar valiosa información ya que es muy probable que un buen/mal equipo en una temporada sea también bueno/malo la siguiente.</p>
+<p>Recalcar que muchos equipos tienen temporadas intermedias en las que no participaron en Euroliga. Cuando vuelven a competir en la Euroliga, la última puntuación Elo que obtuvieron es la que tomo de referencia, en lugar de devolver a este equipo a los 1300.</p>
+<p>Aun así, quizás no sea lo ideal asignar exactamente la misma puntuación con la que acabaron la temporada. Temporadas muy buenas o malas tienden a volver hacia la media. Podemos calcular la puntuación Elo inicial como una media ponderada entre la puntuación final y la media de todos los equipos a lo largo de todos las temporadas. Colocamos la media histórica en 1500 puntos Elo.</p>
+<p>Así pues, la puntuación del equipo A al iniciar una nueva temporada será</p>
+<p><span class="math display">\[R^*_{A} = w R_A + (1 - w)1505\]</span>
+donde <span class="math inline">\(w \in (0, 1)\)</span> es el peso que asignaremos a la puntuación del equipo al acabar la temporada, <span class="math inline">\(R_A\)</span>. Nótese que hemos puesto 1505 en lugar de 1500 para tener en cuenta que cada año se incorporaban nuevos equipos a la liga, comenzando con una puntuación Elo de 1300 y bajando la media más de lo que querríamos.</p>
+<p>Con esta definición, valores de <span class="math inline">\(w\)</span> cercanos a 1 quieren decir que los equipos son bastante consistentes de una temporada a otra, mientras que valores de <span class="math inline">\(w\)</span> más cercanos a 0 indican que la puntuación al acabar la temporada de un equipo aporta poca información para la siguiente temporada.</p>
+<hr />
+</div>
+</div>
+<div id="parametros-del-modelo" class="section level2">
+<h2>Parámetros del modelo</h2>
+<p>Como hemos visto, debemos asignar un valor a varios parámetros de nuestro sistema de puntuación Elo. Para ello necesitamos una forma de evaluar la precisión del modelo.</p>
+<p>No he conseguido encontrar ejemplos de optimización en este tipo de modelos. Lo único que se me ha ocurrido es utilizar una <a href="https://en.wikipedia.org/wiki/Hyperparameter_optimization">búsqueda por cuadrícula</a> con valores razonables de los parámetros. Este método consiste en construir una cuadrícula con todas las combinaciones posibles de los valores especificados de cada parámetro y evaluar con una función de precisión o de pérdida qué parametros maxifican o minimizan esta función respectivamente.</p>
+<p>La función de precisión que he elegido es la proporción de predicciones de victoria correcta, si elegimos como ganador al equipo con mayor puntuación Elo teniendo en cuenta la ventaja por jugar en casa.</p>
+<p>No estoy seguro de que esta función de precisión sea la apropiada. En una futura versión del modelo, probaré otro tipo de criterios para evaluarlo. Aún así, obtengo resultados a simple vista razonables y una precisión de acierto del 70%.</p>
+<p>Los valores que he elegido para los parámetros del modelo son <span class="math inline">\(k = 25\)</span>, <span class="math inline">\(s = 400\)</span>, <span class="math inline">\(h = 100\)</span> y <span class="math inline">\(w = 0.8\)</span>. Un valor de 25 para <span class="math inline">\(k\)</span> es bastante alto para este tipo de modelos y provoca que el modelo reaccione fuertemente a los resultados de cada partido. Esto también quiere decir que las rachas son bastante indicativas de la calidad de un equipo y que no es simplemente suerte.</p>
+<p>Puedes echarle un ojo al código de todo el modelo <a href="https://gist.github.com/solmos/f92a174aa7a005c25c2f5db31988efe4">aquí</a>.</p>
+<hr />
+</div>
+<div id="limitaciones-del-modelo" class="section level2">
+<h2>Limitaciones del modelo</h2>
+<p>El sistema de puntuación Elo es muy simple: solo tiene en cuenta la calidad del rival y el resultado al acabar el partido. Aunque ha demostrado ser una forma muy adecuada de evaluar equipos, esta simpleza conlleva una serie de limitaciones. El modelo no sabe cuando hay lesiones o fichajes, por lo que no cambia la puntuación automáticamente cuando algo así ocurre. A medida que pasan los partidos el sistema en teoría detectará estos cambios a traves de los resultados obtenidos. Sin embargo, es posible que tarde algunas jornadas en detectar la mejoría o empeoramiento del equipo.</p>
+<hr />
+</div>
+<div id="resultados" class="section level2">
+<h2>Resultados</h2>
+<p>A continuación muestro la evolución de la puntuación Elo para todos los equipos de la historia hasta la jornada 28 de la actual temporada 2019-20 y resaltando varios equipos españoles.</p>
+<p><img src="featured.png" /></p>
+<p>Algunas observaciones rápidas al ver este gráfico:</p>
+<ul>
+<li><p>El mejor equipo de la historia de la Euroliga según mi modelo Elo fue el <a href="https://www.euroleague.net/competition/teams/showteam?clubcode=BAR&amp;seasoncode=E2012">FC Barcelona de la temporada 2012-13</a>.</p></li>
+<li><p>El Real Madrid comenzó a juntarse con la elite de Europa una temporada después de la entrada de Laso como entrenador.</p></li>
+<li><p>El Real Madrid de la actual temporada es el lider en puntuación Elo tras 28 jornadas, con casi los mismos puntos que el Anadolu Efes Istambul, a pesar de que los turcos tienen dos victorias más.</p></li>
+</ul>
+<p>¿Os parecen razonables los resultados?</p>
+<hr />
+</div>
+<div id="futuros-pasos" class="section level2">
+<h2>Futuros pasos</h2>
+<ul>
+<li><p>Construir una aplicación web con Shiny que permita interactuar con este gráfico para explorar mejor los resultados.</p></li>
+<li><p>Explorar mejores formas de optimizar los parámetros del modelo.</p></li>
+<li><p>Simular los resultados de lo que queda de la actual temporada con las puntuaciones Elo obtenidas.</p></li>
+</ul>
+</div>

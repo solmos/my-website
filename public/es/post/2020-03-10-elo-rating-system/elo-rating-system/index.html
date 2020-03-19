@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 3.0.0">
+  <meta name="generator" content="Hugo 0.49.2" />
+  <meta name="author" content="Sergio Olmos Pardo">
+
+  
+  
+  
+  
+    
+  
+  <meta name="description" content="Implementación de un sistema de puntuación Elo para evaluar la calidad de todos los equipos de la historia de la Euroliga.">
+
+  
+  <link rel="alternate" hreflang="en" href="/post/2020-03-10-elo-rating-system/elo-rating-system/">
+  
+  <link rel="alternate" hreflang="es" href="/es/post/2020-03-10-elo-rating-system/elo-rating-system/">
+
+  
+
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" crossorigin="anonymous">
+        
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700|Roboto:400,400italic,700|Roboto+Mono">
+  
+
+  <link rel="stylesheet" href="/es/styles.css">
+  
+
+  
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-131928090-1', 'auto');
+      
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+  
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Sergio Olmos">
+  <link rel="feed" href="/index.xml" type="application/rss+xml" title="Sergio Olmos">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="/es/post/2020-03-10-elo-rating-system/elo-rating-system/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="twitter:site" content="@solmos41">
+  <meta property="twitter:creator" content="@solmos41">
+  
+  <meta property="og:site_name" content="Sergio Olmos">
+  <meta property="og:url" content="/es/post/2020-03-10-elo-rating-system/elo-rating-system/">
+  <meta property="og:title" content="Sistema de puntuación Elo para toda la historia de la Euroliga | Sergio Olmos">
+  <meta property="og:description" content="Implementación de un sistema de puntuación Elo para evaluar la calidad de todos los equipos de la historia de la Euroliga.">
+  
+  
+    
+  <meta property="og:image" content="/img/recaman_sharing.png">
+  <meta property="og:locale" content="es">
+  
+  <meta property="article:published_time" content="2020-03-10T00:00:00&#43;00:00">
+  
+  <meta property="article:modified_time" content="2020-03-10T00:00:00&#43;00:00">
+  
+
+  
+
+  
+
+  <title>Sistema de puntuación Elo para toda la historia de la Euroliga | Sergio Olmos</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#TableOfContents" data-offset="71" >
+
+<nav class="navbar navbar-light fixed-top navbar-expand-lg py-0" id="navbar-main">
+  <div class="container">
+
+    
+      <a class="navbar-brand" href="/es">Sergio Olmos</a>
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Barra de navegación">
+        <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+    
+    <div class="collapse navbar-collapse" id="navbar">
+
+      
+      
+      <ul class="navbar-nav ml-auto">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/es/#posts">
+            
+            <span>Blog</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/es/#projects">
+            
+            <span>Proyectos</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/es/#about">
+            
+            <span>Sobre mí</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+      
+
+        
+
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">
+            <i class="fas fa-globe" aria-hidden="true"></i>
+            <span>Español</span>
+          </a>
+          <ul class="dropdown-menu">
+            
+            <li class="dropdown-item my-0 py-0 mx-0 px-0">
+              <a href="/post/2020-03-10-elo-rating-system/elo-rating-system/">
+                <span>English</span>
+              </a>
+            </li>
+            
+          </ul>
+        </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="article-header d-xl-none">
+  <img src="/es/post/2020-03-10-elo-rating-system/elo-rating-system/featured_hu45f51258e8fba4b22835420c96f75aba_2308556_1600x400_fill_q90_box_smart1_2.png" class="article-banner" itemprop="image" alt="">
+  
+</div>
+
+
+<div class="container-fluid split-header d-none d-xl-block">
+  <div class="row">
+    <div class="col-6">
+      <div class="split-header-content">
+        <h1 itemprop="name">Sistema de puntuación Elo para toda la historia de la Euroliga</h1>
+
+        
+        <p class="page-subtitle">Implementación de un sistema de puntuación Elo para evaluar la calidad de todos los equipos de la historia de la Euroliga.</p>
+        
+
+        
+
+<div class="article-metadata">
+
+  
+  
+  <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+  
+
+  <span class="article-date">
+    
+    <meta content="2020-03-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+    <time datetime="2020-03-10 00:00:00 &#43;0000 UTC" itemprop="dateModified">
+      Mar 10, 2020
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    10 min de lectura
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="/es/post/2020-03-10-elo-rating-system/elo-rating-system/#disqus_thread"></a>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder"></i>
+    
+    <a href="/es/categories/castellano/">Castellano</a>
+    
+  </span>
+  
+  
+
+  
+
+</div>
+
+
+        
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Sistema%20de%20puntuaci%c3%b3n%20Elo%20para%20toda%20la%20historia%20de%20la%20Euroliga&amp;url=%2fes%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fes%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fes%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f&amp;title=Sistema%20de%20puntuaci%c3%b3n%20Elo%20para%20toda%20la%20historia%20de%20la%20Euroliga"
+         target="_blank" rel="noopener">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fes%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f&amp;title=Sistema%20de%20puntuaci%c3%b3n%20Elo%20para%20toda%20la%20historia%20de%20la%20Euroliga"
+         target="_blank" rel="noopener">
+        <i class="fab fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Sistema%20de%20puntuaci%c3%b3n%20Elo%20para%20toda%20la%20historia%20de%20la%20Euroliga&amp;body=%2fes%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="split-header-image">
+        <img src="/es/post/2020-03-10-elo-rating-system/elo-rating-system/featured_hu45f51258e8fba4b22835420c96f75aba_2308556_680x500_fill_q90_box_smart1_2.png" itemprop="image" alt="">
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="article-container d-xl-none">
+  <h1 itemprop="name">Sistema de puntuación Elo para toda la historia de la Euroliga</h1>
+
+  
+  <p class="page-subtitle">Implementación de un sistema de puntuación Elo para evaluar la calidad de todos los equipos de la historia de la Euroliga.</p>
+  
+
+  
+
+<div class="article-metadata">
+
+  
+  
+  <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+  
+
+  <span class="article-date">
+    
+    <meta content="2020-03-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+    <time datetime="2020-03-10 00:00:00 &#43;0000 UTC" itemprop="dateModified">
+      Mar 10, 2020
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    10 min de lectura
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="/es/post/2020-03-10-elo-rating-system/elo-rating-system/#disqus_thread"></a>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder"></i>
+    
+    <a href="/es/categories/castellano/">Castellano</a>
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Sistema%20de%20puntuaci%c3%b3n%20Elo%20para%20toda%20la%20historia%20de%20la%20Euroliga&amp;url=%2fes%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fes%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fes%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f&amp;title=Sistema%20de%20puntuaci%c3%b3n%20Elo%20para%20toda%20la%20historia%20de%20la%20Euroliga"
+         target="_blank" rel="noopener">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fes%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f&amp;title=Sistema%20de%20puntuaci%c3%b3n%20Elo%20para%20toda%20la%20historia%20de%20la%20Euroliga"
+         target="_blank" rel="noopener">
+        <i class="fab fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Sistema%20de%20puntuaci%c3%b3n%20Elo%20para%20toda%20la%20historia%20de%20la%20Euroliga&amp;body=%2fes%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style" itemprop="articleBody">
+      <p>El otro día me puse a construir un <a href="https://en.wikipedia.org/wiki/Win_probability">modelo de probabilidad de victoria</a> para la Euroliga pero pronto me topé con un problema. Este tipo de modelos utiliza una serie de covariables para predecir la probabilidad de victoria de un equipo a medida que avanza un partido. Una de estas covariables suele ser algún tipo de indicador de lo bueno que es un equipo antes del partido. Muchos de estos modelos utilizan las cuotas de las casas de apuestas como indicador. Algunos otros utilizan algún tipo de sistema de puntuación que asigna un valor númerico a cada equipo en base a los resultados.</p>
+<p>Necesitaba obtener algún indicador de este tipo para todos los partidos disputados en la Euroliga desde el 2001. En lugar de ensuciarme las manos en el código HTML de los portales de apuestas, decidí construir un sistema de puntuación Elo para la Euroliga, que es mucho más divertido y puede ser interesante en sí mismo.</p>
+<div id="sistema-de-puntuacion-elo" class="section level2">
+<h2>Sistema de puntuación Elo</h2>
+<p>El <a href="https://en.wikipedia.org/wiki/Elo_rating_system">sistema de puntuación Elo</a> es un método para estimar la habilidad relativa de jugadores o equipos en juegos de suma cero. Este método se inventó como un sistema de puntuación para jugadores de ajedrez, pero posteriormente se ha utilizado en multitud de deportes como el fútbol, el tenis, el baloncesto o el Scrabble.</p>
+<p>Las ideas básicas de un sistema Elo son:</p>
+<ul>
+<li><p>La puntuación (Elo) del equipo se actualiza después de cada partido.</p></li>
+<li><p>Los equipos ganan puntos Elo cuando ganan partidos y pierden puntos Elo cuando pierden partidos. El sistema es de suma cero, lo que quiere decir que el ganador y el perdedor ganan y pierden el mismo número de puntos Elo, respectivamente.</p></li>
+<li><p>El valor de cada victoria o derrota depende de la calidad relativa del rival.</p></li>
+</ul>
+<p>A partir de estas ideas básicas podemos construir un sistema de puntuación que nos indique la calidad de los equipos de Euroliga a lo largo de la historia.</p>
+<p>A continuación voy a explicar los detalles del modelo que he construido.</p>
+<div id="algoritmo-basico" class="section level3">
+<h3>Algoritmo básico</h3>
+<p>Para actualizar la puntuación Elo de un equipo después de un partido se le añade o se le resta un número de puntos que viene determinado por la diferencia entre el resultado real y el resultado esperado por el sistema según las puntuaciones Elo de los dos equipos antes de empezar el partido.</p>
+<p>Vamos a expresar este algoritmo formalmente. Si <span class="math inline">\(R_A\)</span> es la puntuación Elo del equipo A antes del partido y <span class="math inline">\(R&#39;_A\)</span> es la puntuación Elo del equipo A después del partido, la ecuación básica que actualiza la puntuación Elo de un equipo después de un partido es</p>
+<p><span class="math display">\[R&#39;_A = R_A + k (S_A - P_A)\]</span></p>
+<p>donde</p>
+<ul>
+<li><p><span class="math inline">\(k\)</span> es un parámetro a estimar.</p></li>
+<li><p><span class="math inline">\(S_A\)</span> asigna un valor entre 0 y 1 según derrota o victoria respectivamente.</p></li>
+<li><p><span class="math inline">\(P_A\)</span> es la probabilidad de victoria del equipo A esperada por el modelo.</p></li>
+</ul>
+<p>A continuación veremos qué son realmente los elementos <span class="math inline">\(P_A\)</span> y <span class="math inline">\(k\)</span> de esta ecuación y añadiremos algunos ajustes que podrían ayudar a que nuestro sistema de puntuación sea más predictivo.</p>
+</div>
+<div id="probabilidad-de-victoria-esperada" class="section level3">
+<h3>Probabilidad de victoria esperada</h3>
+<p>Para cada partido, nuestro sistema de calificación Elo asigna una probabilidad de victoria a cada equipo según la diferencia de puntos Elo entre los dos equipos. La probabilidad de que un equipo A gane un partido contra equipo B viene dada por</p>
+<p><span class="math display">\[P_A = \frac{1}{1 + 10^{-\Delta_{AB} / s}}\]</span>
+donde <span class="math inline">\(\Delta_{AB}\)</span> es la diferencia de puntos Elo entre el equipo A y el equipo B y <span class="math inline">\(s\)</span> es un parámetro de escalado de la función. La diferencia de puntos Elo, <span class="math inline">\(\Delta_{AB}\)</span>, incluye los diferentes ajustes que incorporaremos más adelante para tener en cuenta cosas como qué equipo juega en casa.</p>
+<p>Esta <a href="https://en.wikipedia.org/wiki/Sigmoid_function">función sigmoide</a> resulta en valores entre 0 y 1, por lo que es apropiada para estimar probabilidades. Para entender cómo funciona esta función, podemos dibujarla en un gráfico para distintos valores de <span class="math inline">\(\Delta_{AB}\)</span> y <span class="math inline">\(s\)</span>.</p>
+<p><img src="/post/2020-03-10-elo-rating-system/index.es_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>Podemos observar que cuanto menor es el valor del parámetro <span class="math inline">\(s\)</span>, la probabilidad de victoria cambia mucho más rápido a medida que la diferencia absoluta en puntos Elo aumenta. Queremos elegir un valor de <span class="math inline">\(s\)</span> que resulte en probabilidades de victoria que concuerden lo máximo posible con los resultados de los partidos. Más adelante explico cómo elijo este valor.</p>
+</div>
+<div id="diferencia-de-puntos-elo" class="section level3">
+<h3>Diferencia de puntos Elo</h3>
+<p>Como hemos visto, la probabilidad de victoria depende de la diferencia de puntos Elo entre los dos equipos que juegan el partido.</p>
+<p>Siguiendo la notación anterior, la diferencia de puntos Elo entre dos equipos, <span class="math inline">\(\Delta_{AB}\)</span>, viene dada por
+<span class="math display">\[\Delta_{AB} = R_A - R_B\]</span></p>
+<p>Sin embargo, ya mencioné que en esta diferencia podemos incluir ciertos ajustes que puden influir en las opciones de victoria. Para este modelo simplemente voy a tener en cuenta si se juega en casa o fuera. Pero en un futuro espero poder incluir algunos ajustes más como la distancia que ha tenido que viajar el equipo visitante.</p>
+<p>Como todos sabemos, el equipo que juega en casa parece tener una ligera ventaja. La diferencia de puntos entre equipos locales y visitantes es de alrededor de +4 puntos.</p>
+<p><img src="/post/2020-03-10-elo-rating-system/index.es_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Para incluir este factor en el modelo, debemos introducir una variable <span class="math inline">\(H_A\)</span> que reduzca en la diferencia de puntos Elo, <span class="math inline">\(\Delta_{AB}\)</span>, cuando equipo A juega en casa y que la aumente cuando equipo A juega en casa del equipo B. También deberemos tener en cuenta que en ocasiones como la Final Four, ambos equipos pueden jugar fuera de casa en tal caso la diferencia quedará inalterada.</p>
+<p>Esto es,</p>
+<p><span class="math display">\[\Delta_{AB} = R_A + H_A - R_B\]</span></p>
+<p>donde</p>
+<p><span class="math display">\[H_A = \cases{
+h, &amp;\text{ si equipo A juega en casa.} \\
+-h, &amp;\text{ si equipo A juega en casa de B.} \\
+0, &amp;\text{ si ambos equipos juegan fuera de casa.}
+}\]</span></p>
+<p>Mostraré cómo he elegido el valor de <span class="math inline">\(h\)</span> más adelante.</p>
+</div>
+<div id="margen-de-victoria" class="section level3">
+<h3>Margen de victoria</h3>
+<p>Otro aspecto a tener en cuenta a la hora de otorgar puntos al ganador/perdedor de un partido es por cuántos puntos ha ganado/perdido ese equipo. Podemos introducir un multiplicador en la ecuación principal del modelo que asigne más puntos a victorias/derrotas amplias que a victorias/derrotas ajustadas, permaneciendo el resto de variables constante.</p>
+<p>De esta forma actualizaremos la puntuación Elo según la siguiente ecuación:</p>
+<p><span class="math display">\[R&#39;_A = R_A + k \times m_{A}(S_A - P_A)\]</span></p>
+<p>La variable <span class="math inline">\(m_A\)</span> es el multiplicador por margen de victoria y viene dado por</p>
+<p><span class="math display">\[m_{A} = \frac{(d + 3)^{0.8}}{7.5 + 0.006 \Delta_{AB}}\]</span>
+donde <span class="math inline">\(d\)</span> es la diferencia de puntos anotados en el partido entre el equipo A y el equipo B en valor absoluto. Esta fórmula la he sacado del modelo Elo para la NBA de <a href="https://fivethirtyeight.com/features/how-we-calculate-nba-elo-ratings/">FiveThirtyEight</a>.</p>
+<p>Esta fórmula un tanto extraña tiene en cuenta que la diferencia de puntos de los equipos favoritos en las vicorias tienden a ser más grande que en las derrotas. Si no tenemos en cuenta esto estaríamos introduciendo un elemento de autocorrelación que haría las puntuaciones menos estables.</p>
+</div>
+<div id="evolucion-temporada-a-temporada" class="section level3">
+<h3>Evolución temporada a temporada</h3>
+<p>La última pieza del modelo que tenemos que definir es en qué medida se conservan las puntuaciones Elo de una temporada a la siguiente. En la primera temporada de la que tenemos datos, la 2001/2002, todos los equipos empiezan con una puntuación Elo de 1300. Una vez acabada esa temporada los equipos terminarán con una puntuación distinta a la que empezaron. Volver a asignar 1300 puntos a todos los equipos al inicio de la siguiente temporada conllevaría deshechar valiosa información ya que es muy probable que un buen/mal equipo en una temporada sea también bueno/malo la siguiente.</p>
+<p>Recalcar que muchos equipos tienen temporadas intermedias en las que no participaron en Euroliga. Cuando vuelven a competir en la Euroliga, la última puntuación Elo que obtuvieron es la que tomo de referencia, en lugar de devolver a este equipo a los 1300.</p>
+<p>Aun así, quizás no sea lo ideal asignar exactamente la misma puntuación con la que acabaron la temporada. Temporadas muy buenas o malas tienden a volver hacia la media. Podemos calcular la puntuación Elo inicial como una media ponderada entre la puntuación final y la media de todos los equipos a lo largo de todos las temporadas. Colocamos la media histórica en 1500 puntos Elo.</p>
+<p>Así pues, la puntuación del equipo A al iniciar una nueva temporada será</p>
+<p><span class="math display">\[R^*_{A} = w R_A + (1 - w)1505\]</span>
+donde <span class="math inline">\(w \in (0, 1)\)</span> es el peso que asignaremos a la puntuación del equipo al acabar la temporada, <span class="math inline">\(R_A\)</span>. Nótese que hemos puesto 1505 en lugar de 1500 para tener en cuenta que cada año se incorporaban nuevos equipos a la liga, comenzando con una puntuación Elo de 1300 y bajando la media más de lo que querríamos.</p>
+<p>Con esta definición, valores de <span class="math inline">\(w\)</span> cercanos a 1 quieren decir que los equipos son bastante consistentes de una temporada a otra, mientras que valores de <span class="math inline">\(w\)</span> más cercanos a 0 indican que la puntuación al acabar la temporada de un equipo aporta poca información para la siguiente temporada.</p>
+<hr />
+</div>
+</div>
+<div id="parametros-del-modelo" class="section level2">
+<h2>Parámetros del modelo</h2>
+<p>Como hemos visto, debemos asignar un valor a varios parámetros de nuestro sistema de puntuación Elo. Para ello necesitamos una forma de evaluar la precisión del modelo.</p>
+<p>No he conseguido encontrar ejemplos de optimización en este tipo de modelos. Lo único que se me ha ocurrido es utilizar una <a href="https://en.wikipedia.org/wiki/Hyperparameter_optimization">búsqueda por cuadrícula</a> con valores razonables de los parámetros. Este método consiste en construir una cuadrícula con todas las combinaciones posibles de los valores especificados de cada parámetro y evaluar con una función de precisión o de pérdida qué parametros maxifican o minimizan esta función respectivamente.</p>
+<p>La función de precisión que he elegido es la proporción de predicciones de victoria correcta, si elegimos como ganador al equipo con mayor puntuación Elo teniendo en cuenta la ventaja por jugar en casa.</p>
+<p>No estoy seguro de que esta función de precisión sea la apropiada. En una futura versión del modelo, probaré otro tipo de criterios para evaluarlo. Aún así, obtengo resultados a simple vista razonables y una precisión de acierto del 70%.</p>
+<p>Los valores que he elegido para los parámetros del modelo son <span class="math inline">\(k = 25\)</span>, <span class="math inline">\(s = 400\)</span>, <span class="math inline">\(h = 100\)</span> y <span class="math inline">\(w = 0.8\)</span>. Un valor de 25 para <span class="math inline">\(k\)</span> es bastante alto para este tipo de modelos y provoca que el modelo reaccione fuertemente a los resultados de cada partido. Esto también quiere decir que las rachas son bastante indicativas de la calidad de un equipo y que no es simplemente suerte.</p>
+<p>Puedes echarle un ojo al código de todo el modelo <a href="https://gist.github.com/solmos/f92a174aa7a005c25c2f5db31988efe4">aquí</a>.</p>
+<hr />
+</div>
+<div id="limitaciones-del-modelo" class="section level2">
+<h2>Limitaciones del modelo</h2>
+<p>El sistema de puntuación Elo es muy simple: solo tiene en cuenta la calidad del rival y el resultado al acabar el partido. Aunque ha demostrado ser una forma muy adecuada de evaluar equipos, esta simpleza conlleva una serie de limitaciones. El modelo no sabe cuando hay lesiones o fichajes, por lo que no cambia la puntuación automáticamente cuando algo así ocurre. A medida que pasan los partidos el sistema en teoría detectará estos cambios a traves de los resultados obtenidos. Sin embargo, es posible que tarde algunas jornadas en detectar la mejoría o empeoramiento del equipo.</p>
+<hr />
+</div>
+<div id="resultados" class="section level2">
+<h2>Resultados</h2>
+<p>A continuación muestro la evolución de la puntuación Elo para todos los equipos de la historia hasta la jornada 28 de la actual temporada 2019-20 y resaltando varios equipos españoles.</p>
+<p><img src="featured.png" /></p>
+<p>Algunas observaciones rápidas al ver este gráfico:</p>
+<ul>
+<li><p>El mejor equipo de la historia de la Euroliga según mi modelo Elo fue el <a href="https://www.euroleague.net/competition/teams/showteam?clubcode=BAR&amp;seasoncode=E2012">FC Barcelona de la temporada 2012-13</a>.</p></li>
+<li><p>El Real Madrid comenzó a juntarse con la elite de Europa una temporada después de la entrada de Laso como entrenador.</p></li>
+<li><p>El Real Madrid de la actual temporada es el lider en puntuación Elo tras 28 jornadas, con casi los mismos puntos que el Anadolu Efes Istambul, a pesar de que los turcos tienen dos victorias más.</p></li>
+</ul>
+<p>¿Os parecen razonables los resultados?</p>
+<hr />
+</div>
+<div id="futuros-pasos" class="section level2">
+<h2>Futuros pasos</h2>
+<ul>
+<li><p>Construir una aplicación web con Shiny que permita interactuar con este gráfico para explorar mejor los resultados.</p></li>
+<li><p>Explorar mejores formas de optimizar los parámetros del modelo.</p></li>
+<li><p>Simular los resultados de lo que queda de la actual temporada con las puntuaciones Elo obtenidas.</p></li>
+</ul>
+</div>
+
+    </div>
+
+    
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/es/tags/basketball-analytics/">Basketball analytics</a>
+  
+  <a class="badge badge-light" href="/es/tags/r/">R</a>
+  
+  <a class="badge badge-light" href="/es/tags/basketball/">Basketball</a>
+  
+</div>
+
+
+
+    
+
+
+
+
+
+
+<div class="media author-card" itemscope itemtype="http://schema.org/Person">
+  
+  <img class="portrait mr-3" src="/img/foto_perfil.jpg" itemprop="image" alt="Avatar">
+  
+  <div class="media-body">
+    <h5 class="card-title" itemprop="name"><a href="/es">Sergio Olmos Pardo</a></h5>
+    <h6 class="card-subtitle">Científico de datos y jugador de baloncesto</h6>
+    
+    <ul class="network-icon" aria-hidden="true">
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="mailto:solmos41@gmail.com" target="_blank" rel="noopener">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//twitter.com/solmos41" target="_blank" rel="noopener">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//github.com/solmos" target="_blank" rel="noopener">
+          <i class="fab fa-github"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//linkedin.com/in/sergio-olmos" target="_blank" rel="noopener">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="files/cv.pdf" target="_blank" rel="noopener">
+          <i class="ai ai-cv"></i>
+        </a>
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+
+
+    
+    
+    <div class="article-widget">
+      <div class="hr-light"></div>
+      <h3>Relacionado</h3>
+      <ul>
+        
+        <li><a href="/es/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/">Introducción a eurolig</a></li>
+        
+        <li><a href="/es/post/2019-03-28-eurolig/analisis-asistencia/">Análisis de los patrones de asistencias del FC Barcelona en Euroliga</a></li>
+        
+        <li><a href="/es/post/2019-02-20-la-secuencia-de-recaman/la-secuencia-de-recaman/">La secuencia de Recamán</a></li>
+        
+        <li><a href="/es/post/2019-01-24-graficos-de-tiro-con-r/shotcharts-with-r/">rfeb: Gráficos de tiro con R</a></li>
+        
+        <li><a href="/es/post/2018-11-06-multiplication-table/multiplication-table-with-r/">Exploring the multiplication table with R</a></li>
+        
+      </ul>
+    </div>
+    
+
+    
+
+    
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "solmos" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+  </div>
+</article>
+
+<div class="container">
+  <footer class="site-footer">
+  
+
+  <p class="powered-by">
+    &copy; 2018 &middot; 
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" id="back_to_top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+</div>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Citar</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copiar
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Descargar
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    
+    
+    <script src="/js/mathjax-config.500a6cbb2c0f345fcecc21b3116d6637aa78f1f11db8081ea581abe05390c2e8f3bbffe61be3cf0217baf785c40efceabe51050a4f007e69af94efd3643260e8.js" integrity="sha512-UApsuywPNF/OzCGzEW1mN6p48fEduAgepYGr4FOQwujzu//mG&#43;PPAhe694XEDvzqvlEFCk8AfmmvlO/TZDJg6A=="></script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha512-+NqPlbbtM1QqiK8ZAo4Yrj2c4lNQoGv8P79DPtKzj++l5jnN39rHA/xsqn8zE9l0uSoxaCdrOgFs6yjyfbBxSg==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+
+    
+    
+    
+    <script id="dsq-count-scr" src="//solmos.disqus.com/count.js" async></script>
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/index.json";
+      const i18n = {
+        'placeholder': "Search...",
+        'results': "Search Results",
+        'no_results': "No results found"
+      };
+      const content_type = {
+        'post': "Posts",
+        'project': "Proyectos",
+        'publication' : "Publicaciones",
+        'talk' : "Conferencias"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    <script src="/js/search.js"></script>
+    
+
+    
+    
+
+  </body>
+</html>
+

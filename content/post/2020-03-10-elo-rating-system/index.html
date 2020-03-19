@@ -1,0 +1,133 @@
+---
+title: Elo rating system for the Euroleague
+subtitle: Implementation of an Elo rating system for evaluating team quality throughout Euroleague's history.
+summary: Implementation of an Elo rating system for evaluating team quality throughout Euroleague's history.
+author: Sergio Olmos
+date: '2020-03-10'
+slug: elo-rating-system
+categories:
+  - English
+tags:
+  - Basketball analytics
+  - R
+  - Basketball
+image:
+  caption: ''
+  focal_point: ''
+---
+
+
+
+<p>The other day I started building a <a href="https://en.wikipedia.org/wiki/Win_probability">win probability model</a> for the Euroleague but soon I stumped into a little problem. This kind of model uses a set of covariates to predict a team’s probability of winning as the game progresses. One of these covariates is usually some kind of indicator of how good or bad a given team is before starting the game. Many of these models use betting spreads from betting companies as the indicator. Some others use some kind of rating system that assigns a numeric value to each team based on its performance.</p>
+<p>I needed to obtain some indicator of this type for all games played in Eurolegue since 2001. Instead of getting my hands dirty scraping the data from the HTML code of betting websites, I decided to build an Elo rating system for the Euroleague, which seems more fun and can be interesting in itself.</p>
+<div id="elo-rating-system" class="section level2">
+<h2>Elo rating system</h2>
+<p>The <a href="https://en.wikipedia.org/wiki/Elo_rating_system">Elo rating system</a> is a simple method to estimate the relative ability of players or teams in zero-sum games. This method was invented as a ranking system for chess players, but was later used in many sports such as soccer, football, basketball or Scrabble.</p>
+<p>The basic ideas behind an Elo rating system are:</p>
+<ul>
+<li><p>A team’s (Elo) rating is updated after every game.</p></li>
+<li><p>Teams win Elo points when they win a game and lose them when they lose a game. The system is zero-sum, meaning that the winner and the loser of the game win and lose the same amount of Elo points, respectively.</p></li>
+<li><p>The value of each win or loss depends on the relative strength of the opponnent.</p></li>
+</ul>
+<p>From these basic ideas, we can build a rating system that tells us the quality of all teams in the Euroleague throughout history.</p>
+<p>Next I explain the details of the model I have built.</p>
+<div id="basic-algorithm" class="section level3">
+<h3>Basic algorithm</h3>
+<p>In order to update a team’s Elo rating after a game we need to add or substract a number of points that is given by the difference between the actual result and the result expected by the model based on the difference in Elo ratings before the game starts.</p>
+<p>Let’s express this algorithm formally. If <span class="math inline">\(R_A\)</span> is team A Elo rating before the game and <span class="math inline">\(R&#39;_A\)</span> is its Elo rating after the game, the basic equation for uptdating a team’s rating is</p>
+<p><span class="math display">\[R&#39;_A = R_A + k (S_A - P_A)\]</span></p>
+<p>where</p>
+<ul>
+<li><p><span class="math inline">\(k\)</span> is a parameter we need to estimate.</p></li>
+<li><p><span class="math inline">\(S_A\)</span> assigns 0 for a loss and 1 for a win.</p></li>
+<li><p><span class="math inline">\(P_A\)</span> is the expected probability of winning the game for team A.</p></li>
+</ul>
+<p>In the following subsections I explain what <span class="math inline">\(P_A\)</span> and <span class="math inline">\(k\)</span> represent, and I will add some adjustments that can help our system’s predictive ability.</p>
+</div>
+<div id="expected-winning-probability" class="section level3">
+<h3>Expected winning probability</h3>
+<p>For each game, our Elo rating system assigns a winning probability to each team based on the difference in Elo points between the two teams. In our model, the probability that team A wins a game against team B is given by</p>
+<p><span class="math display">\[P_A = \frac{1}{1 + 10^{-\Delta_{AB} / s}}\]</span></p>
+<p>where <span class="math inline">\(\Delta_{AB}\)</span> is the difference between A’s Elo points and B’s Elo points, and <span class="math inline">\(s\)</span> is a scale parameter of the function. The difference in Elo points, <span class="math inline">\(\Delta_{AB}\)</span>, can include some adjustments such as home court advantage as I will show later.</p>
+<p>This <a href="https://en.wikipedia.org/wiki/Sigmoid_function">sigmoid function</a> results in values between 0 and 1, so it is appropriate as a proability estimator. In order to understand this function we can plot it for different values of <span class="math inline">\(\Delta_{AB}\)</span> and <span class="math inline">\(s\)</span>.</p>
+<p><img src="/post/2020-03-10-elo-rating-system/index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>We can observe that as the value of <span class="math inline">\(s\)</span> decreases the probabity of winning changes much more rapidly as the absolute difference in Elo points increases. We want to choose a value of <span class="math inline">\(s\)</span> that results in winning probabilities that are consistent with the actual results.</p>
+</div>
+<div id="elo-points-difference" class="section level3">
+<h3>Elo points difference</h3>
+<p>As we have seen, the expected winning probability depends on the difference in Elo points between the two teams that play a game.</p>
+<p>Following the adpoted notation, the difference in Elo points between two teams, <span class="math inline">\(\Delta_{AB}\)</span>, is given by</p>
+<p><span class="math display">\[\Delta_{AB} = R_A - R_B\]</span></p>
+<p>However, as I mentioned in the previous section, it may be helpful to add some adjustments that can influence the chances of winning a game. For this model, I am only going to take into account whether the team plays at home or not. In a possible future version of the system, I may include other adjustments such as the distance that a visiting team has had to travel for the game.</p>
+<p>It is common knowledge that playing at home provides an advantage. The average point differential between home and away teams is around +4.</p>
+<p><img src="/post/2020-03-10-elo-rating-system/index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>In order to include this factor in the model, we need to introduce a variable, <span class="math inline">\(H_A\)</span>, that reduces the difference in Elo points, <span class="math inline">\(\Delta_{AB}\)</span>, when team A plays at home and it increases it when team A plays in team B’s gym. We need to take into account that in events such as the Final Four both teams can play away from home, in which case the difference remains unaltered.</p>
+<p>That is,</p>
+<p><span class="math display">\[\Delta_{AB} = R_A + H_A - R_B\]</span></p>
+<p>where</p>
+<p><span class="math display">\[H_A = \cases{
+h, &amp;\text{ if team A plays at home.} \\
+-h, &amp;\text{ if team A plays in B&#39;s home.} \\
+0, &amp;\text{ if both teams play away from home.}
+}\]</span></p>
+<p>I will show how I have chosen the value of home advantage in a later section.</p>
+</div>
+<div id="margin-of-victory" class="section level3">
+<h3>Margin of victory</h3>
+<p>Another aspect we may want to account for when assigning points to the winner of a game is by how many points that team won. We can introduce a multiplier in our main equation that assigns more points to wins by wider margins than wins by narrower margins.</p>
+<p>The updating rule will therefore be given by</p>
+<p><span class="math display">\[R&#39;_A = R_A + k \times m_{A}(S_A - P_A)\]</span></p>
+<p>Variable <span class="math inline">\(m_A\)</span> is the marging of victory multiplier and is given by</p>
+<p><span class="math display">\[m_{A} = \frac{(d + 3)^{0.8}}{7.5 + 0.006 \Delta_{AB}}\]</span></p>
+<p>where <span class="math inline">\(d\)</span> is the absolute value of the difference in the score at the end of the game. This formula was taken from <a href="https://fivethirtyeight.com/features/how-we-calculate-nba-elo-ratings/">FiveThirtyEight’s Elo model description</a>.</p>
+<p>This somewhat strange formula takes into account that the difference in points of favourites is larger in wins than in losses. If we fail to account for this fact we would introduce autocorrelation in our model, which would make our ratings less stable.</p>
+</div>
+<div id="year-to-year-carry-over" class="section level3">
+<h3>Year-to-year carry over</h3>
+<p>The last piece of the model that we need to define is how the ratings are carried over from one season to another season. In the first season that we have data (2001/2002) all teams start with an Elo rating of 1300. Once that season is over, the teams will end up with different ratings. Returning all ratings to 1300 in the next season can mean throwing away valuable information since it is reasonable to believe that a good/bad team during one season will perform somewhat similarly in the next season.</p>
+<p>I should mention that many teams have intermediate seasons in which they did not take part in the Euroleague. When these teams return to the competition, their last Elo rating is taken as their baseline rating, instead of lowering their ratings to 1300 again.</p>
+<p>Even so, it is probably not ideal to assign exactly the same rating as the one that they finished with. Very good or very bad seasons tend to regress to the mean. We can compute the initial rating as a weighted average of the last rating and the overall mean throughout all seasons. We set this mean to 1500 Elo points.</p>
+<p>Therefore, team A’s rating when they start a new season is set to</p>
+<p><span class="math display">\[R^*_{A} = w R_A + (1 - w)1505\]</span></p>
+<p>where <span class="math inline">\(w \in (0, 1)\)</span> is the weight we assign to the last recorded rating <span class="math inline">\(R_A\)</span>. Note that we used 1505, instead of 1500 as the mean. I do this to account for new teams throughout Euroleague’s history that start with a rating of 1300 and therefore bring down the mean rating of the league.</p>
+<p>With this definition, values of <span class="math inline">\(w\)</span> close to 1 mean that teams are quite consistent from season to season, while values of <span class="math inline">\(w\)</span> close to 0 indicate that a team’s rating at the end of the season tells us little about its quality for the next season.</p>
+<p>In the next section I show how I chose the value for <span class="math inline">\(w\)</span>, as well as for the rest of parameters in the model.</p>
+<hr />
+</div>
+</div>
+<div id="model-parameters" class="section level2">
+<h2>Model parameters</h2>
+<p>As we have seen, our model has some parameters for which we need to choose some value. This requires that we choose a way to evaluate how well our model fits the data.</p>
+<p>I have not been able to find examples for optimizing parameters in Elo rating systems. The only thing I came up with was to use a <a href="(https://en.wikipedia.org/wiki/Hyperparameter_optimization)">grid search</a> with some specified reasonable parameter values. This method involves building a grid with all combinations of the possible parameter values, evaluate each combination using a precision or loss function and choosing the combination of parameter values that maximizes or minimizes this function, respectively.</p>
+<p>The precision function I chose is the proportion of correct prediction wins, if we predict the winner of the game to be the team with greater Elo rating taking into account home court advantage.</p>
+<p>I am not sure this is a good way to evaluate the model. In a future version of the system, I plan to try other criteria to optimize the parameters. Even so, the results pass the eye test and with correct predictions for 70% of the games.</p>
+<p>The values that I chose for the model parameters are <span class="math inline">\(k = 25\)</span>, <span class="math inline">\(s = 400\)</span>, <span class="math inline">\(h = 100\)</span> and <span class="math inline">\(w = 0.8\)</span>. A value of 25 for <span class="math inline">\(k\)</span> is quite high for these types of models and will cause our model to react strongly to the result of each game. This also means that streaks seem to be quite indicative that team quality and not just luck.</p>
+<p>You can check all the R code for the model <a href="https://gist.github.com/solmos/f92a174aa7a005c25c2f5db31988efe4">here</a>.</p>
+<hr />
+</div>
+<div id="limitations" class="section level2">
+<h2>Limitations</h2>
+<p>The Elo rating system is very simple: it only needs the opponents rating and the score at the end of the game. Even though it has proved to be a reliable way to evaluate teams, this simplicity carries some limitations. The model does not know when there are injuries or trades, so it will not change rates in real time when something of the sort happens. The system will detect these changes through the teams next performances, but it will always take a few games to adapt to them.</p>
+<hr />
+</div>
+<div id="results" class="section level2">
+<h2>Results</h2>
+<p>The following plot shows the evolution of Elo ratings for all teams in Euroleague’s history up until round 28 of the current season (2019-20) and highlights the performances of some Spanish teams.</p>
+<p><img src="elo-j29-en.png" /></p>
+<p>Some quick observations from the plot:</p>
+<ul>
+<li><p>The best team in Euroleague’s history according to my Elo model was <a href="https://www.euroleague.net/competition/teams/showteam?clubcode=BAR&amp;seasoncode=E2012">FC Barcelona’s 2012-13 team</a>.</p></li>
+<li><p>Real Madrid started to be an elite team one season after Laso’s arrival.</p></li>
+<li><p>Real Madrid has the highest rating in the current season, followed very closely by Anadolu Efes Istambul, despite the fact that the Turkish team has two more wins.</p></li>
+</ul>
+<p>¿Do the results look reasonable to you?</p>
+<hr />
+</div>
+<div id="future-steps" class="section level2">
+<h2>Future steps</h2>
+<ul>
+<li><p>Build a web app with Shiny for intercatively exploring these ratings.</p></li>
+<li><p>Explore better approaches for model parameter optimization.</p></li>
+<li><p>Make future predictions using these ratings.</p></li>
+</ul>
+</div>

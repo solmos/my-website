@@ -13,6 +13,15 @@
     
     
     <item>
+      <title>Elo rating system for the Euroleague</title>
+      <link>/post/2020-03-10-elo-rating-system/elo-rating-system/</link>
+      <pubDate>Tue, 10 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2020-03-10-elo-rating-system/elo-rating-system/</guid>
+      <description>The other day I started building a win probability model for the Euroleague but soon I stumped into a little problem. This kind of model uses a set of covariates to predict a team’s probability of winning as the game progresses. One of these covariates is usually some kind of indicator of how good or bad a given team is before starting the game. Many of these models use betting spreads from betting companies as the indicator.</description>
+    </item>
+    
+    <item>
       <title>Introduction to eurolig</title>
       <link>/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/</link>
       <pubDate>Thu, 28 Nov 2019 00:00:00 +0000</pubDate>

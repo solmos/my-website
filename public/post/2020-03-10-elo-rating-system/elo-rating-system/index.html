@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 3.0.0">
+  <meta name="generator" content="Hugo 0.49.2" />
+  <meta name="author" content="Sergio Olmos Pardo">
+
+  
+  
+  
+  
+    
+  
+  <meta name="description" content="Implementation of an Elo rating system for evaluating team quality throughout Euroleague&#39;s history.">
+
+  
+  <link rel="alternate" hreflang="es" href="/es/post/2020-03-10-elo-rating-system/elo-rating-system/">
+  
+  <link rel="alternate" hreflang="en-us" href="/post/2020-03-10-elo-rating-system/elo-rating-system/">
+
+  
+
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" crossorigin="anonymous">
+        
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700|Roboto:400,400italic,700|Roboto+Mono">
+  
+
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-131928090-1', 'auto');
+      
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+  
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Sergio Olmos">
+  <link rel="feed" href="/index.xml" type="application/rss+xml" title="Sergio Olmos">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="/post/2020-03-10-elo-rating-system/elo-rating-system/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="twitter:site" content="@solmos41">
+  <meta property="twitter:creator" content="@solmos41">
+  
+  <meta property="og:site_name" content="Sergio Olmos">
+  <meta property="og:url" content="/post/2020-03-10-elo-rating-system/elo-rating-system/">
+  <meta property="og:title" content="Elo rating system for the Euroleague | Sergio Olmos">
+  <meta property="og:description" content="Implementation of an Elo rating system for evaluating team quality throughout Euroleague&#39;s history.">
+  
+  
+    
+  <meta property="og:image" content="/img/recaman_sharing.png">
+  <meta property="og:locale" content="en-us">
+  
+  <meta property="article:published_time" content="2020-03-10T00:00:00&#43;00:00">
+  
+  <meta property="article:modified_time" content="2020-03-10T00:00:00&#43;00:00">
+  
+
+  
+
+  
+
+  <title>Elo rating system for the Euroleague | Sergio Olmos</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#TableOfContents" data-offset="71" >
+
+<nav class="navbar navbar-light fixed-top navbar-expand-lg py-0" id="navbar-main">
+  <div class="container">
+
+    
+      <a class="navbar-brand" href="/">Sergio Olmos</a>
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+    
+    <div class="collapse navbar-collapse" id="navbar">
+
+      
+      
+      <ul class="navbar-nav ml-auto">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#posts">
+            
+            <span>Blog</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#projects">
+            
+            <span>Projects</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#about">
+            
+            <span>About</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+      
+
+        
+
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">
+            <i class="fas fa-globe" aria-hidden="true"></i>
+            <span>English</span>
+          </a>
+          <ul class="dropdown-menu">
+            
+            <li class="dropdown-item my-0 py-0 mx-0 px-0">
+              <a href="/es/post/2020-03-10-elo-rating-system/elo-rating-system/">
+                <span>Español</span>
+              </a>
+            </li>
+            
+          </ul>
+        </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="article-header d-xl-none">
+  <img src="/post/2020-03-10-elo-rating-system/elo-rating-system/featured_hu45f51258e8fba4b22835420c96f75aba_2308556_1600x400_fill_q90_box_smart1_2.png" class="article-banner" itemprop="image" alt="">
+  
+</div>
+
+
+<div class="container-fluid split-header d-none d-xl-block">
+  <div class="row">
+    <div class="col-6">
+      <div class="split-header-content">
+        <h1 itemprop="name">Elo rating system for the Euroleague</h1>
+
+        
+        <p class="page-subtitle">Implementation of an Elo rating system for evaluating team quality throughout Euroleague&rsquo;s history.</p>
+        
+
+        
+
+<div class="article-metadata">
+
+  
+  
+  <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+  
+
+  <span class="article-date">
+    
+    <meta content="2020-03-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+    <time datetime="2020-03-10 00:00:00 &#43;0000 UTC" itemprop="dateModified">
+      Mar 10, 2020
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    9 min read
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="/post/2020-03-10-elo-rating-system/elo-rating-system/#disqus_thread"></a>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder"></i>
+    
+    <a href="/categories/english/">English</a>
+    
+  </span>
+  
+  
+
+  
+
+</div>
+
+
+        
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Elo%20rating%20system%20for%20the%20Euroleague&amp;url=%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f&amp;title=Elo%20rating%20system%20for%20the%20Euroleague"
+         target="_blank" rel="noopener">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f&amp;title=Elo%20rating%20system%20for%20the%20Euroleague"
+         target="_blank" rel="noopener">
+        <i class="fab fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Elo%20rating%20system%20for%20the%20Euroleague&amp;body=%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="split-header-image">
+        <img src="/post/2020-03-10-elo-rating-system/elo-rating-system/featured_hu45f51258e8fba4b22835420c96f75aba_2308556_680x500_fill_q90_box_smart1_2.png" itemprop="image" alt="">
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="article-container d-xl-none">
+  <h1 itemprop="name">Elo rating system for the Euroleague</h1>
+
+  
+  <p class="page-subtitle">Implementation of an Elo rating system for evaluating team quality throughout Euroleague&rsquo;s history.</p>
+  
+
+  
+
+<div class="article-metadata">
+
+  
+  
+  <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+  
+
+  <span class="article-date">
+    
+    <meta content="2020-03-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+    <time datetime="2020-03-10 00:00:00 &#43;0000 UTC" itemprop="dateModified">
+      Mar 10, 2020
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    9 min read
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="/post/2020-03-10-elo-rating-system/elo-rating-system/#disqus_thread"></a>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder"></i>
+    
+    <a href="/categories/english/">English</a>
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Elo%20rating%20system%20for%20the%20Euroleague&amp;url=%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f&amp;title=Elo%20rating%20system%20for%20the%20Euroleague"
+         target="_blank" rel="noopener">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f&amp;title=Elo%20rating%20system%20for%20the%20Euroleague"
+         target="_blank" rel="noopener">
+        <i class="fab fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Elo%20rating%20system%20for%20the%20Euroleague&amp;body=%2fpost%2f2020-03-10-elo-rating-system%2felo-rating-system%2f">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style" itemprop="articleBody">
+      <p>The other day I started building a <a href="https://en.wikipedia.org/wiki/Win_probability">win probability model</a> for the Euroleague but soon I stumped into a little problem. This kind of model uses a set of covariates to predict a team’s probability of winning as the game progresses. One of these covariates is usually some kind of indicator of how good or bad a given team is before starting the game. Many of these models use betting spreads from betting companies as the indicator. Some others use some kind of rating system that assigns a numeric value to each team based on its performance.</p>
+<p>I needed to obtain some indicator of this type for all games played in Eurolegue since 2001. Instead of getting my hands dirty scraping the data from the HTML code of betting websites, I decided to build an Elo rating system for the Euroleague, which seems more fun and can be interesting in itself.</p>
+<div id="elo-rating-system" class="section level2">
+<h2>Elo rating system</h2>
+<p>The <a href="https://en.wikipedia.org/wiki/Elo_rating_system">Elo rating system</a> is a simple method to estimate the relative ability of players or teams in zero-sum games. This method was invented as a ranking system for chess players, but was later used in many sports such as soccer, football, basketball or Scrabble.</p>
+<p>The basic ideas behind an Elo rating system are:</p>
+<ul>
+<li><p>A team’s (Elo) rating is updated after every game.</p></li>
+<li><p>Teams win Elo points when they win a game and lose them when they lose a game. The system is zero-sum, meaning that the winner and the loser of the game win and lose the same amount of Elo points, respectively.</p></li>
+<li><p>The value of each win or loss depends on the relative strength of the opponnent.</p></li>
+</ul>
+<p>From these basic ideas, we can build a rating system that tells us the quality of all teams in the Euroleague throughout history.</p>
+<p>Next I explain the details of the model I have built.</p>
+<div id="basic-algorithm" class="section level3">
+<h3>Basic algorithm</h3>
+<p>In order to update a team’s Elo rating after a game we need to add or substract a number of points that is given by the difference between the actual result and the result expected by the model based on the difference in Elo ratings before the game starts.</p>
+<p>Let’s express this algorithm formally. If <span class="math inline">\(R_A\)</span> is team A Elo rating before the game and <span class="math inline">\(R&#39;_A\)</span> is its Elo rating after the game, the basic equation for uptdating a team’s rating is</p>
+<p><span class="math display">\[R&#39;_A = R_A + k (S_A - P_A)\]</span></p>
+<p>where</p>
+<ul>
+<li><p><span class="math inline">\(k\)</span> is a parameter we need to estimate.</p></li>
+<li><p><span class="math inline">\(S_A\)</span> assigns 0 for a loss and 1 for a win.</p></li>
+<li><p><span class="math inline">\(P_A\)</span> is the expected probability of winning the game for team A.</p></li>
+</ul>
+<p>In the following subsections I explain what <span class="math inline">\(P_A\)</span> and <span class="math inline">\(k\)</span> represent, and I will add some adjustments that can help our system’s predictive ability.</p>
+</div>
+<div id="expected-winning-probability" class="section level3">
+<h3>Expected winning probability</h3>
+<p>For each game, our Elo rating system assigns a winning probability to each team based on the difference in Elo points between the two teams. In our model, the probability that team A wins a game against team B is given by</p>
+<p><span class="math display">\[P_A = \frac{1}{1 + 10^{-\Delta_{AB} / s}}\]</span></p>
+<p>where <span class="math inline">\(\Delta_{AB}\)</span> is the difference between A’s Elo points and B’s Elo points, and <span class="math inline">\(s\)</span> is a scale parameter of the function. The difference in Elo points, <span class="math inline">\(\Delta_{AB}\)</span>, can include some adjustments such as home court advantage as I will show later.</p>
+<p>This <a href="https://en.wikipedia.org/wiki/Sigmoid_function">sigmoid function</a> results in values between 0 and 1, so it is appropriate as a proability estimator. In order to understand this function we can plot it for different values of <span class="math inline">\(\Delta_{AB}\)</span> and <span class="math inline">\(s\)</span>.</p>
+<p><img src="/post/2020-03-10-elo-rating-system/index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>We can observe that as the value of <span class="math inline">\(s\)</span> decreases the probabity of winning changes much more rapidly as the absolute difference in Elo points increases. We want to choose a value of <span class="math inline">\(s\)</span> that results in winning probabilities that are consistent with the actual results.</p>
+</div>
+<div id="elo-points-difference" class="section level3">
+<h3>Elo points difference</h3>
+<p>As we have seen, the expected winning probability depends on the difference in Elo points between the two teams that play a game.</p>
+<p>Following the adpoted notation, the difference in Elo points between two teams, <span class="math inline">\(\Delta_{AB}\)</span>, is given by</p>
+<p><span class="math display">\[\Delta_{AB} = R_A - R_B\]</span></p>
+<p>However, as I mentioned in the previous section, it may be helpful to add some adjustments that can influence the chances of winning a game. For this model, I am only going to take into account whether the team plays at home or not. In a possible future version of the system, I may include other adjustments such as the distance that a visiting team has had to travel for the game.</p>
+<p>It is common knowledge that playing at home provides an advantage. The average point differential between home and away teams is around +4.</p>
+<p><img src="/post/2020-03-10-elo-rating-system/index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>In order to include this factor in the model, we need to introduce a variable, <span class="math inline">\(H_A\)</span>, that reduces the difference in Elo points, <span class="math inline">\(\Delta_{AB}\)</span>, when team A plays at home and it increases it when team A plays in team B’s gym. We need to take into account that in events such as the Final Four both teams can play away from home, in which case the difference remains unaltered.</p>
+<p>That is,</p>
+<p><span class="math display">\[\Delta_{AB} = R_A + H_A - R_B\]</span></p>
+<p>where</p>
+<p><span class="math display">\[H_A = \cases{
+h, &amp;\text{ if team A plays at home.} \\
+-h, &amp;\text{ if team A plays in B&#39;s home.} \\
+0, &amp;\text{ if both teams play away from home.}
+}\]</span></p>
+<p>I will show how I have chosen the value of home advantage in a later section.</p>
+</div>
+<div id="margin-of-victory" class="section level3">
+<h3>Margin of victory</h3>
+<p>Another aspect we may want to account for when assigning points to the winner of a game is by how many points that team won. We can introduce a multiplier in our main equation that assigns more points to wins by wider margins than wins by narrower margins.</p>
+<p>The updating rule will therefore be given by</p>
+<p><span class="math display">\[R&#39;_A = R_A + k \times m_{A}(S_A - P_A)\]</span></p>
+<p>Variable <span class="math inline">\(m_A\)</span> is the marging of victory multiplier and is given by</p>
+<p><span class="math display">\[m_{A} = \frac{(d + 3)^{0.8}}{7.5 + 0.006 \Delta_{AB}}\]</span></p>
+<p>where <span class="math inline">\(d\)</span> is the absolute value of the difference in the score at the end of the game. This formula was taken from <a href="https://fivethirtyeight.com/features/how-we-calculate-nba-elo-ratings/">FiveThirtyEight’s Elo model description</a>.</p>
+<p>This somewhat strange formula takes into account that the difference in points of favourites is larger in wins than in losses. If we fail to account for this fact we would introduce autocorrelation in our model, which would make our ratings less stable.</p>
+</div>
+<div id="year-to-year-carry-over" class="section level3">
+<h3>Year-to-year carry over</h3>
+<p>The last piece of the model that we need to define is how the ratings are carried over from one season to another season. In the first season that we have data (2001/2002) all teams start with an Elo rating of 1300. Once that season is over, the teams will end up with different ratings. Returning all ratings to 1300 in the next season can mean throwing away valuable information since it is reasonable to believe that a good/bad team during one season will perform somewhat similarly in the next season.</p>
+<p>I should mention that many teams have intermediate seasons in which they did not take part in the Euroleague. When these teams return to the competition, their last Elo rating is taken as their baseline rating, instead of lowering their ratings to 1300 again.</p>
+<p>Even so, it is probably not ideal to assign exactly the same rating as the one that they finished with. Very good or very bad seasons tend to regress to the mean. We can compute the initial rating as a weighted average of the last rating and the overall mean throughout all seasons. We set this mean to 1500 Elo points.</p>
+<p>Therefore, team A’s rating when they start a new season is set to</p>
+<p><span class="math display">\[R^*_{A} = w R_A + (1 - w)1505\]</span></p>
+<p>where <span class="math inline">\(w \in (0, 1)\)</span> is the weight we assign to the last recorded rating <span class="math inline">\(R_A\)</span>. Note that we used 1505, instead of 1500 as the mean. I do this to account for new teams throughout Euroleague’s history that start with a rating of 1300 and therefore bring down the mean rating of the league.</p>
+<p>With this definition, values of <span class="math inline">\(w\)</span> close to 1 mean that teams are quite consistent from season to season, while values of <span class="math inline">\(w\)</span> close to 0 indicate that a team’s rating at the end of the season tells us little about its quality for the next season.</p>
+<p>In the next section I show how I chose the value for <span class="math inline">\(w\)</span>, as well as for the rest of parameters in the model.</p>
+<hr />
+</div>
+</div>
+<div id="model-parameters" class="section level2">
+<h2>Model parameters</h2>
+<p>As we have seen, our model has some parameters for which we need to choose some value. This requires that we choose a way to evaluate how well our model fits the data.</p>
+<p>I have not been able to find examples for optimizing parameters in Elo rating systems. The only thing I came up with was to use a <a href="(https://en.wikipedia.org/wiki/Hyperparameter_optimization)">grid search</a> with some specified reasonable parameter values. This method involves building a grid with all combinations of the possible parameter values, evaluate each combination using a precision or loss function and choosing the combination of parameter values that maximizes or minimizes this function, respectively.</p>
+<p>The precision function I chose is the proportion of correct prediction wins, if we predict the winner of the game to be the team with greater Elo rating taking into account home court advantage.</p>
+<p>I am not sure this is a good way to evaluate the model. In a future version of the system, I plan to try other criteria to optimize the parameters. Even so, the results pass the eye test and with correct predictions for 70% of the games.</p>
+<p>The values that I chose for the model parameters are <span class="math inline">\(k = 25\)</span>, <span class="math inline">\(s = 400\)</span>, <span class="math inline">\(h = 100\)</span> and <span class="math inline">\(w = 0.8\)</span>. A value of 25 for <span class="math inline">\(k\)</span> is quite high for these types of models and will cause our model to react strongly to the result of each game. This also means that streaks seem to be quite indicative that team quality and not just luck.</p>
+<p>You can check all the R code for the model <a href="https://gist.github.com/solmos/f92a174aa7a005c25c2f5db31988efe4">here</a>.</p>
+<hr />
+</div>
+<div id="limitations" class="section level2">
+<h2>Limitations</h2>
+<p>The Elo rating system is very simple: it only needs the opponents rating and the score at the end of the game. Even though it has proved to be a reliable way to evaluate teams, this simplicity carries some limitations. The model does not know when there are injuries or trades, so it will not change rates in real time when something of the sort happens. The system will detect these changes through the teams next performances, but it will always take a few games to adapt to them.</p>
+<hr />
+</div>
+<div id="results" class="section level2">
+<h2>Results</h2>
+<p>The following plot shows the evolution of Elo ratings for all teams in Euroleague’s history up until round 28 of the current season (2019-20) and highlights the performances of some Spanish teams.</p>
+<p><img src="elo-j29-en.png" /></p>
+<p>Some quick observations from the plot:</p>
+<ul>
+<li><p>The best team in Euroleague’s history according to my Elo model was <a href="https://www.euroleague.net/competition/teams/showteam?clubcode=BAR&amp;seasoncode=E2012">FC Barcelona’s 2012-13 team</a>.</p></li>
+<li><p>Real Madrid started to be an elite team one season after Laso’s arrival.</p></li>
+<li><p>Real Madrid has the highest rating in the current season, followed very closely by Anadolu Efes Istambul, despite the fact that the Turkish team has two more wins.</p></li>
+</ul>
+<p>¿Do the results look reasonable to you?</p>
+<hr />
+</div>
+<div id="future-steps" class="section level2">
+<h2>Future steps</h2>
+<ul>
+<li><p>Build a web app with Shiny for intercatively exploring these ratings.</p></li>
+<li><p>Explore better approaches for model parameter optimization.</p></li>
+<li><p>Make future predictions using these ratings.</p></li>
+</ul>
+</div>
+
+    </div>
+
+    
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tags/basketball-analytics/">Basketball analytics</a>
+  
+  <a class="badge badge-light" href="/tags/r/">R</a>
+  
+  <a class="badge badge-light" href="/tags/basketball/">Basketball</a>
+  
+</div>
+
+
+
+    
+
+
+
+
+
+
+<div class="media author-card" itemscope itemtype="http://schema.org/Person">
+  
+  <img class="portrait mr-3" src="/img/foto_perfil.jpg" itemprop="image" alt="Avatar">
+  
+  <div class="media-body">
+    <h5 class="card-title" itemprop="name"><a href="/">Sergio Olmos Pardo</a></h5>
+    <h6 class="card-subtitle">Data scientist and basketball player</h6>
+    
+    <ul class="network-icon" aria-hidden="true">
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="mailto:solmos41@gmail.com" target="_blank" rel="noopener">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//twitter.com/solmos41" target="_blank" rel="noopener">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//github.com/solmos" target="_blank" rel="noopener">
+          <i class="fab fa-github"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//linkedin.com/in/sergio-olmos" target="_blank" rel="noopener">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="files/cv.pdf" target="_blank" rel="noopener">
+          <i class="ai ai-cv"></i>
+        </a>
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+
+
+    
+    
+    <div class="article-widget">
+      <div class="hr-light"></div>
+      <h3>Related</h3>
+      <ul>
+        
+        <li><a href="/post/2019-03-28-eurolig/analisis-asistencia/">Analyzing FC Barcelona&#39;s assists pattern</a></li>
+        
+        <li><a href="/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/">Introduction to eurolig</a></li>
+        
+        <li><a href="/post/2019-01-24-graficos-de-tiro-con-r/shotcharts-with-r/">rfeb: Shot charts with R</a></li>
+        
+        <li><a href="/post/2019-02-20-la-secuencia-de-recaman/la-secuencia-de-recaman/">Recamán&#39;s sequence</a></li>
+        
+        <li><a href="/post/2018-11-06-multiplication-table/multiplication-table-with-r/">Exploring the multiplication table with R</a></li>
+        
+      </ul>
+    </div>
+    
+
+    
+
+    
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "solmos" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+  </div>
+</article>
+
+<div class="container">
+  <footer class="site-footer">
+  
+  <p class="powered-by">
+    <a href="/privacy/">Privacy Policy</a>
+  </p>
+  
+
+  <p class="powered-by">
+    &copy; 2018 &middot; 
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" id="back_to_top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+</div>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    
+    
+    <script src="/js/mathjax-config.500a6cbb2c0f345fcecc21b3116d6637aa78f1f11db8081ea581abe05390c2e8f3bbffe61be3cf0217baf785c40efceabe51050a4f007e69af94efd3643260e8.js" integrity="sha512-UApsuywPNF/OzCGzEW1mN6p48fEduAgepYGr4FOQwujzu//mG&#43;PPAhe694XEDvzqvlEFCk8AfmmvlO/TZDJg6A=="></script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha512-+NqPlbbtM1QqiK8ZAo4Yrj2c4lNQoGv8P79DPtKzj++l5jnN39rHA/xsqn8zE9l0uSoxaCdrOgFs6yjyfbBxSg==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+
+    
+    
+    
+    <script id="dsq-count-scr" src="//solmos.disqus.com/count.js" async></script>
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/index.json";
+      const i18n = {
+        'placeholder': "Search...",
+        'results': "Search Results",
+        'no_results': "No results found"
+      };
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    <script src="/js/search.js"></script>
+    
+
+    
+    
+
+  </body>
+</html>
+
