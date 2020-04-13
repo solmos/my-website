@@ -12,6 +12,7 @@ tags:
 image:
   caption: ''
   focal_point: ''
+twitterImg: 'sim-prob.png'
 ---
 
 ```{r setup, include=FALSE}

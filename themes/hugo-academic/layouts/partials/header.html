@@ -120,18 +120,21 @@
   <link rel="apple-touch-icon" type="image/png" href="{{ "/img/icon-192.png" | relURL }}">
 
   <link rel="canonical" href="{{ .Permalink }}">
-
+  
   <meta property="twitter:card" content="summary_large_image">
   {{ with .Site.Params.twitter }}
   <meta property="twitter:site" content="@{{ . }}">
   <meta property="twitter:creator" content="@{{ . }}">
   {{ end }}
+  
   <meta property="og:site_name" content="{{ .Site.Title }}">
   <meta property="og:url" content="{{ .Permalink }}">
   <meta property="og:title" content="{{ if not .IsHome }}{{ .Title }} | {{ end }}{{ .Site.Title }}">
   <meta property="og:description" content="{{ $desc }}">
   {{ $og_image := "" }}
-  {{ if .Params.header.image }}
+  {{ if .Params.twitterImg }}
+    {{ $og_image = .Params.twitterImg }}
+  {{ else if .Params.header.image }}
     {{ $og_image = .Params.header.image }}
   {{ else if .Site.Params.sharing_image }}
     {{ $og_image = .Site.Params.sharing_image }}
