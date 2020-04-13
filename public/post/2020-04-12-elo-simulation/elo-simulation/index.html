@@ -15,8 +15,7 @@
   
     
   
-  <meta name="description" content="La Euroliga está parada debido a la pandemia de la COVID-19 y no se sabe qué ocurrirá con lo que queda de temporada. El Anadolu Efes estaba intratable y hasta ocho equipos estaban luchando por los últimos tres puestos de Playoffs. ¿Cómo podríamos predecir qué hubiese ocurrido si hubiese seguido la competición?
-En mi última entrada describí cómo utilizar el sistema de puntuación Elo para cuantificar la calidad de los equipos de Euroliga a lo largo de la historia.">
+  <meta name="description" content="Predicción de las probabilidades de cada equipo de ganar el título, alcanzar la Final 4 y clasificarse para Playoff.">
 
   
   <link rel="alternate" hreflang="es" href="/es/post/2020-04-12-elo-simulation/elo-simulation/">
@@ -114,12 +113,11 @@ En mi última entrada describí cómo utilizar el sistema de puntuación Elo par
   <meta property="og:site_name" content="Sergio Olmos">
   <meta property="og:url" content="/post/2020-04-12-elo-simulation/elo-simulation/">
   <meta property="og:title" content="Simulando el final de la Euroliga | Sergio Olmos">
-  <meta property="og:description" content="La Euroliga está parada debido a la pandemia de la COVID-19 y no se sabe qué ocurrirá con lo que queda de temporada. El Anadolu Efes estaba intratable y hasta ocho equipos estaban luchando por los últimos tres puestos de Playoffs. ¿Cómo podríamos predecir qué hubiese ocurrido si hubiese seguido la competición?
-En mi última entrada describí cómo utilizar el sistema de puntuación Elo para cuantificar la calidad de los equipos de Euroliga a lo largo de la historia.">
+  <meta property="og:description" content="Predicción de las probabilidades de cada equipo de ganar el título, alcanzar la Final 4 y clasificarse para Playoff.">
   
   
     
-  <meta property="og:image" content="/img/sim-prob.png">
+  <meta property="og:image" content="/img/elo-sim.png">
   <meta property="og:locale" content="en-us">
   
   <meta property="article:published_time" content="2020-04-12T00:00:00&#43;00:00">
@@ -256,18 +254,136 @@ En mi última entrada describí cómo utilizar el sistema de puntuación Elo par
 
 
 
+
+<div class="article-header d-xl-none">
+  <img src="/post/2020-04-12-elo-simulation/elo-simulation/featured_hu9674592174c0159a6d68ce9aadd36d31_4387135_1600x400_fill_q90_box_smart1_2.png" class="article-banner" itemprop="image" alt="">
+  
+</div>
+
+
+<div class="container-fluid split-header d-none d-xl-block">
+  <div class="row">
+    <div class="col-6">
+      <div class="split-header-content">
+        <h1 itemprop="name">Simulando el final de la Euroliga</h1>
+
+        
+        <p class="page-subtitle">Predicción de las probabilidades de cada equipo de ganar el título, alcanzar la Final 4 y clasificarse para Playoff.</p>
+        
+
+        
+
+<div class="article-metadata">
+
+  
+  
+  <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+  
+
+  <span class="article-date">
+    
+    <meta content="2020-04-12 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+    <time datetime="2020-04-12 00:00:00 &#43;0000 UTC" itemprop="dateModified">
+      Apr 12, 2020
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    7 min read
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="/post/2020-04-12-elo-simulation/elo-simulation/#disqus_thread"></a>
   
 
   
   
   
-<div class="article-container pt-3">
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder"></i>
+    
+    <a href="/categories/castellano/">Castellano</a>
+    
+  </span>
+  
+  
+
+  
+
+</div>
+
+
+        
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Simulando%20el%20final%20de%20la%20Euroliga&amp;url=%2fpost%2f2020-04-12-elo-simulation%2felo-simulation%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fpost%2f2020-04-12-elo-simulation%2felo-simulation%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2f2020-04-12-elo-simulation%2felo-simulation%2f&amp;title=Simulando%20el%20final%20de%20la%20Euroliga"
+         target="_blank" rel="noopener">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fpost%2f2020-04-12-elo-simulation%2felo-simulation%2f&amp;title=Simulando%20el%20final%20de%20la%20Euroliga"
+         target="_blank" rel="noopener">
+        <i class="fab fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Simulando%20el%20final%20de%20la%20Euroliga&amp;body=%2fpost%2f2020-04-12-elo-simulation%2felo-simulation%2f">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="split-header-image">
+        <img src="/post/2020-04-12-elo-simulation/elo-simulation/featured_hu9674592174c0159a6d68ce9aadd36d31_4387135_680x500_fill_q90_box_smart1_2.png" itemprop="image" alt="">
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="article-container d-xl-none">
   <h1 itemprop="name">Simulando el final de la Euroliga</h1>
 
   
+  <p class="page-subtitle">Predicción de las probabilidades de cada equipo de ganar el título, alcanzar la Final 4 y clasificarse para Playoff.</p>
+  
 
   
-    
 
 <div class="article-metadata">
 
@@ -361,7 +477,6 @@ En mi última entrada describí cómo utilizar el sistema de puntuación Elo par
 
 </div>
 
-  
 </div>
 
 
