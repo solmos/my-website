@@ -14,6 +14,7 @@ tags:
 image:
   caption: ''
   focal_point: ''
+twitterImg: 'elo-j29.png'
 ---
 
 ```{r setup, include=FALSE}
