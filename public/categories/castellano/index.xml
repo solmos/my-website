@@ -7,18 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Tue, 10 Mar 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 12 Apr 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/castellano/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Elo rating system for the Euroleague</title>
-      <link>/post/2020-03-10-elo-rating-system/elo-rating-system/</link>
-      <pubDate>Tue, 10 Mar 2020 00:00:00 +0000</pubDate>
+      <title>Simulando el final de la Euroliga</title>
+      <link>/post/2020-04-12-elo-simulation/elo-simulation/</link>
+      <pubDate>Sun, 12 Apr 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/2020-03-10-elo-rating-system/elo-rating-system/</guid>
-      <description>The other day I started building a win probability model for the Euroleague but soon I stumped into a little problem. This kind of model uses a set of covariates to predict a team’s probability of winning as the game progresses. One of these covariates is usually some kind of indicator of how good or bad a given team is before starting the game. Many of these models use betting spreads from betting companies as the indicator.</description>
+      <guid>/post/2020-04-12-elo-simulation/elo-simulation/</guid>
+      <description>La Euroliga está parada debido a la pandemia de la COVID-19 y no se sabe qué ocurrirá con lo que queda de temporada. El Anadolu Efes estaba intratable y hasta ocho equipos estaban luchando por los últimos tres puestos de Playoffs. ¿Cómo podríamos predecir qué hubiese ocurrido si hubiese seguido la competición?
+En mi última entrada describí cómo utilizar el sistema de puntuación Elo para cuantificar la calidad de los equipos de Euroliga a lo largo de la historia.</description>
     </item>
     
   </channel>

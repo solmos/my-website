@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>es</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Tue, 10 Mar 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 12 Apr 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/es/categories/castellano/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Simulando el final de la Euroliga</title>
+      <link>/es/post/2020-04-12-elo-simulation/elo-simulation/</link>
+      <pubDate>Sun, 12 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/es/post/2020-04-12-elo-simulation/elo-simulation/</guid>
+      <description>La Euroliga está parada debido a la pandemia de la COVID-19 y no se sabe qué ocurrirá con lo que queda de temporada. El Anadolu Efes estaba intratable y hasta ocho equipos estaban luchando por los últimos tres puestos de Playoffs. ¿Cómo podríamos predecir qué hubiese ocurrido si hubiese seguido la competición?
+En mi última entrada describí cómo utilizar el sistema de puntuación Elo para cuantificar la calidad de los equipos de Euroliga a lo largo de la historia.</description>
+    </item>
     
     <item>
       <title>Sistema de puntuación Elo para toda la historia de la Euroliga</title>

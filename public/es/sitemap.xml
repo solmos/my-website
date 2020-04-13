@@ -4,6 +4,17 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/es/post/2020-04-12-elo-simulation/elo-simulation/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/post/2020-04-12-elo-simulation/elo-simulation/" hreflang="en"/>
+    
+      <loc>/es/post/2020-04-12-elo-simulation/elo-simulation/</loc>
+      <lastmod>2020-04-12T00:00:00+00:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <xhtml:link rel="alternate" href="/es/post/2020-03-10-elo-rating-system/elo-rating-system/" hreflang="es"/>
       <xhtml:link rel="alternate" href="/post/2020-03-10-elo-rating-system/elo-rating-system/" hreflang="en"/>
     
@@ -137,7 +148,7 @@
       <xhtml:link rel="alternate" href="/tags/basketball-analytics/" hreflang="en"/>
     
       <loc>/es/tags/basketball-analytics/</loc>
-      <lastmod>2020-03-10T00:00:00+00:00</lastmod>
+      <lastmod>2020-04-12T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -145,8 +156,11 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/es/categories/castellano/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/categories/castellano/" hreflang="en"/>
+    
       <loc>/es/categories/castellano/</loc>
-      <lastmod>2020-03-10T00:00:00+00:00</lastmod>
+      <lastmod>2020-04-12T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -158,7 +172,7 @@
       <xhtml:link rel="alternate" href="/categories/" hreflang="en"/>
     
       <loc>/es/categories/</loc>
-      <lastmod>2020-03-10T00:00:00+00:00</lastmod>
+      <lastmod>2020-04-12T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -178,8 +192,11 @@
     
     <url>
     
+      <xhtml:link rel="alternate" href="/es/tags/estad%C3%ADstica-avanzada/" hreflang="es"/>
+      <xhtml:link rel="alternate" href="/tags/estad%C3%ADstica-avanzada/" hreflang="en"/>
+    
       <loc>/es/tags/estad%C3%ADstica-avanzada/</loc>
-      <lastmod>2019-03-28T00:00:00+00:00</lastmod>
+      <lastmod>2020-04-12T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -212,7 +229,7 @@
       <xhtml:link rel="alternate" href="/post/" hreflang="en"/>
     
       <loc>/es/post/</loc>
-      <lastmod>2020-03-10T00:00:00+00:00</lastmod>
+      <lastmod>2020-04-12T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -247,7 +264,7 @@
       <xhtml:link rel="alternate" href="/tags/r/" hreflang="en"/>
     
       <loc>/es/tags/r/</loc>
-      <lastmod>2020-03-10T00:00:00+00:00</lastmod>
+      <lastmod>2020-04-12T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     

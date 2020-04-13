@@ -11,6 +11,662 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Simulando el final de la Euroliga</title>
+      <link>/post/2020-04-12-elo-simulation/elo-simulation/</link>
+      <pubDate>Sun, 12 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2020-04-12-elo-simulation/elo-simulation/</guid>
+      <description>&lt;script src=&#34;/rmarkdown-libs/kePrint/kePrint.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;p&gt;La Euroliga está parada debido a la pandemia de la COVID-19 y no se sabe qué ocurrirá con lo que queda de temporada. El Anadolu Efes estaba intratable y hasta ocho equipos estaban luchando por los últimos tres puestos de Playoffs. ¿Cómo podríamos predecir qué hubiese ocurrido si hubiese seguido la competición?&lt;/p&gt;
+&lt;p&gt;En mi &lt;a href=&#34;https://solmos.netlify.com/es/post/2020-03-10-elo-rating-system/elo-rating-system/&#34;&gt;última entrada&lt;/a&gt; describí cómo utilizar el sistema de puntuación Elo para cuantificar la calidad de los equipos de Euroliga a lo largo de la historia. En esta segunda entrada, voy a describir cómo simular el resto de partidos que quedan de temporada, incluyendo Playoffs y Final Four, utilizando esta puntuación.&lt;/p&gt;
+&lt;p&gt;Como ya expliqué, el sistema de puntuación Elo produce para cada partido una probabilidad de victoria esperada basada en la diferencia de las puntuaciones Elo de los dos equipos antes del partido. Pues bien, esta probabilidad es la que nos ayudará a elegir un ganador en cada encuentro de la simulación.&lt;/p&gt;
+&lt;p&gt;Nótese que las predicciones que voy a realizar son probabilísticas, no determinísticas. Esto es, el resultado de estas simulaciones será en forma de frecuencias relativas tras un gran número de simulaciones.&lt;/p&gt;
+&lt;div id=&#34;simulacion&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Simulación&lt;/h2&gt;
+&lt;p&gt;La simulación comenzará con las puntuaciones Elo de los equipos al acabar la última jornada disputada de esta temporada (Jornada 28). El ganador de cada partido será elegido según la probabilidad esperada de victoria y las puntuaciones Elo serán actualizadas según este resultado.&lt;/p&gt;
+&lt;p&gt;Para poder actualizar las puntuaciones Elo en base a los resultados simulados deberemos de estimar la diferencia de puntos en el marcador al acabar el partido. Esto es debido a que el sistema Elo que utilicé también tiene en cuenta el márgen de victoria para actualizar las puntuaciones. Así pues, he construido un simple modelo Bayesiano de regresión para predecir la diferencia de puntos en el marcador en base a la diferencia de puntos Elo. Más adelante explico todas las suposiciones de este modelo en detalle.&lt;/p&gt;
+&lt;p&gt;Es importante recalcar que el ganador en un partido determinado no es determinístico, sino que se elige según unas probabilidades. Así pues, si repetimos la simulación una segunda vez, es posible que no obtengamos el mismo resultado. Esto es bueno ya que refleja la incertidumbre existente y nos permite explorar muchos escenarios diferentes. Por este motivo, realizaremos 1000 simulaciones de lo que queda de temporada y mostraremos los resultados finales.&lt;/p&gt;
+&lt;div id=&#34;puntuaciones-elo-iniciales&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;1. Puntuaciones Elo iniciales&lt;/h3&gt;
+&lt;p&gt;La siguiente tabla contiene el ranking de los equipos hasta esta ronda según la puntuación Elo. Lo primero que salta a la vista es que el Real Madrid es primero a pesar de que Anadolu Efes Istambul tiene dos victorias más. Otro equipo que sale mejor parado de esta clasificación Elo es el Zalgiris. Según la puntuación Elo, el equipo lituano está en séptima posición, mientras que en la clasificación actual estaría fuera de Playoffs en novena posición.&lt;/p&gt;
+&lt;table class=&#34;table table-striped&#34; style=&#34;width: auto !important; margin-left: auto; margin-right: auto;&#34;&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+Pos
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+Equipo
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+Elo
+&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Real Madrid
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1717
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Anadolu Efes Istanbul
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1713
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+CSKA Moscow
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1697
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+FC Barcelona
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1625
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Maccabi FOX Tel Aviv
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1560
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Fenerbahce Beko Istanbul
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1538
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+7
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Zalgiris Kaunas
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1508
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+8
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Panathinaikos OPAP Athens
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1471
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+9
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Khimki Moscow Region
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1443
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+10
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Olympiacos Piraeus
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1443
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Valencia Basket
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1433
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+12
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+KIROLBET Baskonia Vitoria-Gasteiz
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1415
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+13
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Crvena Zvezda mts Belgrade
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1400
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+14
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+AX Armani Exchange Milan
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1398
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+15
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+ALBA Berlin
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1370
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+16
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+FC Bayern Munich
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1299
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+17
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+LDLC ASVEL Villeurbanne
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1284
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+18
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Zenit St Petersburg
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1271
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;div id=&#34;modelo-para-la-diferencia-de-puntos&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;2. Modelo para la diferencia de puntos&lt;/h3&gt;
+&lt;p&gt;Anteriormente mencioné que era necesario estimar la diferencia de puntos al final de cada encuentro que simulamos para poder actualizar las puntuaciones Elo. Para esto, podemos ajustar un modelo de regresión a los datos que tenemos de todas las temporadas anteriores.&lt;/p&gt;
+&lt;p&gt;El modelo nos permitirá predecir la diferencia de puntos en el marcador al acabar un partido basado en la diferencia en las puntuaciones Elo previas al partido. Utilizaremos un modelo Bayesiano para incluir toda la incertidumbre en torno a los parámetros del modelo y así incluirla en las simulaciones de los partidos.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-04-12-elo-simulation/index_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Formalmente, si &lt;span class=&#34;math inline&#34;&gt;\(y_i\)&lt;/span&gt; es la diferencia de puntos entre el equipo local y el visitante en el partido &lt;span class=&#34;math inline&#34;&gt;\(i\)&lt;/span&gt; y &lt;span class=&#34;math inline&#34;&gt;\(x_i\)&lt;/span&gt; es la diferencia en la puntuación Elo entre el equipo local y el visitante (teniendo en cuenta el factor cancha), el modelo que utilizaremos para estimar el margen de victoria en cada partido simulado es el siguiente:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned}
+y_i &amp;amp;\sim \text{Normal}(\mu_i, \sigma^2) \\
+\mu_i &amp;amp;= \alpha + \beta x_i \\
+\alpha &amp;amp;\sim \text{Normal}(0, 1) \\
+\beta &amp;amp;\sim \text{Log-Normal}(-4, 0.8) \\
+\sigma &amp;amp;\sim \text{Uniform}(0, 50)
+\end{aligned}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;He elegido estas distribuciones de probabilidad a priori realizando simulaciones predictivas a priori. A continuación podemos ver 50 lineas correspondientes al predictor lineal &lt;span class=&#34;math inline&#34;&gt;\(\mu_i\)&lt;/span&gt; obtenidas mediante simulaciones predictivas de las distribuciones a priori de &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt; y &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-04-12-elo-simulation/index_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Es fácil entender el porqué de las distribuciones a priori de los parámetros &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt; y &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt;. En este caso &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt; representa la diferencia de puntos en el marcador cuando los dos equipos tienen la misma puntuación Elo antes de comenzar el partido (teniendo en cuenta el factor cancha). Esta diferencia de puntos debería estar alrededor de cero y por esto asignamos una distribución Normal con media 0 a &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Por otro lado, &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt; representa la pendiente del predictor lineal &lt;span class=&#34;math inline&#34;&gt;\(\mu_i\)&lt;/span&gt;. No tiene sentido que esta pendiente sea negativa. Para ver esto, supón que tenemos a un buen equipo con una puntuación Elo de 1700. Con &lt;span class=&#34;math inline&#34;&gt;\(\beta &amp;lt; 0\)&lt;/span&gt; este equipo tendería a perder contra equipos peores que éste y además, perdería de un mayor margen cuanto peor fuera el rival. Obviamente esto es absurdo y por esto he asignado una distribución Log-Normal a &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Ahora procedemos a obtener la distribución a posteriori condicionando las distribuciones de probabilidad a priori a los datos. Utilizaremos aproximación cuadrática para esta tarea. Es posible implementar esta técnica en unas pocas líneas de código en R. En otra entrada explicaré en detalle en qué consiste este métdodo y por qué funciona para aproximar la distribución a posteriori.&lt;/p&gt;
+&lt;p&gt;A continuación muestro la línea de regresión media obtenida con un intervalo de plausibilidad del 90% (A) y el intervalo de predicción del 90% de la distribución a posteriori (B). Vease que la incertidumbre de nuestro modelo con respecto a la línea de regresión es poca mientras que la incertidumbre en torno a las observaciones de diferencias de puntos es mucho mayor.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-04-12-elo-simulation/index_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;960&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;El siguiente gráfico muestra las diferencias en puntos predecidas por este modelo (azul) según las diferencias en puntos Elo observadas en los 4.425 partidos de nuestro conjunto de datos. Los puntos rojos corresponden a las diferencias observadas en realidad. Podemos observar que el modelo genera predicciones similares a las observadas.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-04-12-elo-simulation/index_files/figure-html/unnamed-chunk-9-1.png&#34; width=&#34;672&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;resultados&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;3. Resultados&lt;/h3&gt;
+&lt;p&gt;Queremos incorporar toda esta incertidumbre en las simulaciones de los partidos. Así pues, en cada partido este modelo generará una nueva observación de la diferencia de puntos en el marcador, que utilizaremos en nuestra simulación para decidir qué equipo gana el partido.&lt;/p&gt;
+&lt;p&gt;Dada la naturaleza probabilística del modelo, cada simulación de lo que resta de Euroliga resultará en uno de los muchos escenarios posibles. Lo que haré pues es realizar un gran número de simulaciones y ver qué escenarios son más frecuentes. Dado el gran número de escenarios posibles serán necesarias miles de simulaciones para obtener unas frecuencias relativas estables.&lt;/p&gt;
+&lt;p&gt;Estas frecuencias relativas pueden interpretarse como la probabilidad de que un escenario determinado ocurra. Así pues, he calculado, para todos los equipos, las probabilidades según este modelo de que este se clasifique para Playoffs, de que se clasifique para la Final 4, de que llegue a la final y de ser campeón. A continuación muestro estas probabilidades tras 10.000 ligas simuladas.&lt;/p&gt;
+&lt;table class=&#34;table&#34; style=&#34;width: auto !important; margin-left: auto; margin-right: auto;&#34;&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+Equipo
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+Elo
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+Playoffs
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+Final 4
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+Final
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+Campeón
+&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Anadolu Efes Istanbul
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #93d3ab&#34;&gt;1713&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffa500&#34;&gt;100.00%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffa500&#34;&gt;91.84%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffa500&#34;&gt;51.64%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffa500&#34;&gt;28.74%&lt;/span&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Real Madrid
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #93d3ab&#34;&gt;1717&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffa500&#34;&gt;100.00%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffbb40&#34;&gt;68.44%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffb836&#34;&gt;40.51%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffbc41&#34;&gt;21.33%&lt;/span&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+CSKA Moscow
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #97d4ae&#34;&gt;1697&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffa500&#34;&gt;100.00%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffb632&#34;&gt;73.63%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffbf4b&#34;&gt;36.35%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffbf4b&#34;&gt;20.18%&lt;/span&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+FC Barcelona
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #a9dcbc&#34;&gt;1625&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffa500&#34;&gt;100.00%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffb735&#34;&gt;72.46%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffc459&#34;&gt;33.57%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffd280&#34;&gt;14.28%&lt;/span&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Maccabi FOX Tel Aviv
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #b9e2c8&#34;&gt;1560&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffa500&#34;&gt;100.00%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffe3b0&#34;&gt;28.19%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffecc9&#34;&gt;10.88%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fff0d5&#34;&gt;4.66%&lt;/span&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Fenerbahce Beko Istanbul
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #bee4cc&#34;&gt;1538&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffc252&#34;&gt;67.55%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffeac4&#34;&gt;21.15%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffeed0&#34;&gt;9.36%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fff2dc&#34;&gt;3.84%&lt;/span&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Panathinaikos OPAP Athens
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ceebd9&#34;&gt;1471&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffbb3e&#34;&gt;75.48%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffeed0&#34;&gt;16.73%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fff3dd&#34;&gt;6.87%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fff6e6&#34;&gt;2.75%&lt;/span&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Khimki Moscow Region
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #d5eede&#34;&gt;1443&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffd07b&#34;&gt;51.51%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fff5e3&#34;&gt;10.07%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fff8eb&#34;&gt;3.91%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fff9f0&#34;&gt;1.63%&lt;/span&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+AX Armani Exchange Milan
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #e0f2e7&#34;&gt;1398&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffe7bd&#34;&gt;25.81%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fff9f0&#34;&gt;5.37%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffbf4&#34;&gt;2.18%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffcf7&#34;&gt;0.85%&lt;/span&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Zalgiris Kaunas
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #c5e7d2&#34;&gt;1508&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffe6b9&#34;&gt;27.22%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffaf2&#34;&gt;4.52%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffbf5&#34;&gt;1.92%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffcf8&#34;&gt;0.70%&lt;/span&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Olympiacos Piraeus
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #d5eede&#34;&gt;1443&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffedcc&#34;&gt;19.99%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffbf4&#34;&gt;3.75%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffcf8&#34;&gt;1.41%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffdfa&#34;&gt;0.56%&lt;/span&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Crvena Zvezda mts Belgrade
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #dff2e6&#34;&gt;1400&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fff9ee&#34;&gt;6.49%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffdfb&#34;&gt;1.16%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefc&#34;&gt;0.49%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefd&#34;&gt;0.19%&lt;/span&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+KIROLBET Baskonia Vitoria-Gasteiz
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #dcf0e3&#34;&gt;1415&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fff6e6&#34;&gt;9.63%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffdfb&#34;&gt;1.19%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefc&#34;&gt;0.48%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefd&#34;&gt;0.18%&lt;/span&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Valencia Basket
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #d7efe0&#34;&gt;1433&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fff0d5&#34;&gt;16.27%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffdfa&#34;&gt;1.48%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefc&#34;&gt;0.41%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefe&#34;&gt;0.10%&lt;/span&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+ALBA Berlin
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #e7f5ec&#34;&gt;1370&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefe&#34;&gt;0.04%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefe&#34;&gt;0.02%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefe&#34;&gt;0.02%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefe&#34;&gt;0.01%&lt;/span&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+LDLC ASVEL Villeurbanne
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fbfdfc&#34;&gt;1284&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefe&#34;&gt;0.01%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff&#34;&gt;0.00%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff&#34;&gt;0.00%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff&#34;&gt;0.00%&lt;/span&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+FC Bayern Munich
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #f8fcf9&#34;&gt;1299&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff&#34;&gt;0.00%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff&#34;&gt;0.00%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff&#34;&gt;0.00%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff&#34;&gt;0.00%&lt;/span&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Zenit St Petersburg
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff&#34;&gt;1271&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff&#34;&gt;0.00%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff&#34;&gt;0.00%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff&#34;&gt;0.00%&lt;/span&gt;
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+&lt;span style=&#34;display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff&#34;&gt;0.00%&lt;/span&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Elo rating system for the Euroleague</title>
       <link>/post/2020-03-10-elo-rating-system/elo-rating-system/</link>
       <pubDate>Tue, 10 Mar 2020 00:00:00 +0000</pubDate>
@@ -1133,189 +1789,6 @@ devtools::install_github(&amp;quot;solmos/multable&amp;quot;)&lt;/code&gt;&lt;/p
       
       <guid>/publication/clothing-search/</guid>
       <description>&lt;p&gt;More detail can easily be written here using &lt;em&gt;Markdown&lt;/em&gt; and $\rm \LaTeX$ math code.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Slides</title>
-      <link>/slides/example-slides/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/slides/example-slides/</guid>
-      <description>
-
-&lt;h1 id=&#34;welcome-to-slides&#34;&gt;Welcome to Slides&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://sourcethemes.com/academic/&#34; target=&#34;_blank&#34;&gt;Academic&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&#34;features&#34;&gt;Features&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Efficiently write slides in Markdown&lt;/li&gt;
-&lt;li&gt;3-in-1: Create, Present, and Publish your slides&lt;/li&gt;
-&lt;li&gt;Supports speaker notes&lt;/li&gt;
-&lt;li&gt;Mobile friendly slides&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&#34;controls&#34;&gt;Controls&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Next: &lt;code&gt;Right Arrow&lt;/code&gt; or &lt;code&gt;Space&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Previous: &lt;code&gt;Left Arrow&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Start: &lt;code&gt;Home&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Finish: &lt;code&gt;End&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Overview: &lt;code&gt;Esc&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Speaker notes: &lt;code&gt;S&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Fullscreen: &lt;code&gt;F&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Zoom: &lt;code&gt;Alt + Click&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/hakimel/reveal.js#pdf-export&#34; target=&#34;_blank&#34;&gt;PDF Export&lt;/a&gt;: &lt;code&gt;E&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&#34;code-highlighting&#34;&gt;Code Highlighting&lt;/h2&gt;
-
-&lt;p&gt;Inline code: &lt;code&gt;variable&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Code block:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;porridge = &amp;quot;blueberry&amp;quot;
-if porridge == &amp;quot;blueberry&amp;quot;:
-    print(&amp;quot;Eating...&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&#34;math&#34;&gt;Math&lt;/h2&gt;
-
-&lt;p&gt;In-line math: $x + y = z$&lt;/p&gt;
-
-&lt;p&gt;Block math:&lt;/p&gt;
-
-&lt;p&gt;$$
-f\left( x \right) = \;\frac{{2\left( {x + 4} \right)\left( {x - 4} \right)}}{{\left( {x + 4} \right)\left( {x + 1} \right)}}
-$$&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&#34;fragments&#34;&gt;Fragments&lt;/h2&gt;
-
-&lt;p&gt;Make content appear incrementally&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{% fragment %}} One {{% /fragment %}}
-{{% fragment %}} **Two** {{% /fragment %}}
-{{% fragment %}} Three {{% /fragment %}}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Press &lt;code&gt;Space&lt;/code&gt; to play!&lt;/p&gt;
-
-&lt;p&gt;&lt;span class=&#34;fragment &#34; &gt;
-  One
-&lt;/span&gt;
-&lt;span class=&#34;fragment &#34; &gt;
-  &lt;strong&gt;Two&lt;/strong&gt;
-&lt;/span&gt;
-&lt;span class=&#34;fragment &#34; &gt;
-  Three
-&lt;/span&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;A fragment can accept two optional parameters:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;class&lt;/code&gt;: use a custom style (requires definition in custom CSS)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;weight&lt;/code&gt;: sets the order in which a fragment appears&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&#34;speaker-notes&#34;&gt;Speaker Notes&lt;/h2&gt;
-
-&lt;p&gt;Add speaker notes to your presentation&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-markdown&#34;&gt;{{% speaker_note %}}
-- Only the speaker can read these notes
-- Press `S` key to view
-{{% /speaker_note %}}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Press the &lt;code&gt;S&lt;/code&gt; key to view the speaker notes!&lt;/p&gt;
-
-&lt;aside class=&#34;notes&#34;&gt;
-  &lt;ul&gt;
-&lt;li&gt;Only the speaker can read these notes&lt;/li&gt;
-&lt;li&gt;Press &lt;code&gt;S&lt;/code&gt; key to view&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;/aside&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&#34;themes&#34;&gt;Themes&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;black: Black background, white text, blue links (default)&lt;/li&gt;
-&lt;li&gt;white: White background, black text, blue links&lt;/li&gt;
-&lt;li&gt;league: Gray background, white text, blue links&lt;/li&gt;
-&lt;li&gt;beige: Beige background, dark text, brown links&lt;/li&gt;
-&lt;li&gt;sky: Blue background, thin dark text, blue links&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;ul&gt;
-&lt;li&gt;night: Black background, thick white text, orange links&lt;/li&gt;
-&lt;li&gt;serif: Cappuccino background, gray text, brown links&lt;/li&gt;
-&lt;li&gt;simple: White background, black text, blue links&lt;/li&gt;
-&lt;li&gt;solarized: Cream-colored background, dark green text, blue links&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-
-&lt;section data-noprocess data-shortcode-slide
-  
-      
-      data-background-image=&#34;/img/boards.jpg&#34;
-  &gt;
-
-
-&lt;h2 id=&#34;custom-slide&#34;&gt;Custom Slide&lt;/h2&gt;
-
-&lt;p&gt;Customize the slide style and background&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-markdown&#34;&gt;{{&amp;lt; slide background-image=&amp;quot;/img/boards.jpg&amp;quot; &amp;gt;}}
-{{&amp;lt; slide background-color=&amp;quot;#0000FF&amp;quot; &amp;gt;}}
-{{&amp;lt; slide class=&amp;quot;my-style&amp;quot; &amp;gt;}}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&#34;custom-css-example&#34;&gt;Custom CSS Example&lt;/h2&gt;
-
-&lt;p&gt;Let&amp;rsquo;s make headers navy colored.&lt;/p&gt;
-
-&lt;p&gt;Create &lt;code&gt;assets/css/reveal_custom.css&lt;/code&gt; with:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.reveal section h1,
-.reveal section h2,
-.reveal section h3 {
-  color: navy;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&#34;questions&#34;&gt;Questions?&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://discourse.gohugo.io&#34; target=&#34;_blank&#34;&gt;Ask&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://sourcethemes.com/academic/docs/&#34; target=&#34;_blank&#34;&gt;Documentation&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     

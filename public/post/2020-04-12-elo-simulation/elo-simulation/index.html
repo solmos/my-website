@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 3.0.0">
+  <meta name="generator" content="Hugo 0.49.2" />
+  <meta name="author" content="Sergio Olmos Pardo">
+
+  
+  
+  
+  
+    
+  
+  <meta name="description" content="La Euroliga está parada debido a la pandemia de la COVID-19 y no se sabe qué ocurrirá con lo que queda de temporada. El Anadolu Efes estaba intratable y hasta ocho equipos estaban luchando por los últimos tres puestos de Playoffs. ¿Cómo podríamos predecir qué hubiese ocurrido si hubiese seguido la competición?
+En mi última entrada describí cómo utilizar el sistema de puntuación Elo para cuantificar la calidad de los equipos de Euroliga a lo largo de la historia.">
+
+  
+  <link rel="alternate" hreflang="es" href="/es/post/2020-04-12-elo-simulation/elo-simulation/">
+  
+  <link rel="alternate" hreflang="en-us" href="/post/2020-04-12-elo-simulation/elo-simulation/">
+
+  
+
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" crossorigin="anonymous">
+        
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700|Roboto:400,400italic,700|Roboto+Mono">
+  
+
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-131928090-1', 'auto');
+      
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+  
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Sergio Olmos">
+  <link rel="feed" href="/index.xml" type="application/rss+xml" title="Sergio Olmos">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="/post/2020-04-12-elo-simulation/elo-simulation/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="twitter:site" content="@solmos41">
+  <meta property="twitter:creator" content="@solmos41">
+  
+  <meta property="og:site_name" content="Sergio Olmos">
+  <meta property="og:url" content="/post/2020-04-12-elo-simulation/elo-simulation/">
+  <meta property="og:title" content="Simulando el final de la Euroliga | Sergio Olmos">
+  <meta property="og:description" content="La Euroliga está parada debido a la pandemia de la COVID-19 y no se sabe qué ocurrirá con lo que queda de temporada. El Anadolu Efes estaba intratable y hasta ocho equipos estaban luchando por los últimos tres puestos de Playoffs. ¿Cómo podríamos predecir qué hubiese ocurrido si hubiese seguido la competición?
+En mi última entrada describí cómo utilizar el sistema de puntuación Elo para cuantificar la calidad de los equipos de Euroliga a lo largo de la historia.">
+  
+  
+    
+  <meta property="og:image" content="/img/recaman_sharing.png">
+  <meta property="og:locale" content="en-us">
+  
+  <meta property="article:published_time" content="2020-04-12T00:00:00&#43;00:00">
+  
+  <meta property="article:modified_time" content="2020-04-12T00:00:00&#43;00:00">
+  
+
+  
+
+  
+
+  <title>Simulando el final de la Euroliga | Sergio Olmos</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#TableOfContents" data-offset="71" >
+
+<nav class="navbar navbar-light fixed-top navbar-expand-lg py-0" id="navbar-main">
+  <div class="container">
+
+    
+      <a class="navbar-brand" href="/">Sergio Olmos</a>
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+    
+    <div class="collapse navbar-collapse" id="navbar">
+
+      
+      
+      <ul class="navbar-nav ml-auto">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#posts">
+            
+            <span>Blog</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#projects">
+            
+            <span>Projects</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#about">
+            
+            <span>About</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+      
+
+        
+
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">
+            <i class="fas fa-globe" aria-hidden="true"></i>
+            <span>English</span>
+          </a>
+          <ul class="dropdown-menu">
+            
+            <li class="dropdown-item my-0 py-0 mx-0 px-0">
+              <a href="/es/post/2020-04-12-elo-simulation/elo-simulation/">
+                <span>Español</span>
+              </a>
+            </li>
+            
+          </ul>
+        </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1 itemprop="name">Simulando el final de la Euroliga</h1>
+
+  
+
+  
+    
+
+<div class="article-metadata">
+
+  
+  
+  <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+  
+
+  <span class="article-date">
+    
+    <meta content="2020-04-12 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+    <time datetime="2020-04-12 00:00:00 &#43;0000 UTC" itemprop="dateModified">
+      Apr 12, 2020
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    7 min read
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="/post/2020-04-12-elo-simulation/elo-simulation/#disqus_thread"></a>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder"></i>
+    
+    <a href="/categories/castellano/">Castellano</a>
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Simulando%20el%20final%20de%20la%20Euroliga&amp;url=%2fpost%2f2020-04-12-elo-simulation%2felo-simulation%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fpost%2f2020-04-12-elo-simulation%2felo-simulation%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2f2020-04-12-elo-simulation%2felo-simulation%2f&amp;title=Simulando%20el%20final%20de%20la%20Euroliga"
+         target="_blank" rel="noopener">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fpost%2f2020-04-12-elo-simulation%2felo-simulation%2f&amp;title=Simulando%20el%20final%20de%20la%20Euroliga"
+         target="_blank" rel="noopener">
+        <i class="fab fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Simulando%20el%20final%20de%20la%20Euroliga&amp;body=%2fpost%2f2020-04-12-elo-simulation%2felo-simulation%2f">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style" itemprop="articleBody">
+      <script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+
+<p>La Euroliga está parada debido a la pandemia de la COVID-19 y no se sabe qué ocurrirá con lo que queda de temporada. El Anadolu Efes estaba intratable y hasta ocho equipos estaban luchando por los últimos tres puestos de Playoffs. ¿Cómo podríamos predecir qué hubiese ocurrido si hubiese seguido la competición?</p>
+<p>En mi <a href="https://solmos.netlify.com/es/post/2020-03-10-elo-rating-system/elo-rating-system/">última entrada</a> describí cómo utilizar el sistema de puntuación Elo para cuantificar la calidad de los equipos de Euroliga a lo largo de la historia. En esta segunda entrada, voy a describir cómo simular el resto de partidos que quedan de temporada, incluyendo Playoffs y Final Four, utilizando esta puntuación.</p>
+<p>Como ya expliqué, el sistema de puntuación Elo produce para cada partido una probabilidad de victoria esperada basada en la diferencia de las puntuaciones Elo de los dos equipos antes del partido. Pues bien, esta probabilidad es la que nos ayudará a elegir un ganador en cada encuentro de la simulación.</p>
+<p>Nótese que las predicciones que voy a realizar son probabilísticas, no determinísticas. Esto es, el resultado de estas simulaciones será en forma de frecuencias relativas tras un gran número de simulaciones.</p>
+<div id="simulacion" class="section level2">
+<h2>Simulación</h2>
+<p>La simulación comenzará con las puntuaciones Elo de los equipos al acabar la última jornada disputada de esta temporada (Jornada 28). El ganador de cada partido será elegido según la probabilidad esperada de victoria y las puntuaciones Elo serán actualizadas según este resultado.</p>
+<p>Para poder actualizar las puntuaciones Elo en base a los resultados simulados deberemos de estimar la diferencia de puntos en el marcador al acabar el partido. Esto es debido a que el sistema Elo que utilicé también tiene en cuenta el márgen de victoria para actualizar las puntuaciones. Así pues, he construido un simple modelo Bayesiano de regresión para predecir la diferencia de puntos en el marcador en base a la diferencia de puntos Elo. Más adelante explico todas las suposiciones de este modelo en detalle.</p>
+<p>Es importante recalcar que el ganador en un partido determinado no es determinístico, sino que se elige según unas probabilidades. Así pues, si repetimos la simulación una segunda vez, es posible que no obtengamos el mismo resultado. Esto es bueno ya que refleja la incertidumbre existente y nos permite explorar muchos escenarios diferentes. Por este motivo, realizaremos 1000 simulaciones de lo que queda de temporada y mostraremos los resultados finales.</p>
+<div id="puntuaciones-elo-iniciales" class="section level3">
+<h3>1. Puntuaciones Elo iniciales</h3>
+<p>La siguiente tabla contiene el ranking de los equipos hasta esta ronda según la puntuación Elo. Lo primero que salta a la vista es que el Real Madrid es primero a pesar de que Anadolu Efes Istambul tiene dos victorias más. Otro equipo que sale mejor parado de esta clasificación Elo es el Zalgiris. Según la puntuación Elo, el equipo lituano está en séptima posición, mientras que en la clasificación actual estaría fuera de Playoffs en novena posición.</p>
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+Pos
+</th>
+<th style="text-align:left;">
+Equipo
+</th>
+<th style="text-align:right;">
+Elo
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Real Madrid
+</td>
+<td style="text-align:right;">
+1717
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Anadolu Efes Istanbul
+</td>
+<td style="text-align:right;">
+1713
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+CSKA Moscow
+</td>
+<td style="text-align:right;">
+1697
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+FC Barcelona
+</td>
+<td style="text-align:right;">
+1625
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+Maccabi FOX Tel Aviv
+</td>
+<td style="text-align:right;">
+1560
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+Fenerbahce Beko Istanbul
+</td>
+<td style="text-align:right;">
+1538
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:left;">
+Zalgiris Kaunas
+</td>
+<td style="text-align:right;">
+1508
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:left;">
+Panathinaikos OPAP Athens
+</td>
+<td style="text-align:right;">
+1471
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:left;">
+Khimki Moscow Region
+</td>
+<td style="text-align:right;">
+1443
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:left;">
+Olympiacos Piraeus
+</td>
+<td style="text-align:right;">
+1443
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:left;">
+Valencia Basket
+</td>
+<td style="text-align:right;">
+1433
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:left;">
+KIROLBET Baskonia Vitoria-Gasteiz
+</td>
+<td style="text-align:right;">
+1415
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:left;">
+Crvena Zvezda mts Belgrade
+</td>
+<td style="text-align:right;">
+1400
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:left;">
+AX Armani Exchange Milan
+</td>
+<td style="text-align:right;">
+1398
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+ALBA Berlin
+</td>
+<td style="text-align:right;">
+1370
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:left;">
+FC Bayern Munich
+</td>
+<td style="text-align:right;">
+1299
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:left;">
+LDLC ASVEL Villeurbanne
+</td>
+<td style="text-align:right;">
+1284
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:left;">
+Zenit St Petersburg
+</td>
+<td style="text-align:right;">
+1271
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="modelo-para-la-diferencia-de-puntos" class="section level3">
+<h3>2. Modelo para la diferencia de puntos</h3>
+<p>Anteriormente mencioné que era necesario estimar la diferencia de puntos al final de cada encuentro que simulamos para poder actualizar las puntuaciones Elo. Para esto, podemos ajustar un modelo de regresión a los datos que tenemos de todas las temporadas anteriores.</p>
+<p>El modelo nos permitirá predecir la diferencia de puntos en el marcador al acabar un partido basado en la diferencia en las puntuaciones Elo previas al partido. Utilizaremos un modelo Bayesiano para incluir toda la incertidumbre en torno a los parámetros del modelo y así incluirla en las simulaciones de los partidos.</p>
+<p><img src="/post/2020-04-12-elo-simulation/index_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Formalmente, si <span class="math inline">\(y_i\)</span> es la diferencia de puntos entre el equipo local y el visitante en el partido <span class="math inline">\(i\)</span> y <span class="math inline">\(x_i\)</span> es la diferencia en la puntuación Elo entre el equipo local y el visitante (teniendo en cuenta el factor cancha), el modelo que utilizaremos para estimar el margen de victoria en cada partido simulado es el siguiente:</p>
+<p><span class="math display">\[\begin{aligned}
+y_i &amp;\sim \text{Normal}(\mu_i, \sigma^2) \\
+\mu_i &amp;= \alpha + \beta x_i \\
+\alpha &amp;\sim \text{Normal}(0, 1) \\
+\beta &amp;\sim \text{Log-Normal}(-4, 0.8) \\
+\sigma &amp;\sim \text{Uniform}(0, 50)
+\end{aligned}\]</span></p>
+<p>He elegido estas distribuciones de probabilidad a priori realizando simulaciones predictivas a priori. A continuación podemos ver 50 lineas correspondientes al predictor lineal <span class="math inline">\(\mu_i\)</span> obtenidas mediante simulaciones predictivas de las distribuciones a priori de <span class="math inline">\(\alpha\)</span> y <span class="math inline">\(\beta\)</span>:</p>
+<p><img src="/post/2020-04-12-elo-simulation/index_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Es fácil entender el porqué de las distribuciones a priori de los parámetros <span class="math inline">\(\beta\)</span> y <span class="math inline">\(\alpha\)</span>. En este caso <span class="math inline">\(\alpha\)</span> representa la diferencia de puntos en el marcador cuando los dos equipos tienen la misma puntuación Elo antes de comenzar el partido (teniendo en cuenta el factor cancha). Esta diferencia de puntos debería estar alrededor de cero y por esto asignamos una distribución Normal con media 0 a <span class="math inline">\(\alpha\)</span>.</p>
+<p>Por otro lado, <span class="math inline">\(\beta\)</span> representa la pendiente del predictor lineal <span class="math inline">\(\mu_i\)</span>. No tiene sentido que esta pendiente sea negativa. Para ver esto, supón que tenemos a un buen equipo con una puntuación Elo de 1700. Con <span class="math inline">\(\beta &lt; 0\)</span> este equipo tendería a perder contra equipos peores que éste y además, perdería de un mayor margen cuanto peor fuera el rival. Obviamente esto es absurdo y por esto he asignado una distribución Log-Normal a <span class="math inline">\(\beta\)</span>.</p>
+<p>Ahora procedemos a obtener la distribución a posteriori condicionando las distribuciones de probabilidad a priori a los datos. Utilizaremos aproximación cuadrática para esta tarea. Es posible implementar esta técnica en unas pocas líneas de código en R. En otra entrada explicaré en detalle en qué consiste este métdodo y por qué funciona para aproximar la distribución a posteriori.</p>
+<p>A continuación muestro la línea de regresión media obtenida con un intervalo de plausibilidad del 90% (A) y el intervalo de predicción del 90% de la distribución a posteriori (B). Vease que la incertidumbre de nuestro modelo con respecto a la línea de regresión es poca mientras que la incertidumbre en torno a las observaciones de diferencias de puntos es mucho mayor.</p>
+<p><img src="/post/2020-04-12-elo-simulation/index_files/figure-html/unnamed-chunk-7-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>El siguiente gráfico muestra las diferencias en puntos predecidas por este modelo (azul) según las diferencias en puntos Elo observadas en los 4.425 partidos de nuestro conjunto de datos. Los puntos rojos corresponden a las diferencias observadas en realidad. Podemos observar que el modelo genera predicciones similares a las observadas.</p>
+<p><img src="/post/2020-04-12-elo-simulation/index_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="resultados" class="section level3">
+<h3>3. Resultados</h3>
+<p>Queremos incorporar toda esta incertidumbre en las simulaciones de los partidos. Así pues, en cada partido este modelo generará una nueva observación de la diferencia de puntos en el marcador, que utilizaremos en nuestra simulación para decidir qué equipo gana el partido.</p>
+<p>Dada la naturaleza probabilística del modelo, cada simulación de lo que resta de Euroliga resultará en uno de los muchos escenarios posibles. Lo que haré pues es realizar un gran número de simulaciones y ver qué escenarios son más frecuentes. Dado el gran número de escenarios posibles serán necesarias miles de simulaciones para obtener unas frecuencias relativas estables.</p>
+<p>Estas frecuencias relativas pueden interpretarse como la probabilidad de que un escenario determinado ocurra. Así pues, he calculado, para todos los equipos, las probabilidades según este modelo de que este se clasifique para Playoffs, de que se clasifique para la Final 4, de que llegue a la final y de ser campeón. A continuación muestro estas probabilidades tras 10.000 ligas simuladas.</p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Equipo
+</th>
+<th style="text-align:left;">
+Elo
+</th>
+<th style="text-align:left;">
+Playoffs
+</th>
+<th style="text-align:left;">
+Final 4
+</th>
+<th style="text-align:left;">
+Final
+</th>
+<th style="text-align:left;">
+Campeón
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Anadolu Efes Istanbul
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #93d3ab">1713</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffa500">100.00%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffa500">91.84%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffa500">51.64%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffa500">28.74%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Real Madrid
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #93d3ab">1717</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffa500">100.00%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffbb40">68.44%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffb836">40.51%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffbc41">21.33%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CSKA Moscow
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #97d4ae">1697</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffa500">100.00%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffb632">73.63%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffbf4b">36.35%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffbf4b">20.18%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FC Barcelona
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #a9dcbc">1625</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffa500">100.00%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffb735">72.46%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffc459">33.57%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffd280">14.28%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Maccabi FOX Tel Aviv
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #b9e2c8">1560</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffa500">100.00%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffe3b0">28.19%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffecc9">10.88%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fff0d5">4.66%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fenerbahce Beko Istanbul
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #bee4cc">1538</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffc252">67.55%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffeac4">21.15%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffeed0">9.36%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fff2dc">3.84%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Panathinaikos OPAP Athens
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ceebd9">1471</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffbb3e">75.48%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffeed0">16.73%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fff3dd">6.87%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fff6e6">2.75%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Khimki Moscow Region
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #d5eede">1443</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffd07b">51.51%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fff5e3">10.07%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fff8eb">3.91%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fff9f0">1.63%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AX Armani Exchange Milan
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #e0f2e7">1398</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffe7bd">25.81%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fff9f0">5.37%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffbf4">2.18%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffcf7">0.85%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zalgiris Kaunas
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #c5e7d2">1508</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffe6b9">27.22%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffaf2">4.52%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffbf5">1.92%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffcf8">0.70%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Olympiacos Piraeus
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #d5eede">1443</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffedcc">19.99%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffbf4">3.75%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffcf8">1.41%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffdfa">0.56%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Crvena Zvezda mts Belgrade
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #dff2e6">1400</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fff9ee">6.49%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffdfb">1.16%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefc">0.49%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefd">0.19%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+KIROLBET Baskonia Vitoria-Gasteiz
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #dcf0e3">1415</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fff6e6">9.63%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffdfb">1.19%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefc">0.48%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefd">0.18%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Valencia Basket
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #d7efe0">1433</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fff0d5">16.27%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffdfa">1.48%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefc">0.41%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefe">0.10%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ALBA Berlin
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #e7f5ec">1370</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefe">0.04%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefe">0.02%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefe">0.02%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefe">0.01%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LDLC ASVEL Villeurbanne
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fbfdfc">1284</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fffefe">0.01%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff">0.00%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff">0.00%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff">0.00%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FC Bayern Munich
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #f8fcf9">1299</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff">0.00%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff">0.00%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff">0.00%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff">0.00%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zenit St Petersburg
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff">1271</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff">0.00%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff">0.00%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff">0.00%</span>
+</td>
+<td style="text-align:left;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff">0.00%</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+    </div>
+
+    
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tags/basketball-analytics/">Basketball analytics</a>
+  
+  <a class="badge badge-light" href="/tags/estad%C3%ADstica-avanzada/">Estadística avanzada</a>
+  
+  <a class="badge badge-light" href="/tags/r/">R</a>
+  
+</div>
+
+
+
+    
+
+
+
+
+
+
+<div class="media author-card" itemscope itemtype="http://schema.org/Person">
+  
+  <img class="portrait mr-3" src="/img/foto_perfil.jpg" itemprop="image" alt="Avatar">
+  
+  <div class="media-body">
+    <h5 class="card-title" itemprop="name"><a href="/">Sergio Olmos Pardo</a></h5>
+    <h6 class="card-subtitle">Data scientist and basketball player</h6>
+    
+    <ul class="network-icon" aria-hidden="true">
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="mailto:solmos41@gmail.com" target="_blank" rel="noopener">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//twitter.com/solmos41" target="_blank" rel="noopener">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//github.com/solmos" target="_blank" rel="noopener">
+          <i class="fab fa-github"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//linkedin.com/in/sergio-olmos" target="_blank" rel="noopener">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="files/cv.pdf" target="_blank" rel="noopener">
+          <i class="ai ai-cv"></i>
+        </a>
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+
+
+    
+    
+    <div class="article-widget">
+      <div class="hr-light"></div>
+      <h3>Related</h3>
+      <ul>
+        
+        <li><a href="/post/2020-03-10-elo-rating-system/elo-rating-system/">Elo rating system for the Euroleague</a></li>
+        
+        <li><a href="/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/">Introduction to eurolig</a></li>
+        
+        <li><a href="/post/2019-03-28-eurolig/analisis-asistencia/">Analyzing FC Barcelona&#39;s assists pattern</a></li>
+        
+        <li><a href="/post/2019-02-20-la-secuencia-de-recaman/la-secuencia-de-recaman/">Recamán&#39;s sequence</a></li>
+        
+        <li><a href="/post/2019-01-24-graficos-de-tiro-con-r/shotcharts-with-r/">rfeb: Shot charts with R</a></li>
+        
+      </ul>
+    </div>
+    
+
+    
+
+    
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "solmos" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+  </div>
+</article>
+
+<div class="container">
+  <footer class="site-footer">
+  
+  <p class="powered-by">
+    <a href="/privacy/">Privacy Policy</a>
+  </p>
+  
+
+  <p class="powered-by">
+    &copy; 2018 &middot; 
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" id="back_to_top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+</div>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    
+    
+    <script src="/js/mathjax-config.500a6cbb2c0f345fcecc21b3116d6637aa78f1f11db8081ea581abe05390c2e8f3bbffe61be3cf0217baf785c40efceabe51050a4f007e69af94efd3643260e8.js" integrity="sha512-UApsuywPNF/OzCGzEW1mN6p48fEduAgepYGr4FOQwujzu//mG&#43;PPAhe694XEDvzqvlEFCk8AfmmvlO/TZDJg6A=="></script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha512-+NqPlbbtM1QqiK8ZAo4Yrj2c4lNQoGv8P79DPtKzj++l5jnN39rHA/xsqn8zE9l0uSoxaCdrOgFs6yjyfbBxSg==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+
+    
+    
+    
+    <script id="dsq-count-scr" src="//solmos.disqus.com/count.js" async></script>
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/index.json";
+      const i18n = {
+        'placeholder': "Search...",
+        'results': "Search Results",
+        'no_results': "No results found"
+      };
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    <script src="/js/search.js"></script>
+    
+
+    
+    
+
+  </body>
+</html>
+

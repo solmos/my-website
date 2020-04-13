@@ -1,0 +1,402 @@
+---
+title: Simulando el final de la Euroliga
+author: Sergio Olmos
+date: '2020-04-12'
+slug: elo-simulation
+categories:
+  - Castellano
+tags:
+  - Basketball analytics
+  - Estadística avanzada
+  - R
+image:
+  caption: ''
+  focal_point: ''
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE,
+                      fig.align = "center")
+library(tidyverse)
+library(plotly)
+library(kableExtra)
+library(otElo)
+library(wesanderson)
+library(patchwork)
+library(formattable)
+```
+
+La Euroliga está parada debido a la pandemia de la COVID-19 y no se sabe qué ocurrirá con lo que queda de temporada. El Anadolu Efes estaba intratable y hasta ocho equipos estaban luchando por los últimos tres puestos de Playoffs. ¿Cómo podríamos predecir qué hubiese ocurrido si hubiese seguido la competición?
+
+```{r}
+data("elohist")
+data("elohistwide")
+
+elo2019_plot <- elohist %>% 
+  filter(season == 2019) %>% 
+  ggplot(aes(round_code, elo_new, group = team, color = team_code)) +
+  geom_line() +
+  theme_minimal() +
+  theme(
+    legend.position = "none"
+  ) +
+  labs(
+    title = "Puntuación Elo de los equipos Euroliga",
+    subtitle = "Temporada 2019-20",
+    y = "Puntuación Elo",
+    x = "Ronda"
+  )
+
+# ggplotly(elo2019_plot)
+```
+
+En mi [última entrada](https://solmos.netlify.com/es/post/2020-03-10-elo-rating-system/elo-rating-system/) describí cómo utilizar el sistema de puntuación Elo para cuantificar la calidad de los equipos de Euroliga a lo largo de la historia. En esta segunda entrada, voy a describir cómo simular el resto de partidos que quedan de temporada, incluyendo Playoffs y Final Four, utilizando esta puntuación.
+
+Como ya expliqué, el sistema de puntuación Elo produce para cada partido una probabilidad de victoria esperada basada en la diferencia de las puntuaciones Elo de los dos equipos antes del partido. Pues bien, esta probabilidad es la que nos ayudará a elegir un ganador en cada encuentro de la simulación.
+
+Nótese que las predicciones que voy a realizar son probabilísticas, no determinísticas. Esto es, el resultado de estas simulaciones será en forma de frecuencias relativas tras un gran número de simulaciones.
+
+## Simulación
+
+La simulación comenzará con las puntuaciones Elo de los equipos al acabar la última jornada disputada de esta temporada (Jornada 28). El ganador de cada partido será elegido según la probabilidad esperada de victoria y las puntuaciones Elo serán actualizadas según este resultado.
+
+Para poder actualizar las puntuaciones Elo en base a los resultados simulados deberemos de estimar la diferencia de puntos en el marcador al acabar el partido. Esto es debido a que el sistema Elo que utilicé también tiene en cuenta el márgen de victoria para actualizar las puntuaciones. Así pues, he construido un simple modelo Bayesiano de regresión para predecir la diferencia de puntos en el marcador en base a la diferencia de puntos Elo. Más adelante explico todas las suposiciones de este modelo en detalle.
+
+Es importante recalcar que el ganador en un partido determinado no es determinístico, sino que se elige según unas probabilidades. Así pues, si repetimos la simulación una segunda vez, es posible que no obtengamos el mismo resultado. Esto es bueno ya que refleja la incertidumbre existente y nos permite explorar muchos escenarios diferentes. Por este motivo, realizaremos 1000 simulaciones de lo que queda de temporada y mostraremos los resultados finales.
+
+### 1. Puntuaciones Elo iniciales
+
+La siguiente tabla contiene el ranking de los equipos hasta esta ronda según la puntuación Elo. Lo primero que salta a la vista es que el Real Madrid es primero a pesar de que Anadolu Efes Istambul tiene dos victorias más. Otro equipo que sale mejor parado de esta clasificación Elo es el Zalgiris. Según la puntuación Elo, el equipo lituano está en séptima posición, mientras que en la clasificación actual estaría fuera de Playoffs en novena posición.
+
+```{r}
+latest_dates <- elohist %>% 
+  filter(season == 2019) %>% 
+  group_by(team) %>% 
+  summarise(date = max(game_date))
+
+initial_elo <- elohist %>% 
+  filter(game_date %in% unique(latest_dates$date)) %>% 
+  select(season, game_date, team, team_code, elo_new) %>% 
+  arrange(desc(elo_new)) %>% 
+  rename(elo = elo_new)
+
+elo_table <- initial_elo %>% 
+  mutate(elo = round(elo), Pos = 1:18) %>%
+  select(Pos, team, elo) %>% 
+  rename(Equipo = team, Elo = elo) %>% 
+  kable() %>% 
+  kable_styling(bootstrap_option = "striped", full_width = FALSE)
+elo_table
+```
+
+### 2. Modelo para la diferencia de puntos
+
+Anteriormente mencioné que era necesario estimar la diferencia de puntos al final de cada encuentro que simulamos para poder actualizar las puntuaciones Elo. Para esto, podemos ajustar un modelo de regresión a los datos que tenemos de todas las temporadas anteriores.
+
+El modelo nos permitirá predecir la diferencia de puntos en el marcador al acabar un partido basado en la diferencia en las puntuaciones Elo previas al partido. Utilizaremos un modelo Bayesiano para incluir toda la incertidumbre en torno a los parámetros del modelo y así incluirla en las simulaciones de los partidos.
+
+
+```{r}
+red <- wes_palette("GrandBudapest2")[1]
+blue <- wes_palette("GrandBudapest2")[4]
+purple <- wes_palette("GrandBudapest2")[2]
+pts_df <- elohistwide %>% 
+  select(elo_prev_home, elo_prev_away,
+         points_home, points_away, home_adv) %>% 
+  mutate(pt_diff = points_home - points_away,
+         elo_diff = elo_prev_home + home_adv - elo_prev_away)
+
+ggplot(pts_df, aes(elo_diff, pt_diff)) +
+  geom_point(alpha = 0.2, color = red) +
+  geom_smooth(method = "lm", se = FALSE, color = blue) +
+  theme_minimal() +
+  labs(
+    x = "Diferencia de puntos Elo",
+    y = "Diferencia de puntos"
+  ) +
+  theme(
+    axis.text = element_text(size = 11, family = "inconsolata"),
+    title = element_text(family = "inconsolata")
+  )
+```
+
+
+Formalmente, si $y_i$ es la diferencia de puntos entre el equipo local y el visitante en el partido $i$ y $x_i$ es la diferencia en la puntuación Elo entre el equipo local y el visitante (teniendo en cuenta el factor cancha), el modelo que utilizaremos para estimar el margen de victoria en cada partido simulado es el siguiente:
+
+$$\begin{aligned}
+y_i &\sim \text{Normal}(\mu_i, \sigma^2) \\
+\mu_i &= \alpha + \beta x_i \\
+\alpha &\sim \text{Normal}(0, 1) \\
+\beta &\sim \text{Log-Normal}(-4, 0.8) \\
+\sigma &\sim \text{Uniform}(0, 50)
+\end{aligned}$$
+
+
+He elegido estas distribuciones de probabilidad a priori realizando simulaciones predictivas a priori. A continuación podemos ver 50 lineas correspondientes al predictor lineal $\mu_i$ obtenidas mediante simulaciones predictivas de las distribuciones a priori de $\alpha$ y $\beta$:
+
+```{r}
+# Data
+y <- pts_df$pt_diff
+x <- pts_df$elo_diff
+
+# Priors
+set.seed(123)
+n <- 50
+alpha <- rnorm(n, 0, 1)
+beta <- rlnorm(n, -4, 0.8)
+sigma <- runif(n, 0, 50)
+
+mu_list <- vector("list", n)
+for (i in seq_along(mu_list)) {
+  x_seq <- seq(-500, 500, length.out = n)
+  mu_line <- alpha[i] + beta[i] * x_seq
+  mu_list[[i]] <- tibble(x = x_seq, y = mu_line, grp = i)
+}
+mu_df <- do.call("rbind", mu_list)
+
+mu_prior <- ggplot(mu_df, aes(x, y, group = grp)) +
+  geom_line(alpha = 0.4, color = blue) +
+  theme_minimal() + 
+  theme(
+    axis.text = element_text(family = "inconsolata", size = 11),
+    title = element_text(family = "inconsolata")
+  ) +
+  labs(
+    title = "Simulación predictiva a priori de \u03bc\n",
+    y = "Diferencia de puntos",
+    x = "Diferencia de puntos Elo"
+  )
+mu_prior
+
+# ggsave("prior-sim.png", plot = mu_prior, dpi = 600, height = 5.624, width = 10)
+```
+
+Es fácil entender el porqué de las distribuciones a priori de los parámetros $\beta$ y $\alpha$. En este caso $\alpha$ representa la diferencia de puntos en el marcador cuando los dos equipos tienen la misma puntuación Elo antes de comenzar el partido (teniendo en cuenta el factor cancha). Esta diferencia de puntos debería estar alrededor de cero y por esto asignamos una distribución Normal con media 0 a $\alpha$.
+
+Por otro lado, $\beta$ representa la pendiente del predictor lineal $\mu_i$. No tiene sentido que esta pendiente sea negativa. Para ver esto, supón que tenemos a un buen equipo con una puntuación Elo de 1700. Con $\beta < 0$ este equipo tendería a perder contra equipos peores que éste y además, perdería de un mayor margen cuanto peor fuera el rival. Obviamente esto es absurdo y por esto he asignado una distribución Log-Normal a $\beta$.
+
+Ahora procedemos a obtener la distribución a posteriori condicionando las distribuciones de probabilidad a priori a los datos. Utilizaremos aproximación cuadrática para esta tarea. Es posible implementar esta técnica en unas pocas líneas de código en R. En otra entrada explicaré en detalle en qué consiste este métdodo y por qué funciona para aproximar la distribución a posteriori.
+
+```{r}
+# Fitting a Bayesian regression model with quadratic approximation
+
+# y is a vector of point differences
+# x is a vector of Elo point differences
+
+log_posterior <- function(p, y, x) {
+  # Log riors
+  alpha <- dnorm(p["alpha"], 0, 1, log = TRUE)
+  beta <- dlnorm(p["beta"], -4, 0.8, log = TRUE)
+  sigma <- dunif(p["sigma"], 0, 50, log = TRUE)
+  # Assuming independence
+  joint_log_prior <- alpha + beta + sigma
+  
+  # Log likelihood
+  mu <- p["alpha"] + p["beta"] * x
+  log_lik <- sum(dnorm(y, mu, p["sigma"], log = TRUE))
+  
+  # Unnormalized joint log posterior distribution
+  log_posterior <- log_lik + joint_log_prior
+  
+  unname(log_posterior)
+}
+
+# Set initial values for all parameters in the model
+initial_values <- c(alpha = 1, beta = 0.5, sigma = 5)
+quad_approx <- optim(initial_values, log_posterior,
+                     control = list(fnscale = -1),
+                     hessian = TRUE, y = y, x = x)
+
+# Parameter values that maximize the joint posterior log likelihood
+par_peak <- quad_approx$par
+# Variance-covariance matrix of the approximated joint posterior distribution
+cov_matrix <- solve(-quad_approx$hessian)
+# Generate posterior samples for all parameters
+posterior_samples <- mvtnorm::rmvnorm(1000, par_peak, sigma = cov_matrix) %>% 
+  as_tibble()
+```
+
+A continuación muestro la línea de regresión media obtenida con un intervalo de plausibilidad del 90% (A) y el intervalo de predicción del 90% de la distribución a posteriori (B). Vease que la incertidumbre de nuestro modelo con respecto a la línea de regresión es poca mientras que la incertidumbre en torno a las observaciones de diferencias de puntos es mucho mayor.
+
+```{r}
+mu_link <- function(x) posterior_samples$alpha + posterior_samples$beta * x
+x_seq <- seq(min(x) - 20, max(x) + 20, length.out = 1000)
+
+mu_samples <- map_dfc(x_seq, mu_link)
+mu_mean <- colMeans(mu_samples)
+mu_uci <- apply(mu_samples, 2, quantile, 0.95)
+mu_lci <- apply(mu_samples, 2, quantile, 0.05)
+
+mu <- tibble(mu_mean, mu_lci, mu_uci, x_seq)
+
+mu_plot <- ggplot() +
+  geom_ribbon(
+    data = mu,
+    aes(x = x_seq, ymin = mu_lci, ymax = mu_uci),
+    fill = purple, alpha = 0.6
+  ) +
+  geom_line(
+    data = mu,
+    aes(x = x_seq, y = mu_mean), color = blue
+  ) +
+  #geom_point(data = pts_df, aes(elo_diff, pt_diff), alpha = 0.3) +
+  theme_minimal() +
+  theme(
+    axis.title = element_text(family = "inconsolata"),
+    axis.text = element_text(family = "inconsolata", size = 11)
+  ) +
+  labs(
+    title = "A.",
+    x = "Diferencia de puntos Elo",
+    y = "Diferencia de puntos"
+  )
+```
+
+
+```{r, fig.width = 10}
+sim_pts_diff <- sapply(x_seq, function(x) {
+  rnorm(n = nrow(posterior_samples),
+        mean = mu_link(x),
+        sd = posterior_samples$sigma)
+})
+
+pts_mean <- colMeans(sim_pts_diff)
+pts_uci <- apply(sim_pts_diff, 2, quantile, 0.975)
+pts_lci <- apply(sim_pts_diff, 2, quantile, 0.025)
+
+prediction <- tibble(pts_mean, pts_uci, pts_lci, x_seq)
+
+pi_plot <- ggplot() +
+  geom_point(data = pts_df, aes(elo_diff, pt_diff),
+             alpha = 0.3, color = red) +
+  geom_ribbon(
+    data = prediction,
+    aes(x = x_seq, ymin = pts_lci, ymax = pts_uci),
+    fill = purple, alpha = 0.5
+  ) +
+  geom_ribbon(
+    data = mu,
+    aes(x = x_seq, ymin = mu_lci, ymax = mu_uci),
+    fill = purple, alpha = 0.6
+  ) +
+  geom_line(
+    data = mu,
+    aes(x = x_seq, y = mu_mean), color = blue
+  ) +
+  theme_minimal() +
+  theme(
+    axis.title = element_text(family = "inconsolata"),
+    axis.text = element_text(family = "inconsolata", size = 11)
+  ) +
+  labs(
+    title = "B.",
+    x = "Diferencia de puntos Elo",
+    y = "Diferencia de puntos"
+  )
+
+mu_plot + pi_plot
+```
+
+```{r, eval = FALSE}
+interval_plot <- ggplot() +
+  geom_point(data = pts_df, aes(elo_diff, pt_diff),
+             alpha = 0.3, color = red) +
+  geom_ribbon(
+    data = prediction,
+    aes(x = x_seq, ymin = pts_lci, ymax = pts_uci),
+    fill = purple, alpha = 0.5
+  ) +
+  geom_ribbon(
+    data = mu,
+    aes(x = x_seq, ymin = mu_lci, ymax = mu_uci),
+    fill = purple, alpha = 0.6
+  ) +
+  geom_line(
+    data = mu,
+    aes(x = x_seq, y = mu_mean), color = blue
+  ) +
+  theme_minimal() +
+  theme(
+    axis.title = element_text(family = "inconsolata"),
+    axis.text = element_text(family = "inconsolata", size = 11)
+  ) +
+  labs(
+    title = "Intervalo de predicción del 90%",
+    x = "Diferencia de puntos Elo",
+    y = "Diferencia de puntos"
+  )
+ggsave("prediction-interval.png", interval_plot, dpi = 600, height = 5.624, width = 10)
+```
+
+
+El siguiente gráfico muestra las diferencias en puntos predecidas por este modelo (azul) según las diferencias en puntos Elo observadas en los 4.425 partidos de nuestro conjunto de datos. Los puntos rojos corresponden a las diferencias observadas en realidad. Podemos observar que el modelo genera predicciones similares a las observadas.
+
+```{r}
+# Predict a single mu observation for a single Elo difference
+predictPtDiff <- function(x) {
+  pos_sample <- mvtnorm::rmvnorm(1, par_peak, sigma = cov_matrix) %>% 
+    as_tibble()
+  mu <- pos_sample$alpha + pos_sample$beta * x
+  pt_diff <- rnorm(1, mean = mu, sd = pos_sample$sigma)
+  
+  pt_diff
+}
+
+elo_diff_obs <- x
+pt_diff_pred <- map_dbl(elo_diff_obs, predictPtDiff)
+
+pred_df <- tibble(elo_diff_obs, pt_diff_pred)
+
+predict_plot <- ggplot() +
+  geom_point(
+    data = pts_df, aes(elo_diff, pt_diff),
+    color = red, alpha = 0.2
+  ) +
+  geom_point(
+    data = pred_df, aes(elo_diff_obs, pt_diff_pred),
+    color = blue, alpha = 0.3
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text = element_text(family = "inconsolata", size = 11),
+    axis.title = element_text(family = "inconosolata"),
+    title = element_text(family = "inconsolata")
+  ) +
+  labs(
+    title = "\nPredicciones de diferencia de puntos anotados",
+    x = "Diferencia de puntos Elo",
+    y = "Diferencia de puntos"
+  )
+predict_plot
+# ggsave("predict-plot.png", plot = predict_plot, dpi = 600, height = 5.624, width = 10)
+```
+
+
+### 3. Resultados
+
+Queremos incorporar toda esta incertidumbre en las simulaciones de los partidos. Así pues, en cada partido este modelo generará una nueva observación de la diferencia de puntos en el marcador, que utilizaremos en nuestra simulación para decidir qué equipo gana el partido.
+
+Dada la naturaleza probabilística del modelo, cada simulación de lo que resta de Euroliga resultará en uno de los muchos escenarios posibles. Lo que haré pues es realizar un gran número de simulaciones y ver qué escenarios son más frecuentes. Dado el gran número de escenarios posibles serán necesarias miles de simulaciones para obtener unas frecuencias relativas estables. 
+
+Estas frecuencias relativas pueden interpretarse como la probabilidad de que un escenario determinado ocurra. Así pues, he calculado, para todos los equipos, las probabilidades según este modelo de que este se clasifique para Playoffs, de que se clasifique para la Final 4, de que llegue a la final y de ser campeón. A continuación muestro estas probabilidades tras 10.000 ligas simuladas.
+
+```{r}
+probs %>%
+  mutate_if(is.numeric, percent) %>% 
+  left_join(initial_elo[, c(3, 5)], by = "team") %>% 
+  mutate(elo = round(elo, 0)) %>% 
+  select(team, elo, everything()) %>% 
+  mutate(
+    elo = color_tile("#ffffff", "#93d3ab")(elo),
+    playoffs = color_tile("transparent", "orange")(playoffs),
+    final4 = color_tile("transparent", "orange")(final4),
+    final = color_tile("transparent", "orange")(final),
+    champion = color_tile("transparent", "orange")(champion)
+  ) %>% 
+  rename(Equipo = team, Elo = elo, Playoffs = playoffs, 
+         `Final 4` = final4, Final = final, `Campeón` = champion) %>% 
+  kable("html", escape = F) %>%
+  kable_styling(full_width = F)
+```
+
+

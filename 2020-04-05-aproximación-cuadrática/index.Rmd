@@ -1,0 +1,22 @@
+---
+title: Aproximación cuadrática del porcentaje en tiros libres
+author: Sergio Olmos
+date: '2020-04-05'
+slug: aproximación-cuadrática
+categories:
+  - Castellano
+tags:
+  - Matemáticas
+  - R
+  - Basketball
+image:
+  caption: ''
+  focal_point: ''
+---
+
+I just started reading Richard McElreath's excellent book, Statistical Rethinking. I find it to be one of the best textbooks on statistical modeling I have come accross. McElreath even has a series of lectures that follow the topics of the book. If you have not watched them yet, do it.
+
+In Chapter 2 of the book, the author introduces the conceptual mechanics of Bayesian data analysis:
+
+>The target of inference in Bayesian inference is a posterior probability distribution. Posterior probabilities state the relative number of ways each conjectured cause of the data could have produced the data. These relative numbers indicate plausibilities of the different conjectures. These plausibilities are updated in light of observations through Bayesian updating.
+
