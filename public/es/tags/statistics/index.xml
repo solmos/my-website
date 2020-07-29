@@ -1,25 +1,42 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Statistics on Sergio Olmos</title>
+    <title>statistics on Sergio Olmos</title>
     <link>/es/tags/statistics/</link>
-    <description>Recent content in Statistics on Sergio Olmos</description>
+    <description>Recent content in statistics on Sergio Olmos</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>es</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Mon, 06 Jul 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 01 Aug 2019 00:00:00 +0200</lastBuildDate>
     
 	<atom:link href="/es/tags/statistics/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Emacs for Statisticians</title>
-      <link>/es/post/2020-07-06-emacs-for-statisticians/emacs-for-statisticians/</link>
-      <pubDate>Mon, 06 Jul 2020 00:00:00 +0000</pubDate>
+      <title>eurolig</title>
+      <link>/es/project/eurolig/</link>
+      <pubDate>Thu, 01 Aug 2019 00:00:00 +0200</pubDate>
       
-      <guid>/es/post/2020-07-06-emacs-for-statisticians/emacs-for-statisticians/</guid>
-      <description>Introduction These past few weeks I have been trying to find the right workflow when analyzing data that are stored in remote servers. When sensitive data is stored on remote servers, working in the server is highly encouraged to ensure safety of information to external threats and data loss. In this case, no data should be stored in external devices.
-Up until now I used RStudio Desktop for all my projects but running code locally when the data is in a remote server has proved to be a nightmare for me, as everything is just so slow.</description>
+      <guid>/es/project/eurolig/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>rfeb</title>
+      <link>/es/project/rfeb/</link>
+      <pubDate>Sat, 20 Jul 2019 00:00:00 +0200</pubDate>
+      
+      <guid>/es/project/rfeb/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Trabajo Fin de Máster</title>
+      <link>/es/project/tfm/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>/es/project/tfm/</guid>
+      <description></description>
     </item>
     
   </channel>

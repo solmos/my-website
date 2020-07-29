@@ -1,5 +1,5 @@
 ---
-title: Emacs for Statisticians
+title: Emacs for Statisticians (Part 1)
 subtitle: Analyzing data on remote servers using Spacemacs and ESS
 summary: Analyzing data on remote servers using Spacemacs and ESS
 author: Sergio Olmos
