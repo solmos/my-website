@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 3.0.0">
+  <meta name="generator" content="Hugo 0.49.2" />
+  <meta name="author" content="Sergio Olmos Pardo">
+
+  
+  
+  
+  
+    
+  
+  <meta name="description" content="Analyzing data on remote servers using Spacemacs and ESS">
+
+  
+  <link rel="alternate" hreflang="es" href="/es/post/2020-07-06-emacs-for-statisticians/emacs-for-statisticians/">
+  
+  <link rel="alternate" hreflang="en-us" href="/post/2020-07-06-emacs-for-statisticians/emacs-for-statisticians/">
+
+  
+
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" crossorigin="anonymous">
+        
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700|Roboto:400,400italic,700|Roboto+Mono">
+  
+
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-131928090-1', 'auto');
+      
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+  
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Sergio Olmos">
+  <link rel="feed" href="/index.xml" type="application/rss+xml" title="Sergio Olmos">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="/post/2020-07-06-emacs-for-statisticians/emacs-for-statisticians/">
+  
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="twitter:site" content="@solmos41">
+  <meta property="twitter:creator" content="@solmos41">
+  
+  
+  <meta property="og:site_name" content="Sergio Olmos">
+  <meta property="og:url" content="/post/2020-07-06-emacs-for-statisticians/emacs-for-statisticians/">
+  <meta property="og:title" content="Emacs for Statisticians (Part 1) | Sergio Olmos">
+  <meta property="og:description" content="Analyzing data on remote servers using Spacemacs and ESS">
+  
+  
+    
+  <meta property="og:image" content="/img/emacs-screenshot.png">
+  <meta property="og:locale" content="en-us">
+  
+  <meta property="article:published_time" content="2020-07-06T00:00:00&#43;00:00">
+  
+  <meta property="article:modified_time" content="2020-07-06T00:00:00&#43;00:00">
+  
+
+  
+
+  
+
+  <title>Emacs for Statisticians (Part 1) | Sergio Olmos</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#TableOfContents" data-offset="71" >
+
+<nav class="navbar navbar-light fixed-top navbar-expand-lg py-0" id="navbar-main">
+  <div class="container">
+
+    
+      <a class="navbar-brand" href="/">Sergio Olmos</a>
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+    
+    <div class="collapse navbar-collapse" id="navbar">
+
+      
+      
+      <ul class="navbar-nav ml-auto">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#posts">
+            
+            <span>Blog</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#projects">
+            
+            <span>Projects</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#about">
+            
+            <span>About</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+      
+
+        
+
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">
+            <i class="fas fa-globe" aria-hidden="true"></i>
+            <span>English</span>
+          </a>
+          <ul class="dropdown-menu">
+            
+            <li class="dropdown-item my-0 py-0 mx-0 px-0">
+              <a href="/es/post/2020-07-06-emacs-for-statisticians/emacs-for-statisticians/">
+                <span>Español</span>
+              </a>
+            </li>
+            
+          </ul>
+        </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="article-header d-xl-none">
+  <img src="/post/2020-07-06-emacs-for-statisticians/emacs-for-statisticians/featured_huc0d594a1413f8be29095c308c522c790_75239_1600x400_fill_q90_box_smart1_2.png" class="article-banner" itemprop="image" alt="">
+  
+</div>
+
+
+<div class="container-fluid split-header d-none d-xl-block">
+  <div class="row">
+    <div class="col-6">
+      <div class="split-header-content">
+        <h1 itemprop="name">Emacs for Statisticians (Part 1)</h1>
+
+        
+        <p class="page-subtitle">Analyzing data on remote servers using Spacemacs and ESS</p>
+        
+
+        
+
+<div class="article-metadata">
+
+  
+  
+  <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+  
+
+  <span class="article-date">
+    
+    <meta content="2020-07-06 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+    <time datetime="2020-07-06 00:00:00 &#43;0000 UTC" itemprop="dateModified">
+      Jul 6, 2020
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    7 min read
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="/post/2020-07-06-emacs-for-statisticians/emacs-for-statisticians/#disqus_thread"></a>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder"></i>
+    
+    <a href="/categories/english/">English</a>
+    
+  </span>
+  
+  
+
+  
+
+</div>
+
+
+        
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Emacs%20for%20Statisticians%20%28Part%201%29&amp;url=%2fpost%2f2020-07-06-emacs-for-statisticians%2femacs-for-statisticians%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fpost%2f2020-07-06-emacs-for-statisticians%2femacs-for-statisticians%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2f2020-07-06-emacs-for-statisticians%2femacs-for-statisticians%2f&amp;title=Emacs%20for%20Statisticians%20%28Part%201%29"
+         target="_blank" rel="noopener">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fpost%2f2020-07-06-emacs-for-statisticians%2femacs-for-statisticians%2f&amp;title=Emacs%20for%20Statisticians%20%28Part%201%29"
+         target="_blank" rel="noopener">
+        <i class="fab fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Emacs%20for%20Statisticians%20%28Part%201%29&amp;body=%2fpost%2f2020-07-06-emacs-for-statisticians%2femacs-for-statisticians%2f">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="split-header-image">
+        <img src="/post/2020-07-06-emacs-for-statisticians/emacs-for-statisticians/featured_huc0d594a1413f8be29095c308c522c790_75239_680x500_fill_q90_box_smart1_2.png" itemprop="image" alt="">
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="article-container d-xl-none">
+  <h1 itemprop="name">Emacs for Statisticians (Part 1)</h1>
+
+  
+  <p class="page-subtitle">Analyzing data on remote servers using Spacemacs and ESS</p>
+  
+
+  
+
+<div class="article-metadata">
+
+  
+  
+  <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+  
+
+  <span class="article-date">
+    
+    <meta content="2020-07-06 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+    <time datetime="2020-07-06 00:00:00 &#43;0000 UTC" itemprop="dateModified">
+      Jul 6, 2020
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Sergio Olmos Pardo">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    7 min read
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="/post/2020-07-06-emacs-for-statisticians/emacs-for-statisticians/#disqus_thread"></a>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder"></i>
+    
+    <a href="/categories/english/">English</a>
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Emacs%20for%20Statisticians%20%28Part%201%29&amp;url=%2fpost%2f2020-07-06-emacs-for-statisticians%2femacs-for-statisticians%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fpost%2f2020-07-06-emacs-for-statisticians%2femacs-for-statisticians%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2f2020-07-06-emacs-for-statisticians%2femacs-for-statisticians%2f&amp;title=Emacs%20for%20Statisticians%20%28Part%201%29"
+         target="_blank" rel="noopener">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fpost%2f2020-07-06-emacs-for-statisticians%2femacs-for-statisticians%2f&amp;title=Emacs%20for%20Statisticians%20%28Part%201%29"
+         target="_blank" rel="noopener">
+        <i class="fab fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Emacs%20for%20Statisticians%20%28Part%201%29&amp;body=%2fpost%2f2020-07-06-emacs-for-statisticians%2femacs-for-statisticians%2f">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style" itemprop="articleBody">
+      <div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>These past few weeks I have been trying to find the right workflow when analyzing data that are stored in remote servers. When sensitive data is stored on remote servers, working in the server is highly encouraged to ensure safety of information to external threats and data loss. In this case, no data should be stored in external devices.</p>
+<p>Up until now I used RStudio Desktop for all my projects but running code locally when the data is in a remote server has proved to be a nightmare for me, as everything is just so slow.</p>
+<p>Looking for alternatives, I learned about Emacs. Emacs is a powerful text editor that allows to bring code and data together on the server, while having some of the nice functionalities that RStudio offers. It has a very steep learning curve, so give it a try only if you do not have access to RStudio Server or if you are feeling adventurous.</p>
+<p>I documented the painful journey of getting Emacs up and running for my data analysis projects and turned it into a blog post. Let’s start hacking.</p>
+</div>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<p>First <a href="https://www.gnu.org/software/emacs/">install Emacs</a> on your local computer. In Ubuntu you can install the latest version by putting the following command in the Terminal:</p>
+<pre class="bash"><code>sudo apt-get install emacs</code></pre>
+</div>
+<div id="spacemacs" class="section level2">
+<h2>Spacemacs</h2>
+<p>Once Emacs is installed, I recommend installing <a href="https://www.spacemacs.org/">Spacemacs</a> on top of it. Spacemacs provides a layer of functionalities that make setting up and working with Emacs much more pleasant.</p>
+<p>You can install it by removing the .emacs.d folder that is in your home directory and typing:</p>
+<pre class="bash"><code>git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d</code></pre>
+<p>Now launch Emacs in your computer, accept the default initial options and go through the ‘Evil Tutor’ tutorial by typing <code>SPC h T v</code>.</p>
+</div>
+<div id="the-dot-file" class="section level2">
+<h2>The dot file</h2>
+<p>Emacs can be configured by editing Elisp code in one of its files. This file is usually known as the dot file. Spacemacs provides a good starting template with nice defaults and informative comments. You can find the dot file typing <code>SPC f e d</code>. Spend some time trying to understand this file and try out different options. It is also a good idea to look at <a href="https://github.com/MilesMcBain/esscss">other user’s configuration</a>.</p>
+<p>An important aspect of Spacemacs is the concept of a layer. Layers help collect related packages together to provide features. You can add/remove layers by including/removing them from the <code>dotspacemacs-configuration-layer</code> in your dot file. Read the documentation for more details.</p>
+</div>
+<div id="ess" class="section level2">
+<h2>ESS</h2>
+<p>An important package/layer for us statisticians is <a href="https://develop.spacemacs.org/layers/+lang/ess/README.html">ESS</a> (Emacs Speaks Statistics). This layer adds support for statistical programming languages to Spacemacs.</p>
+<p>Add the layer <code>ess</code> to your dot file and restart Spacemacs.</p>
+<p>Start an R process typing <code>:R</code>. You will see the usual R command line where you can write R commands as you would do in RStudio or the terminal.</p>
+<p>Create an R script file by typing <code>SPC f f</code> and then typing the path to the new file you want to create. Make sure the file name ends with <code>.R</code>. This will open a new buffer which ESS will recognize as R code. Write some simple commands in this script and press <code>C-RET</code> to run a single line. You can run entire regions or paragraphs by typing <code>M-C-x</code> or, in normal mode, <code>SPC m e</code>.</p>
+</div>
+<div id="ess-process-on-remote-computers" class="section level2">
+<h2>ESS process on remote computers</h2>
+<p>ESS works with processes on remote computers as easily as with processes on the local machine. The recommended way to access a statistical program on a remote computer is to start it with <a href="https://www.gnu.org/software/emacs/manual/html_mono/tramp.html#Top">TRAMP</a>.</p>
+<p>You will need to have R installed on the remote computer in order to start a remote R process. In my experience, installing from source will produce all sort of dependency issues, specially for viewing graphics. I recommend installing R with a package manager instead. I use <a href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>.</p>
+<p>You may also need to specify which remote <a href="https://www.gnu.org/software/emacs/manual/html_node/tramp/Remote-programs.html">remote directory paths</a> TRAMP can search for remote programs. Add the following lines to the <code>dotspacemacs/user-config</code> section of your Dot file:</p>
+<pre class="bash"><code>(with-eval-after-load &#39;tramp
+  (add-to-list &#39;tramp-remote-path &#39;tramp-own-remote-path))</code></pre>
+<p>Once you have added the remote path you should be able to run an R process on the remote machine. The R program that will run will be the same as running R on the remote terminal. Check that the correct path that contains the R program you want to use comes first in the <code>$PATH</code> environment variable in the remote machine.</p>
+<p>Start an ssh session using TRAMP with <code>SPC f f /ssh:user@host:</code> and enter your password. Press Enter (<code>RET</code>) to start a dired buffer in your remote home directory. Now you can start editing scripts and running R processes on the remote machine as you would usually do on your local machine. Once you have finished working on the server you can close the connection with <code>:tramp-cleanup-connection RET</code></p>
+<p>To simplify the process even further create a <code>config</code> file in your <code>.ssh/</code> folder and add an account. It would look something like this:</p>
+<pre class="bash"><code>Host server1
+  Hostname host
+  User user
+  ForwardX11 yes</code></pre>
+<p>With this configuration <code>/ssh:server1:</code> is enough to start a connection. The ForwardX11 is needed if you want to see the R graphic device showing on the current machine. See next section for more details on showing R plots generated from the remote machine.</p>
+<div id="graphics" class="section level3">
+<h3>Graphics</h3>
+<p>If you have installed R in the remote machine with Miniconda or other package manager you should be able to properly see any R plots generated on the remote machine. If X11 forwarding is enabled you should be able to see any R plots generated on the remote machine. We want to use the Cairo graphics library to properly show the plots. If you have installed R with Miniconda you should have Cairo already installed. If you installed from source you will need to install Cairo from source, with all the implied dependency issues this entails.</p>
+<p>We can set some default options when showing R graphics. Create a file named <code>.Rprofile</code> in your remote home folder and add these lines:</p>
+<pre class="r"><code>## Graphics options
+## Open a new dbcairo device in the bottom right.
+## This avoids having to move/resize the plot window for each session.
+setHook(
+  packageEvent(&quot;grDevices&quot;, &quot;onLoad&quot;),
+  function(...) {
+    grDevices::X11.options(
+                 type = &quot;dbcairo&quot;,
+                 xpos = -1, ypos = -1
+               )
+  }
+)</code></pre>
+<p>If you have a multiple screen setup you may have to play around with the <code>xpos</code>, <code>ypos</code> arguments to show the window where you want. Or properly set the DISPLAY environment variable.</p>
+</div>
+<div id="cran-mirror" class="section level3">
+<h3>CRAN mirror</h3>
+<p>Add the following lines to your <code>.Rprofile</code> to avoid having to interactively select the CRAN mirror in each R session:</p>
+<pre class="r"><code>local({
+  r &lt;- getOption(&quot;repos&quot;)
+  r[&quot;CRAN&quot;] &lt;- &quot;https://cloud.r-project.org&quot;
+  options(repos = r)
+})</code></pre>
+</div>
+</div>
+<div id="rmarkdown" class="section level2">
+<h2>Rmarkdown</h2>
+<p>It is possible to work with Rmarkdown files within Spacemacs thanks to the <code>polymode</code> package. <a href="https://github.com/MilesMcBain/spacemacs_cfg">Miles McBain</a> configuration provides some private layers with some helpful features for this purpose. These layers are enabled by moving them to private folder and adding the <code>polymode</code> layer at <code>dotspacemacs-configuration-layers</code> in your dot file. Note that Spacemacs will use the private <code>ess</code> layer instead of the official one.</p>
+<p>You should enable the <code>markdown</code> layer by adding the following lines at <code>dotspacemacs-configuration-layers</code>:</p>
+<pre class="bash"><code>(markdown :variables
+          markdown-command &quot;pandoc&quot;)</code></pre>
+<p>You may also want to add the following lines to your <code>dotspacemacs/user-config</code> section:</p>
+<pre class="bash"><code>(add-to-list &#39;auto-mode-alist &#39;(&quot;\\.md&quot; . poly-markdown-mode))
+(add-to-list &#39;auto-mode-alist &#39;(&quot;\\.Rmd&quot; . poly-markdown+r-mode))</code></pre>
+<p>You can now write and render Rmarkdown documents (.Rmd) as you would in RStudio.</p>
+<pre class="r"><code>x &lt;- rnorm(100)
+y &lt;- rnorm(100, x)
+plot(x, y, pch = 19)</code></pre>
+<p><img src="/post/2020-07-06-emacs-for-statisticians/index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+<div id="useful-commands" class="section level2">
+<h2>Useful commands</h2>
+<div id="normal-mode" class="section level3">
+<h3><code>normal-mode</code></h3>
+<table>
+<thead>
+<tr class="header">
+<th>Key Binding</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>SPC f f</code></td>
+<td>Find/create file</td>
+</tr>
+<tr class="even">
+<td><code>SPC f s</code></td>
+<td>Save file</td>
+</tr>
+<tr class="odd">
+<td><code>SPC f e d</code></td>
+<td>Open dot file</td>
+</tr>
+<tr class="even">
+<td><code>SPC 1</code></td>
+<td>Select window 1</td>
+</tr>
+<tr class="odd">
+<td><code>SPC 2</code></td>
+<td>Select window 2</td>
+</tr>
+<tr class="even">
+<td><code>SPC w /</code></td>
+<td>Split current window vertically</td>
+</tr>
+<tr class="odd">
+<td><code>SPC w -</code></td>
+<td>Split current window horizontally</td>
+</tr>
+<tr class="even">
+<td><code>SPC b b</code></td>
+<td>List buffers</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="essr" class="section level3">
+<h3><code>ESS[R]</code></h3>
+<table>
+<thead>
+<tr class="header">
+<th>Key Binding</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>C-RET</code></td>
+<td>Evaluate current line</td>
+</tr>
+<tr class="even">
+<td><code>C-M-x</code></td>
+<td>Evaluate current paragraph</td>
+</tr>
+<tr class="odd">
+<td><code>SPC m e</code></td>
+<td>Evaluate current paragraph</td>
+</tr>
+<tr class="even">
+<td><code>C-'</code></td>
+<td>Insert assign symbol <code>&lt;-</code></td>
+</tr>
+<tr class="odd">
+<td><code>C-"</code></td>
+<td>Insert pipe symbol <code>%&gt;%</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="poly-markdownr-mode" class="section level3">
+<h3><code>poly-markdown+r-mode</code>:</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Key Binding</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>C-c i</code></td>
+<td>Insert R code chunk</td>
+</tr>
+<tr class="even">
+<td><code>M-n e</code></td>
+<td>Knit document</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="part-2" class="section level2">
+<h2>Part 2</h2>
+<p>I plan on writing another post with more Emacs hacking as I learn new tweaks that could be useful for statisticians doing data analysis projects on remote servers.</p>
+</div>
+
+    </div>
+
+    
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tags/r/">R</a>
+  
+  <a class="badge badge-light" href="/tags/statistics/">Statistics</a>
+  
+</div>
+
+
+
+    
+
+
+
+
+
+
+<div class="media author-card" itemscope itemtype="http://schema.org/Person">
+  
+  <img class="portrait mr-3" src="/img/foto_perfil.jpg" itemprop="image" alt="Avatar">
+  
+  <div class="media-body">
+    <h5 class="card-title" itemprop="name"><a href="/">Sergio Olmos Pardo</a></h5>
+    <h6 class="card-subtitle">Statistician | Data Scientist</h6>
+    
+    <ul class="network-icon" aria-hidden="true">
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="mailto:solmos41@gmail.com" target="_blank" rel="noopener">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//twitter.com/solmos41" target="_blank" rel="noopener">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//github.com/solmos" target="_blank" rel="noopener">
+          <i class="fab fa-github"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="//linkedin.com/in/sergio-olmos" target="_blank" rel="noopener">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </li>
+      
+      
+      
+      
+      <li>
+        <a itemprop="sameAs" href="files/cv.pdf" target="_blank" rel="noopener">
+          <i class="ai ai-cv"></i>
+        </a>
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+
+
+    
+    
+    <div class="article-widget">
+      <div class="hr-light"></div>
+      <h3>Related</h3>
+      <ul>
+        
+        <li><a href="/post/2020-04-12-elo-simulation/elo-simulation/">Simulando el final de la Euroliga</a></li>
+        
+        <li><a href="/post/2020-03-10-elo-rating-system/elo-rating-system/">Elo rating system for the Euroleague</a></li>
+        
+        <li><a href="/post/2019-11-28-introduction-to-eurolig/introduction-to-eurolig/">Introduction to eurolig</a></li>
+        
+        <li><a href="/post/2019-03-28-eurolig/analisis-asistencia/">Analyzing FC Barcelona&#39;s assists pattern</a></li>
+        
+        <li><a href="/post/2019-02-20-la-secuencia-de-recaman/la-secuencia-de-recaman/">Recamán&#39;s sequence</a></li>
+        
+      </ul>
+    </div>
+    
+
+    
+
+    
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "solmos" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+  </div>
+</article>
+
+<div class="container">
+  <footer class="site-footer">
+  
+  <p class="powered-by">
+    <a href="/privacy/">Privacy Policy</a>
+  </p>
+  
+
+  <p class="powered-by">
+    &copy; 2018 &middot; 
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" id="back_to_top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+</div>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    
+    
+    <script src="/js/mathjax-config.500a6cbb2c0f345fcecc21b3116d6637aa78f1f11db8081ea581abe05390c2e8f3bbffe61be3cf0217baf785c40efceabe51050a4f007e69af94efd3643260e8.js" integrity="sha512-UApsuywPNF/OzCGzEW1mN6p48fEduAgepYGr4FOQwujzu//mG&#43;PPAhe694XEDvzqvlEFCk8AfmmvlO/TZDJg6A=="></script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha512-+NqPlbbtM1QqiK8ZAo4Yrj2c4lNQoGv8P79DPtKzj++l5jnN39rHA/xsqn8zE9l0uSoxaCdrOgFs6yjyfbBxSg==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+
+    
+    
+    
+    <script id="dsq-count-scr" src="//solmos.disqus.com/count.js" async></script>
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/index.json";
+      const i18n = {
+        'placeholder': "Search...",
+        'results': "Search Results",
+        'no_results': "No results found"
+      };
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    <script src="/js/search.js"></script>
+    
+
+    
+    
+
+  </body>
+</html>
+

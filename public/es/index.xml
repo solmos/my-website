@@ -11,6 +11,210 @@
     <atom:link href="/es/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Emacs for Statisticians</title>
+      <link>/es/post/2020-07-06-emacs-for-statisticians/emacs-for-statisticians/</link>
+      <pubDate>Mon, 06 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/es/post/2020-07-06-emacs-for-statisticians/emacs-for-statisticians/</guid>
+      <description>&lt;div id=&#34;introduction&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;These past few weeks I have been trying to find the right workflow when analyzing data that are stored in remote servers. When sensitive data is stored on remote servers, working in the server is highly encouraged to ensure safety of information to external threats and data loss. In this case, no data should be stored in external devices.&lt;/p&gt;
+&lt;p&gt;Up until now I used RStudio Desktop for all my projects but running code locally when the data is in a remote server has proved to be a nightmare for me, as everything is just so slow.&lt;/p&gt;
+&lt;p&gt;Looking for alternatives, I learned about Emacs. Emacs is a powerful text editor that allows to bring code and data together on the server, while having some of the nice functionalities that RStudio offers. It has a very steep learning curve, so give it a try only if you do not have access to RStudio Server or if you are feeling adventurous.&lt;/p&gt;
+&lt;p&gt;I documented the painful journey of getting Emacs up and running for my data analysis projects and turned it into a blog post. Let’s start hacking.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;installation&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Installation&lt;/h2&gt;
+&lt;p&gt;First &lt;a href=&#34;https://www.gnu.org/software/emacs/&#34;&gt;install Emacs&lt;/a&gt; on your local computer. In Ubuntu you can install the latest version by putting the following command in the Terminal:&lt;/p&gt;
+&lt;pre class=&#34;bash&#34;&gt;&lt;code&gt;sudo apt-get install emacs&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;spacemacs&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Spacemacs&lt;/h2&gt;
+&lt;p&gt;Once Emacs is installed, I recommend installing &lt;a href=&#34;https://www.spacemacs.org/&#34;&gt;Spacemacs&lt;/a&gt; on top of it. Spacemacs provides a layer of functionalities that make setting up and working with Emacs much more pleasant.&lt;/p&gt;
+&lt;p&gt;You can install it by removing the .emacs.d folder that is in your home directory and typing:&lt;/p&gt;
+&lt;pre class=&#34;bash&#34;&gt;&lt;code&gt;git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now launch Emacs in your computer, accept the default initial options and go through the ‘Evil Tutor’ tutorial by typing &lt;code&gt;SPC h T v&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;the-dot-file&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The dot file&lt;/h2&gt;
+&lt;p&gt;Emacs can be configured by editing Elisp code in one of its files. This file is usually known as the dot file. Spacemacs provides a good starting template with nice defaults and informative comments. You can find the dot file typing &lt;code&gt;SPC f e d&lt;/code&gt;. Spend some time trying to understand this file and try out different options. It is also a good idea to look at &lt;a href=&#34;https://github.com/MilesMcBain/esscss&#34;&gt;other user’s configuration&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;An important aspect of Spacemacs is the concept of a layer. Layers help collect related packages together to provide features. You can add/remove layers by including/removing them from the &lt;code&gt;dotspacemacs-configuration-layer&lt;/code&gt; in your dot file. Read the documentation for more details.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ess&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;ESS&lt;/h2&gt;
+&lt;p&gt;An important package/layer for us statisticians is &lt;a href=&#34;https://develop.spacemacs.org/layers/+lang/ess/README.html&#34;&gt;ESS&lt;/a&gt; (Emacs Speaks Statistics). This layer adds support for statistical programming languages to Spacemacs.&lt;/p&gt;
+&lt;p&gt;Add the layer &lt;code&gt;ess&lt;/code&gt; to your dot file and restart Spacemacs.&lt;/p&gt;
+&lt;p&gt;Start an R process typing &lt;code&gt;:R&lt;/code&gt;. You will see the usual R command line where you can write R commands as you would do in RStudio or the terminal.&lt;/p&gt;
+&lt;p&gt;Create an R script file by typing &lt;code&gt;SPC f f&lt;/code&gt; and then typing the path to the new file you want to create. Make sure the file name ends with &lt;code&gt;.R&lt;/code&gt;. This will open a new buffer which ESS will recognize as R code. Write some simple commands in this script and press &lt;code&gt;C-RET&lt;/code&gt; to run a single line. You can run entire regions or paragraphs by typing &lt;code&gt;M-C-x&lt;/code&gt; or, in normal mode, &lt;code&gt;SPC m e&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ess-process-on-remote-computers&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;ESS process on remote computers&lt;/h2&gt;
+&lt;p&gt;ESS works with processes on remote computers as easily as with processes on the local machine. The recommended way to access a statistical program on a remote computer is to start it with &lt;a href=&#34;https://www.gnu.org/software/emacs/manual/html_mono/tramp.html#Top&#34;&gt;TRAMP&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;You will need to have R installed on the remote computer in order to start a remote R process. In my experience, installing from source will produce all sort of dependency issues, specially for viewing graphics. I recommend installing R with a package manager instead. I use &lt;a href=&#34;https://docs.conda.io/en/latest/miniconda.html&#34;&gt;Miniconda&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;You may also need to specify which remote &lt;a href=&#34;https://www.gnu.org/software/emacs/manual/html_node/tramp/Remote-programs.html&#34;&gt;remote directory paths&lt;/a&gt; TRAMP can search for remote programs. Add the following lines to the &lt;code&gt;dotspacemacs/user-config&lt;/code&gt; section of your Dot file:&lt;/p&gt;
+&lt;pre class=&#34;bash&#34;&gt;&lt;code&gt;(with-eval-after-load &amp;#39;tramp
+  (add-to-list &amp;#39;tramp-remote-path &amp;#39;tramp-own-remote-path))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Once you have added the remote path you should be able to run an R process on the remote machine. The R program that will run will be the same as running R on the remote terminal. Check that the correct path that contains the R program you want to use comes first in the &lt;code&gt;$PATH&lt;/code&gt; environment variable in the remote machine.&lt;/p&gt;
+&lt;p&gt;Start an ssh session using TRAMP with &lt;code&gt;SPC f f /ssh:user@host:&lt;/code&gt; and enter your password. Press Enter (&lt;code&gt;RET&lt;/code&gt;) to start a dired buffer in your remote home directory. Now you can start editing scripts and running R processes on the remote machine as you would usually do on your local machine. Once you have finished working on the server you can close the connection with &lt;code&gt;:tramp-cleanup-connection RET&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;To simplify the process even further create a &lt;code&gt;config&lt;/code&gt; file in your &lt;code&gt;.ssh/&lt;/code&gt; folder and add an account. It would look something like this:&lt;/p&gt;
+&lt;pre class=&#34;bash&#34;&gt;&lt;code&gt;Host server1
+  Hostname host
+  User user
+  ForwardX11 yes&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;With this configuration &lt;code&gt;/ssh:server1:&lt;/code&gt; is enough to start a connection. The ForwardX11 is needed if you want to see the R graphic device showing on the current machine. See next section for more details on showing R plots generated from the remote machine.&lt;/p&gt;
+&lt;div id=&#34;graphics&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Graphics&lt;/h3&gt;
+&lt;p&gt;If you have installed R in the remote machine with Miniconda or other package manager you should be able to properly see any R plots generated on the remote machine. If X11 forwarding is enabled you should be able to see any R plots generated on the remote machine. We want to use the Cairo graphics library to properly show the plots. If you have installed R with Miniconda you should have Cairo already installed. If you installed from source you will need to install Cairo from source, with all the implied dependency issues this entails.&lt;/p&gt;
+&lt;p&gt;We can set some default options when showing R graphics. Create a file named &lt;code&gt;.Rprofile&lt;/code&gt; in your remote home folder and add these lines:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;## Graphics options
+## Open a new dbcairo device in the bottom right.
+## This avoids having to move/resize the plot window for each session.
+setHook(
+  packageEvent(&amp;quot;grDevices&amp;quot;, &amp;quot;onLoad&amp;quot;),
+  function(...) {
+    grDevices::X11.options(
+                 type = &amp;quot;dbcairo&amp;quot;,
+                 xpos = -1, ypos = -1
+               )
+  }
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you have a multiple screen setup you may have to play around with the &lt;code&gt;xpos&lt;/code&gt;, &lt;code&gt;ypos&lt;/code&gt; arguments to show the window where you want. Or properly set the DISPLAY environment variable.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;cran-mirror&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;CRAN mirror&lt;/h3&gt;
+&lt;p&gt;Add the following lines to your &lt;code&gt;.Rprofile&lt;/code&gt; to avoid having to interactively select the CRAN mirror in each R session:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;local({
+  r &amp;lt;- getOption(&amp;quot;repos&amp;quot;)
+  r[&amp;quot;CRAN&amp;quot;] &amp;lt;- &amp;quot;https://cloud.r-project.org&amp;quot;
+  options(repos = r)
+})&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;rmarkdown&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Rmarkdown&lt;/h2&gt;
+&lt;p&gt;It is possible to work with Rmarkdown files within Spacemacs thanks to the &lt;code&gt;polymode&lt;/code&gt; package. &lt;a href=&#34;https://github.com/MilesMcBain/spacemacs_cfg&#34;&gt;Miles McBain&lt;/a&gt; configuration provides some private layers with some helpful features for this purpose. These layers are enabled by moving them to private folder and adding the &lt;code&gt;polymode&lt;/code&gt; layer at &lt;code&gt;dotspacemacs-configuration-layers&lt;/code&gt; in your dot file. Note that Spacemacs will use the private &lt;code&gt;ess&lt;/code&gt; layer instead of the official one.&lt;/p&gt;
+&lt;p&gt;You should enable the &lt;code&gt;markdown&lt;/code&gt; layer by adding the following lines at &lt;code&gt;dotspacemacs-configuration-layers&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;bash&#34;&gt;&lt;code&gt;(markdown :variables
+          markdown-command &amp;quot;pandoc&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You may also want to add the following lines to your &lt;code&gt;dotspacemacs/user-config&lt;/code&gt; section:&lt;/p&gt;
+&lt;pre class=&#34;bash&#34;&gt;&lt;code&gt;(add-to-list &amp;#39;auto-mode-alist &amp;#39;(&amp;quot;\\.md&amp;quot; . poly-markdown-mode))
+(add-to-list &amp;#39;auto-mode-alist &amp;#39;(&amp;quot;\\.Rmd&amp;quot; . poly-markdown+r-mode))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can now write and render Rmarkdown documents (.Rmd) as you would in RStudio.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;x &amp;lt;- rnorm(100)
+y &amp;lt;- rnorm(100, x)
+plot(x, y, pch = 19)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-07-06-emacs-for-statisticians/index.es_files/figure-html/unnamed-chunk-9-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;useful-commands&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Useful commands&lt;/h2&gt;
+&lt;div id=&#34;normal-mode&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;&lt;code&gt;normal-mode&lt;/code&gt;&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th&gt;Key Binding&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;&lt;code&gt;SPC f f&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Find/create file&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;&lt;code&gt;SPC f s&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Save file&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;&lt;code&gt;SPC f e d&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Open dot file&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;&lt;code&gt;SPC 1&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Select window 1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;&lt;code&gt;SPC 2&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Select window 2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;&lt;code&gt;SPC w /&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Split current window vertically&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;&lt;code&gt;SPC w -&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Split current window horizontally&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;&lt;code&gt;SPC b b&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;List buffers&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;div id=&#34;essr&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;&lt;code&gt;ESS[R]&lt;/code&gt;&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th&gt;Key Binding&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;&lt;code&gt;C-RET&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Evaluate current line&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;&lt;code&gt;C-M-x&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Evaluate current paragraph&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;&lt;code&gt;SPC m e&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Evaluate current paragraph&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;&lt;code&gt;SPC m f&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Evalueate current function&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;&lt;code&gt;C-&#39;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Insert assign symbol &lt;code&gt;&amp;lt;-&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;&lt;code&gt;C-&#34;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Insert pipe symbol &lt;code&gt;%&amp;gt;%&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;div id=&#34;poly-markdownr-mode&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;&lt;code&gt;poly-markdown+r-mode&lt;/code&gt;:&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th&gt;Key Binding&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;&lt;code&gt;C-c i&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Insert R code chunk&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;&lt;code&gt;M-n e&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Knit document&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Simulando el final de la Euroliga</title>
       <link>/es/post/2020-04-12-elo-simulation/elo-simulation/</link>
       <pubDate>Sun, 12 Apr 2020 00:00:00 +0000</pubDate>

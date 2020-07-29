@@ -1,0 +1,215 @@
+---
+title: Emacs for Statisticians (Part 1)
+subtitle: Analyzing data on remote servers using Spacemacs and ESS
+summary: Analyzing data on remote servers using Spacemacs and ESS
+author: Sergio Olmos
+date: '2020-07-06'
+slug: emacs-for-statisticians
+categories:
+  - English
+tags:
+  - R
+  - Statistics
+image:
+  caption: ''
+  focal_point: ''
+twitterImg: 'emacs-screenshot.png'
+---
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>These past few weeks I have been trying to find the right workflow when analyzing data that are stored in remote servers. When sensitive data is stored on remote servers, working in the server is highly encouraged to ensure safety of information to external threats and data loss. In this case, no data should be stored in external devices.</p>
+<p>Up until now I used RStudio Desktop for all my projects but running code locally when the data is in a remote server has proved to be a nightmare for me, as everything is just so slow.</p>
+<p>Looking for alternatives, I learned about Emacs. Emacs is a powerful text editor that allows to bring code and data together on the server, while having some of the nice functionalities that RStudio offers. It has a very steep learning curve, so give it a try only if you do not have access to RStudio Server or if you are feeling adventurous.</p>
+<p>I documented the painful journey of getting Emacs up and running for my data analysis projects and turned it into a blog post. Let’s start hacking.</p>
+</div>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<p>First <a href="https://www.gnu.org/software/emacs/">install Emacs</a> on your local computer. In Ubuntu you can install the latest version by putting the following command in the Terminal:</p>
+<pre class="bash"><code>sudo apt-get install emacs</code></pre>
+</div>
+<div id="spacemacs" class="section level2">
+<h2>Spacemacs</h2>
+<p>Once Emacs is installed, I recommend installing <a href="https://www.spacemacs.org/">Spacemacs</a> on top of it. Spacemacs provides a layer of functionalities that make setting up and working with Emacs much more pleasant.</p>
+<p>You can install it by removing the .emacs.d folder that is in your home directory and typing:</p>
+<pre class="bash"><code>git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d</code></pre>
+<p>Now launch Emacs in your computer, accept the default initial options and go through the ‘Evil Tutor’ tutorial by typing <code>SPC h T v</code>.</p>
+</div>
+<div id="the-dot-file" class="section level2">
+<h2>The dot file</h2>
+<p>Emacs can be configured by editing Elisp code in one of its files. This file is usually known as the dot file. Spacemacs provides a good starting template with nice defaults and informative comments. You can find the dot file typing <code>SPC f e d</code>. Spend some time trying to understand this file and try out different options. It is also a good idea to look at <a href="https://github.com/MilesMcBain/esscss">other user’s configuration</a>.</p>
+<p>An important aspect of Spacemacs is the concept of a layer. Layers help collect related packages together to provide features. You can add/remove layers by including/removing them from the <code>dotspacemacs-configuration-layer</code> in your dot file. Read the documentation for more details.</p>
+</div>
+<div id="ess" class="section level2">
+<h2>ESS</h2>
+<p>An important package/layer for us statisticians is <a href="https://develop.spacemacs.org/layers/+lang/ess/README.html">ESS</a> (Emacs Speaks Statistics). This layer adds support for statistical programming languages to Spacemacs.</p>
+<p>Add the layer <code>ess</code> to your dot file and restart Spacemacs.</p>
+<p>Start an R process typing <code>:R</code>. You will see the usual R command line where you can write R commands as you would do in RStudio or the terminal.</p>
+<p>Create an R script file by typing <code>SPC f f</code> and then typing the path to the new file you want to create. Make sure the file name ends with <code>.R</code>. This will open a new buffer which ESS will recognize as R code. Write some simple commands in this script and press <code>C-RET</code> to run a single line. You can run entire regions or paragraphs by typing <code>M-C-x</code> or, in normal mode, <code>SPC m e</code>.</p>
+</div>
+<div id="ess-process-on-remote-computers" class="section level2">
+<h2>ESS process on remote computers</h2>
+<p>ESS works with processes on remote computers as easily as with processes on the local machine. The recommended way to access a statistical program on a remote computer is to start it with <a href="https://www.gnu.org/software/emacs/manual/html_mono/tramp.html#Top">TRAMP</a>.</p>
+<p>You will need to have R installed on the remote computer in order to start a remote R process. In my experience, installing from source will produce all sort of dependency issues, specially for viewing graphics. I recommend installing R with a package manager instead. I use <a href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>.</p>
+<p>You may also need to specify which remote <a href="https://www.gnu.org/software/emacs/manual/html_node/tramp/Remote-programs.html">remote directory paths</a> TRAMP can search for remote programs. Add the following lines to the <code>dotspacemacs/user-config</code> section of your Dot file:</p>
+<pre class="bash"><code>(with-eval-after-load &#39;tramp
+  (add-to-list &#39;tramp-remote-path &#39;tramp-own-remote-path))</code></pre>
+<p>Once you have added the remote path you should be able to run an R process on the remote machine. The R program that will run will be the same as running R on the remote terminal. Check that the correct path that contains the R program you want to use comes first in the <code>$PATH</code> environment variable in the remote machine.</p>
+<p>Start an ssh session using TRAMP with <code>SPC f f /ssh:user@host:</code> and enter your password. Press Enter (<code>RET</code>) to start a dired buffer in your remote home directory. Now you can start editing scripts and running R processes on the remote machine as you would usually do on your local machine. Once you have finished working on the server you can close the connection with <code>:tramp-cleanup-connection RET</code></p>
+<p>To simplify the process even further create a <code>config</code> file in your <code>.ssh/</code> folder and add an account. It would look something like this:</p>
+<pre class="bash"><code>Host server1
+  Hostname host
+  User user
+  ForwardX11 yes</code></pre>
+<p>With this configuration <code>/ssh:server1:</code> is enough to start a connection. The ForwardX11 is needed if you want to see the R graphic device showing on the current machine. See next section for more details on showing R plots generated from the remote machine.</p>
+<div id="graphics" class="section level3">
+<h3>Graphics</h3>
+<p>If you have installed R in the remote machine with Miniconda or other package manager you should be able to properly see any R plots generated on the remote machine. If X11 forwarding is enabled you should be able to see any R plots generated on the remote machine. We want to use the Cairo graphics library to properly show the plots. If you have installed R with Miniconda you should have Cairo already installed. If you installed from source you will need to install Cairo from source, with all the implied dependency issues this entails.</p>
+<p>We can set some default options when showing R graphics. Create a file named <code>.Rprofile</code> in your remote home folder and add these lines:</p>
+<pre class="r"><code>## Graphics options
+## Open a new dbcairo device in the bottom right.
+## This avoids having to move/resize the plot window for each session.
+setHook(
+  packageEvent(&quot;grDevices&quot;, &quot;onLoad&quot;),
+  function(...) {
+    grDevices::X11.options(
+                 type = &quot;dbcairo&quot;,
+                 xpos = -1, ypos = -1
+               )
+  }
+)</code></pre>
+<p>If you have a multiple screen setup you may have to play around with the <code>xpos</code>, <code>ypos</code> arguments to show the window where you want. Or properly set the DISPLAY environment variable.</p>
+</div>
+<div id="cran-mirror" class="section level3">
+<h3>CRAN mirror</h3>
+<p>Add the following lines to your <code>.Rprofile</code> to avoid having to interactively select the CRAN mirror in each R session:</p>
+<pre class="r"><code>local({
+  r &lt;- getOption(&quot;repos&quot;)
+  r[&quot;CRAN&quot;] &lt;- &quot;https://cloud.r-project.org&quot;
+  options(repos = r)
+})</code></pre>
+</div>
+</div>
+<div id="rmarkdown" class="section level2">
+<h2>Rmarkdown</h2>
+<p>It is possible to work with Rmarkdown files within Spacemacs thanks to the <code>polymode</code> package. <a href="https://github.com/MilesMcBain/spacemacs_cfg">Miles McBain</a> configuration provides some private layers with some helpful features for this purpose. These layers are enabled by moving them to private folder and adding the <code>polymode</code> layer at <code>dotspacemacs-configuration-layers</code> in your dot file. Note that Spacemacs will use the private <code>ess</code> layer instead of the official one.</p>
+<p>You should enable the <code>markdown</code> layer by adding the following lines at <code>dotspacemacs-configuration-layers</code>:</p>
+<pre class="bash"><code>(markdown :variables
+          markdown-command &quot;pandoc&quot;)</code></pre>
+<p>You may also want to add the following lines to your <code>dotspacemacs/user-config</code> section:</p>
+<pre class="bash"><code>(add-to-list &#39;auto-mode-alist &#39;(&quot;\\.md&quot; . poly-markdown-mode))
+(add-to-list &#39;auto-mode-alist &#39;(&quot;\\.Rmd&quot; . poly-markdown+r-mode))</code></pre>
+<p>You can now write and render Rmarkdown documents (.Rmd) as you would in RStudio.</p>
+<pre class="r"><code>x &lt;- rnorm(100)
+y &lt;- rnorm(100, x)
+plot(x, y, pch = 19)</code></pre>
+<p><img src="/post/2020-07-06-emacs-for-statisticians/index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+<div id="useful-commands" class="section level2">
+<h2>Useful commands</h2>
+<div id="normal-mode" class="section level3">
+<h3><code>normal-mode</code></h3>
+<table>
+<thead>
+<tr class="header">
+<th>Key Binding</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>SPC f f</code></td>
+<td>Find/create file</td>
+</tr>
+<tr class="even">
+<td><code>SPC f s</code></td>
+<td>Save file</td>
+</tr>
+<tr class="odd">
+<td><code>SPC f e d</code></td>
+<td>Open dot file</td>
+</tr>
+<tr class="even">
+<td><code>SPC 1</code></td>
+<td>Select window 1</td>
+</tr>
+<tr class="odd">
+<td><code>SPC 2</code></td>
+<td>Select window 2</td>
+</tr>
+<tr class="even">
+<td><code>SPC w /</code></td>
+<td>Split current window vertically</td>
+</tr>
+<tr class="odd">
+<td><code>SPC w -</code></td>
+<td>Split current window horizontally</td>
+</tr>
+<tr class="even">
+<td><code>SPC b b</code></td>
+<td>List buffers</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="essr" class="section level3">
+<h3><code>ESS[R]</code></h3>
+<table>
+<thead>
+<tr class="header">
+<th>Key Binding</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>C-RET</code></td>
+<td>Evaluate current line</td>
+</tr>
+<tr class="even">
+<td><code>C-M-x</code></td>
+<td>Evaluate current paragraph</td>
+</tr>
+<tr class="odd">
+<td><code>SPC m e</code></td>
+<td>Evaluate current paragraph</td>
+</tr>
+<tr class="even">
+<td><code>C-'</code></td>
+<td>Insert assign symbol <code>&lt;-</code></td>
+</tr>
+<tr class="odd">
+<td><code>C-"</code></td>
+<td>Insert pipe symbol <code>%&gt;%</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="poly-markdownr-mode" class="section level3">
+<h3><code>poly-markdown+r-mode</code>:</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Key Binding</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>C-c i</code></td>
+<td>Insert R code chunk</td>
+</tr>
+<tr class="even">
+<td><code>M-n e</code></td>
+<td>Knit document</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="part-2" class="section level2">
+<h2>Part 2</h2>
+<p>I plan on writing another post with more Emacs hacking as I learn new tweaks that could be useful for statisticians doing data analysis projects on remote servers.</p>
+</div>

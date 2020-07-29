@@ -13,10 +13,10 @@ weight = 3
     "Estadística",
     "Aprendizaje automático",
     "R",
+    "Epidemiología",
     "Estadística avanzada en baloncesto",
     "Matemáticas",
-    "Arte generativo",
-    "Bioinformática"
+    "Arte generativo"
   ]
 
 # List your qualifications (such as academic degrees).
@@ -40,6 +40,6 @@ weight = 3
 
 # Sobre mí
 
-[Jugador profesional de baloncesto](https://www.youtube.com/watch?v=1fS4MCVzFu4) desde hace más de 10 años interesado en el lado analítico del juego. Actualmente estoy desarrollando varios paquetes de R y Shiny apps para analizar datos generados por varias ligas de baloncesto europeas.
+Soy estadístico investigando sobre los efectos de la contaminación ambiental y otros factores del entorno urbano sobre la salud. Antes de unirme a ISGlobal, fui [jugador profesional de baloncesto](https://www.youtube.com/watch?v=1fS4MCVzFu4) durante 11 años. También soy consultor en ciencia de datos para [ALBA Berlín](https://www.albaberlin.de/). En mi tiempo libre estoy desarrollando varios paquetes de R de código abierto para obtener y analizar datos de baloncesto.
 
 En mi blog escribo principalmente sobre cómo utilizar el [lenguaje de programación R](https://www.r-project.org/) para analizar y visualizar diferentes tipos de datos. A veces en castellano, a veces en inglés.

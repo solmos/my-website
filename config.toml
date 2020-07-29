@@ -52,11 +52,11 @@ enableGitInfo = false
 
   # Your details.
   name = "Sergio Olmos Pardo"
-  role = "Data scientist and basketball player"
+  role = "Statistician | Data Scientist"
 
   # Organizations/Affiliations.
   #   Separate multiple entries with a comma, using the form: `[ {name="Org1", url=""}, {name="Org2", url=""} ]`.
-  organizations = [ { name = "Granada, Spain", url = "" } ]
+  organizations = [ { name = "ISGlobal", url = "https://www.isglobal.org/" } ]
 
   gravatar = false  # Get your avatar from Gravatar.com? (true/false)
   avatar = "foto_perfil.jpg"  # Specify an avatar image (in `static/img/` folder) or delete value to disable avatar.
@@ -361,7 +361,7 @@ enableGitInfo = false
   title = "Sergio Olmos"
   [languages.es.params]
     name = "Sergio Olmos Pardo"
-    role = "Científico de datos y jugador de baloncesto"
+    role = "Estadístico | Científico de datos"
   [[languages.es.menu.main]]
     name = "Sobre mí"
     url = "#about"
@@ -374,10 +374,10 @@ enableGitInfo = false
     name = "Proyectos"
     url = "#projects"
     weight = 2
-  #[[languages.es.menu.main]]
-  #  name = "CV"
-  #  url = "files/cv.pdf"
-  #  weight = 7
+  # [[languages.es.menu.main]]
+  #   name = "CV"
+  #   url = "files/cv.pdf"
+  #   weight = 7
 
 #  [[languages.es.menu.main]]
 #    name = "Experiencia"

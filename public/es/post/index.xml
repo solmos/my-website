@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>es</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Sun, 12 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 06 Jul 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/es/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Emacs for Statisticians</title>
+      <link>/es/post/2020-07-06-emacs-for-statisticians/emacs-for-statisticians/</link>
+      <pubDate>Mon, 06 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/es/post/2020-07-06-emacs-for-statisticians/emacs-for-statisticians/</guid>
+      <description>Introduction These past few weeks I have been trying to find the right workflow when analyzing data that are stored in remote servers. When sensitive data is stored on remote servers, working in the server is highly encouraged to ensure safety of information to external threats and data loss. In this case, no data should be stored in external devices.
+Up until now I used RStudio Desktop for all my projects but running code locally when the data is in a remote server has proved to be a nightmare for me, as everything is just so slow.</description>
+    </item>
     
     <item>
       <title>Simulando el final de la Euroliga</title>
